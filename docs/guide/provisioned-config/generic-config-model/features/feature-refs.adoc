@@ -1,8 +1,8 @@
 ##### Feature references
 
-[[feature-refs]]There are cases when a value range of a parameter of one feature spec is defined by a set of existing in the configuration model values of an ID parameter from another feature spec. In other words, a feature spec may declare certain parameters as references to other feature ID parameters. (In a relational database, this would be a foreign key reference).
+[[feature-refs]]There are cases when a value range of a parameter of one feature spec is defined by a set of existing in the configuration model values of an ID parameter of another feature spec. In other words, a feature spec may declare certain parameters as references to ID parameters of another feature spec. (In a relational database, this would be a foreign key reference).
 
-In a feature spec a simple feature reference would look like
+In a feature spec a simple feature reference would look like this
 
 [source,xml]
 ----
@@ -17,17 +17,17 @@ In a feature spec a simple feature reference would look like
  </feature-spec>
 ----
 
-Attribute *feature* in the *ref* element contains a name of the referenced feature-spec. Note that we have not provided which parameter of *featureC* references the ID parameter of *featureP*. This example also demonstrates the *implicit reference parameter mapping*.
+Attribute `feature` of element `ref` contains the name of the referenced feature-spec. Note that we have not provided which parameter of `featureC` references the ID parameter of `featureP`. This example also demonstrates the *implicit reference parameter mapping*.
 
-IMPORTANT: The implicit reference parameter mapping rule is based on the expectation that the feature spec declaring a reference includes parameters with the names matching the ID parameter names of the referenced feature spec.
+IMPORTANT: The implicit reference parameter mapping rule is based on the expectation that the feature spec declaring the reference includes parameters with the names matching the ID parameter names of the referenced feature spec.
 
 So the example above will work if one of the following statements is true:
 
-. *featureP* declares parameter *p* and it is its only feature-id parameter;
+. `featureP` declares parameter `p` and it is its only feature-id parameter;
 
-. *featureP* declares parameter *name* and it is its only feature-id parameter;
+. `featureP` declares parameter `name` and it is its only feature-id parameter;
 
-. *featureP* declares parameters *name* and *p* and both of them are its only feature-id parameters.
+. `featureP` declares parameters `name` and `p` as its feature-id parameters and has not other feature-id parameters.
 
 
 .The complete set of a feature reference declaration attributes
@@ -35,7 +35,7 @@ So the example above will work if one of the following statements is true:
 |===
 |Attribute name |Required |Default |Description
 
-|*dependency* |false |null (current feature-pack) |The feature-pack dependency name the referenced feature spec belongs to.
+|*dependency* |false |null (current feature-pack or its dependencies) |The feature-pack dependency name the referenced feature spec belongs to.
 
 |*feature* |true |null |The name of the referenced feature spec.
 
@@ -49,7 +49,7 @@ So the example above will work if one of the following statements is true:
 
 ###### Custom reference parameter mapping
 
-Suppose we want to explicitly map parameters in the reference declaration. The example below will correspond to the statement 1. from the example above.
+Instead of relying on the implicit reference parameter mapping rule, it is also possible to map the parameters in the reference declaration explicitly. The example below will correspond to the statement 1. from the example above.
 
 [source,xml]
 ----
@@ -66,7 +66,7 @@ Suppose we want to explicitly map parameters in the reference declaration. The e
  </feature-spec>
 ----
 
-Now let's suppose that *featureP*'s ID parameter is in fact *name* but we still want to use parameter *p* as the reference to *featureP*.
+Now let's suppose that `featureP` ID parameter is in fact `name` but we still want to use parameter `p` as the reference to `featureP`.
 
 [source,xml]
 ----
@@ -83,7 +83,7 @@ Now let's suppose that *featureP*'s ID parameter is in fact *name* but we still 
  </feature-spec>
 ----
 
-If *featureP* had more than one ID parameter, e.g.
+If `featureP` had more than one ID parameter, e.g.
 
 [source,xml]
 ----
@@ -95,7 +95,7 @@ If *featureP* had more than one ID parameter, e.g.
  </feature-spec>
 ----
 
-Then the reference parameter mapping in *featureC* could look like:
+Then the reference parameter mapping in `featureC` could look like:
 
 [source,xml]
 ----
@@ -117,7 +117,9 @@ Then the reference parameter mapping in *featureC* could look like:
 
 ###### Nillable feature references
 
-Feature reference resolves to null if one of the feature reference parameters is null. If a reference resolves to null and its not marked as nillable in the feature spec, the provisioning will fail with an error. Here is an example of a nillable reference declaration:
+IMPORTANT: Feature reference resolves to null if one of the feature reference parameters is null.
+
+If a reference resolves to null and its not marked as nillable in the feature spec, the provisioning will fail with an error. Here is an example of a nillable reference declaration:
 
 [source,xml]
 ----
@@ -139,23 +141,27 @@ Feature reference resolves to null if one of the feature reference parameters is
 
 ###### External feature references
 
-A feature may reference a feature from another feature-pack. The origin of the external feature spec is specified in the *dependency* attribute of the feature reference declaration. The value of the *dependency* attribute must match the value of the *name* element of the feature-pack dependency (the referenced feature spec belongs to) declaration in the feature-pack.xml file.
+A feature may reference a feature from another feature-pack. The other feature-pack must be a (direct or transitive) dependency of the feature-pack the referencing feature belongs to.
 
-For example, suppose, feature-pack *fp1* depends on feature-pack *fp2*.
+NOTE: Unless the feature-pack of the referenced feature has not been explicitly specified, the mechanism will navigate the dependency tree of the feature-pack of the referencing feature and the first feature-pack containing a feature spec with the referenced feature spec name will be selected as the target.
+
+Otherwise, the target feature-pack can be specified using `dependency` attribute of the feature reference declaration. The value of `dependency` attribute must match the value of `origin` element of the feature-pack dependency (the referenced feature spec belongs to) declaration in the `feature-pack.xml` file of the referencing feature spec.
+
+For example, suppose, feature-pack `fp1` depends on feature-pack `fp2`.
 
 [source,xml]
 ----
- <feature-pack xmlns="urn:jboss:galleon:feature-pack:1.0"
-                groupId="org.jboss.pm.test" artifactId="fp1" version="1.0.0">
+ <feature-pack xmlns="urn:jboss:galleon:feature-pack:2.0"
+                location="fp1@maven(org.jboss.universe:community-universe):1#1.0.0">
     <dependencies>
-        <dependency groupId="org.jboss.pm.test" artifactId="fp2" version="2.0.0">
-            <name>fp2-dep</name>
+        <dependency location="fp2@maven(org.jboss.universe:community-universe):2#2.0.0">
+            <origin>fp2-dep</origin>
         </dependency>
     </dependencies>
  </feature-pack>
 ----
 
-*fp2* includes a feature spec *featureP*
+`fp2` includes a feature spec `featureP`
 
 [source,xml]
 ----
@@ -166,7 +172,7 @@ For example, suppose, feature-pack *fp1* depends on feature-pack *fp2*.
  </feature-spec>
 ----
 
-And *fp1* includes a feature spec *featureC* which declares a reference to *featureP*
+And `fp1` includes a feature spec `featureC` which declares a reference to `featureP`
 
 [source,xml]
 ----
@@ -181,6 +187,7 @@ And *fp1* includes a feature spec *featureC* which declares a reference to *feat
  </feature-spec>
 ----
 
+NOTE: It is expected that in most cases `dependency` attribute of `ref` element will not have to be used.
 
 ###### Implicit feature reference parameter initialization
 
@@ -223,7 +230,7 @@ If we were to add features of these specs to a config, it could look like this
  </config>
 ----
 
-This approach is very verbose, the value for the *parentId* parameter is set on every feature. There is a more compact way of expressing the same configuration using nesting, e.g.
+This approach is very verbose, the value for `parentId` parameter is set on every feature. There is a more compact way of expressing the same configuration using nesting, e.g.
 
 [source,xml]
 ----
@@ -237,7 +244,7 @@ This approach is very verbose, the value for the *parentId* parameter is set on 
  </config>
 ----
 
-As can be seen, the *parentId* parameter is initialized only once on the parent feature. The *parentId* of the child feature will be implicitly initialized to the value of the *parentId* of the parent.
+Here, `parentId` parameter is initialized only once for the parent feature. `parentId` of the child feature will be implicitly initialized to the value of `parentId` of the parent.
 
 IMPORTANT: When a feature is nested, the tool will look in the feature spec of the nested feature for a reference declaration with the name matching the outer feature spec and, if it is found, the tool will resolve the reference parameter mappings and will initialize the parameters of the child feature referencing the parent.
 
@@ -255,7 +262,7 @@ In case the reference name is different from the referenced feature spec name, i
  </feature-spec>
 ----
 
-Then the name of the reference has to be explicitly specified when the child feature is nested using the *parent-ref* attribute, e.g.
+Then the name of the reference has to be explicitly specified when the child feature is nested using the `parent-ref` attribute, e.g.
 [source,xml]
 ----
  <config>
@@ -272,7 +279,7 @@ NOTE: it is also possible to <<fg-in-features,include a feature-group as a child
 
 ###### Implicit inclusion of referenced features into the configuration
 
-It is possible to configure feature references so that when the resolved referenced feature ID is not found in the configuration model, instead of failing with the referential integrity constraint error, implicitly include the referenced feature into the configuration model initializing it its configured default values. This is done by simply setting the *include* attribute of the feature reference declaration to *true*.
+It is possible to configure feature references so that when the resolved referenced feature ID is not found in the configuration model, instead of failing with the referential integrity constraint error, implicitly include the referenced feature into the configuration model initializing it with its default values. This is done by simply setting `include` attribute of the feature reference declaration to `true`.
 
 [source,xml]
 ----
@@ -290,7 +297,7 @@ It is possible to configure feature references so that when the resolved referen
 
 ###### Multiple references to the same feature spec
 
-Suppose a feature needs to declare more than one reference to the same feature spec. For example let's model a chain having a feature spec called *link*. The *link* must have an ID parameter, let it be called *id*. Then it has to include a parameter to reference to the previous link and another parameter to reference the next link in the chain. The following, although looking right from the parameter mapping perspective, will clearly won't work
+Suppose a feature needs to declare more than one reference to the same feature spec. For example let's model a chain using a feature spec called `link`. `link` must have an ID parameter, let's call it `id`. Then it has to include a parameter to reference the previous link and another parameter to reference the next link in the chain. The following, although looking right from the parameter mapping perspective, will clearly not work
 
 [source,xml]
 ----
@@ -335,13 +342,13 @@ Feature references must have a unique name. In this case, both reference names a
 
 ###### Processing of features with references
 
-One of the responsibilities of the provisioning tool is to order the features from the resolve configuration model for processing by the provisioning plugins that generate the final installation configuration files. While the general rule is to preserve the order in which the features where added to the configuration model, when feature A references feature B, feature B will get the priority will be processed by the provisioning plugins before feature A to not break the referential integrity of the generated model (if it is significant for the consuming plugin).
+One of the responsibilities of the provisioning tool is to order the features from the resolved configuration model for processing by the provisioning plugins that generate the final installation configuration files. While the general rule is to preserve the order in which the features where added to the configuration model, when feature `A` references feature `B`, feature `B` will get the priority and will be processed by the provisioning plugins before feature `A` to not break the referential integrity of the generated model (if it is significant for the consuming plugin).
 
 
 ###### Circular feature references
 
-The provisioning mechanism is capable of identifying circular references (circular reference graphs). It does not throw an error if a circular reference graphs is detected. The responsibility of the provisioning mechanism is make sure the configuration model is valid and all the referential integrity constraints are satisfied. From this point of view circular references are not illegal.
+The provisioning mechanism is capable of identifying circular references (circular reference graphs). It does not throw an error if a circular reference graphs is detected. The responsibility of the provisioning mechanism is to make sure the configuration model is valid and all the referential integrity constraints are satisfied. From this point of view circular references are not illegal.
 
 The issue with circular references is the ordering of the features when configuration model is processed by the product specific plugins that generate the final configuration files. In some cases the order of the features will not be significant but in some cases it will be. So the rule is 
 
-IMPORTANT: When a circular reference graph is identified, the feature that was added to the configuration model first will be processed by the provisioning plugins first, the rest of the features from the grapth will be processed respecting the references.
+IMPORTANT: When a circular reference graph is identified, the feature that was added to the configuration model first will be processed by the provisioning plugins first, the rest of the features from the graph will be processed respecting the references as usual.

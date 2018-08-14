@@ -1,10 +1,10 @@
-#### Package dependencies
+### Package dependencies
 
 [[package-deps]]Package dependency may be required or optional.
 
 *Required dependency* means that a package cannot be installed unless all its required dependencies are satisfied, i.e. installed. If any required dependency cannot be satisfied (perhaps because a package that happens to be a required dependency has been explicitly excluded from the installation), the provisioning process will fail with an error.
 
-*Optional dependency* means that the dependency does not have to be satisfied for the package to be installed. For example if package *p1* declares an optional dependency on package *p2* and *p2* is explicitly excluded by the user, *p1* will still be installed. An example of an optional dependency could be a package called *documentation* which declares an optional dependency on package *examples*. If a user is not interested in the *examples*, the rest of the *documentation* could still be installed.
+*Optional dependency* means that the dependency does not have to be satisfied for the package to be installed. For example if package `p1` declares an optional dependency on package `p2` and `p2` is explicitly excluded by the user, `p1` will still be installed. An example of an optional dependency could be a package called `documentation` which declares an optional dependency on package `examples`. If a user is not interested in `examples`, the rest of `documentation` could still be installed.
 
 Package dependencies are also used to determine the <<_feature_pack_without_dependencies,effective package set of a feature-pack>> to be installed described later.
 
@@ -20,7 +20,7 @@ Here is an example of how dependencies are expressed in the XML metadata:
  </package-spec>
 ----
 
-In this example *p2* is a required dependency of *p1* while *p3* is an optional one.
+In this example `p2` is a required dependency of `p1` while `p3` is an optional one.
 
 Package may declare dependency on a package from the same or another feature-pack. During the dependency resolution, at first, the mechanism is trying to resolve the package dependency locally, i.e. in the current feature-pack. If the dependency could not be resolved locally, the mechanism will look for the package dependency in the feature-packs the current feature-pack depends on (in the order the feature-pack dependencies are listed in the `feature-pack.xml` of the current feature-pack). The first found matching package will be used as the resolved dependency. If the package dependency could not be resolved, the mechanism will report an error.
 
@@ -28,16 +28,16 @@ NOTE: Although a package may declare a dependency on a package from another feat
 
 #### Explicit package dependency origin
 
-Feature-pack containing a package with an external dependency must declare an explicit dependency on the feature-pack (specifying its version) the target package of the external dependency belongs to. This feature-pack dependency may also be assigned a name which can later be used as a reference to that feature-pack dependency when declaring dependencies in *package.xml* file on packages that belong to that feature-pack.
+Feature-pack containing a package with an external dependency must declare an explicit dependency on the feature-pack (specifying its version) the target package of the external dependency belongs to. This feature-pack dependency may also be assigned a name which can later be used as a reference to that feature-pack dependency when declaring dependencies in `package.xml` file on packages that belong to that feature-pack.
 
-For example, suppose feature-pack *fp1* depends on feature-pack *fp2* and package *fp1:p1* depends on packages *fp2:p1* and *fp2:p10*. The *feature-pack.xml* of *fp1* might look like this:
+For example, suppose feature-pack `fp1` depends on feature-pack `fp2` and package `fp1:p1` depends on packages `fp2:p1` and `fp2:p10`. The `feature-pack.xml` of `fp1` might look like this:
 
 [source,xml]
 ----
- <feature-pack xmlns="urn:jboss:galleon:feature-pack:1.0"
-                groupId="org.jboss.pm.test" artifactId="fp1" version="1.0.0">
+ <feature-pack xmlns="urn:jboss:galleon:feature-pack:2.0"
+                location="fp1@maven(org.jboss.universe:community-universe):1#1.0.0">
     <dependencies>
-        <dependency groupId="org.jboss.pm.test" artifactId="fp2" version="2.0.0">
+        <dependency location="fp2@maven(org.jboss.universe:community-universe):1#1.0.0">
             <origin>fp2-dep</origin>
         </dependency>
     </dependencies>
@@ -47,7 +47,7 @@ For example, suppose feature-pack *fp1* depends on feature-pack *fp2* and packag
  </feature-pack>
 ----
 
-And the *package.xml* file of *fp1:p1* might look like this:
+And the `package.xml` file of `fp1:p1` might look like this:
 
 [source,xml]
 ----
