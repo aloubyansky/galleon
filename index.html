@@ -433,7 +433,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Alexey Loubyansky, Jean-François Denise</span><br>
 <span id="revnumber">version 2.0.0.Beta2-SNAPSHOT,</span>
-<span id="revdate">2018-08-17</span>
+<span id="revdate">2018-08-21</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -2214,7 +2214,7 @@ The order of the ID parameters in the feature ID string is <strong>not</strong> 
 </div>
 </div>
 <div class="sect4">
-<h5 id="_features_in_a_configuration"><a class="anchor" href="#_features_in_a_configuration"></a><a class="link" href="#_features_in_a_configuration">Features in a configuration</a></h5>
+<h5 id="_features_in_configuration"><a class="anchor" href="#_features_in_configuration"></a><a class="link" href="#_features_in_configuration">Features in configuration</a></h5>
 <div class="paragraph">
 <p>Here is an example of how features can be used in a configuration.</p>
 </div>
@@ -2267,7 +2267,7 @@ The order of the ID parameters in the feature ID string is <strong>not</strong> 
 </div>
 </div>
 <div class="paragraph">
-<p>Attribute <code>feature</code> of element <code>ref</code> contains the name of the referenced feature-spec. Note that we have not provided which parameter of <code>featureC</code> references the ID parameter of <code>featureP</code>. This example also demonstrates the <strong>implicit reference parameter mapping</strong>.</p>
+<p>Attribute <code>feature</code> of element <code>ref</code> contains the name of the referenced feature-spec. Note that we have not provided which parameter of <code>featureC</code> references the ID parameter of <code>featureP</code>. This example also demonstrates the <strong>default (implicit) reference parameter mapping</strong>.</p>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -2276,7 +2276,7 @@ The order of the ID parameters in the feature ID string is <strong>not</strong> 
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-The implicit reference parameter mapping rule is based on the expectation that the feature spec declaring the reference includes parameters with the names matching the ID parameter names of the referenced feature spec.
+The default reference parameter mapping rule is based on the expectation that the feature spec declaring the reference includes parameters with the names matching the ID parameter names of the referenced feature spec.
 </td>
 </tr>
 </table>
@@ -2347,9 +2347,9 @@ The implicit reference parameter mapping rule is based on the expectation that t
 </tbody>
 </table>
 <div class="sect5">
-<h6 id="_custom_reference_parameter_mapping"><a class="anchor" href="#_custom_reference_parameter_mapping"></a><a class="link" href="#_custom_reference_parameter_mapping">Custom reference parameter mapping</a></h6>
+<h6 id="_non_default_reference_parameter_mapping"><a class="anchor" href="#_non_default_reference_parameter_mapping"></a><a class="link" href="#_non_default_reference_parameter_mapping">Non-default reference parameter mapping</a></h6>
 <div class="paragraph">
-<p>Instead of relying on the implicit reference parameter mapping rule, it is also possible to map the parameters in the reference declaration explicitly. The example below will correspond to the statement 1. from the example above.</p>
+<p>Instead of relying on the default reference parameter mapping rule, it is also possible to map the parameters in the reference declaration explicitly. The example below will correspond to the statement 1. from the example above.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2432,8 +2432,17 @@ Feature reference resolves to null if one of the feature reference parameters is
 </tr>
 </table>
 </div>
-<div class="paragraph">
-<p>If a reference resolves to null and its not marked as nillable in the feature spec, the provisioning will fail with an error. Here is an example of a nillable reference declaration:</p>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+If a reference resolves to null and its not marked as nillable in the feature spec, the provisioning will fail with an error. Here is an example of a nillable reference declaration:
+</td>
+</tr>
+</table>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2489,7 +2498,7 @@ Unless the feature-pack of the referenced feature has not been explicitly specif
 </div>
 </div>
 <div class="paragraph">
-<p><code>fp2</code> includes a feature spec <code>featureP</code></p>
+<p><code>fp2</code> includes feature spec <code>featureP</code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2501,7 +2510,7 @@ Unless the feature-pack of the referenced feature has not been explicitly specif
 </div>
 </div>
 <div class="paragraph">
-<p>And <code>fp1</code> includes a feature spec <code>featureC</code> which declares a reference to <code>featureP</code></p>
+<p>And <code>fp1</code> includes feature spec <code>featureC</code> which declares a reference to <code>featureP</code></p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2523,7 +2532,7 @@ Unless the feature-pack of the referenced feature has not been explicitly specif
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-It is expected that in most cases <code>dependency</code> attribute of <code>ref</code> element will not have to be used.
+It is expected that in most cases <code>dependency</code> attribute of element <code>ref</code> will not have to be used.
 </td>
 </tr>
 </table>
@@ -2763,7 +2772,7 @@ When a circular reference graph is identified, the feature that was added to the
 </div>
 </div>
 <div class="paragraph">
-<p>Now all the features of the spec <strong>feature1</strong> will depend on the feature with ID <code>feature2:id=123</code>.</p>
+<p>Now all the features of spec <code>feature1</code> will depend on the feature with ID <code>feature2:id=123</code>.</p>
 </div>
 </div>
 <div class="sect5">
@@ -2782,13 +2791,28 @@ When a circular reference graph is identified, the feature that was added to the
 </div>
 </div>
 <div class="paragraph">
-<p>Now feature <code>feature1:name=abc</code> depends on the feature <code>feature2:id=123</code> (inherited dependency from the spec) and the feature <code>feature3:id=789</code>.</p>
+<p>Now feature <code>feature1:name=abc</code> depends on feature <code>feature2:id=123</code> (inherited dependency from the spec) and feature <code>feature3:id=789</code>.</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="_external_feature_dependencies"><a class="anchor" href="#_external_feature_dependencies"></a><a class="link" href="#_external_feature_dependencies">External feature dependencies</a></h6>
 <div class="paragraph">
-<p>If the <strong>feature3</strong> spec was from another feature-pack than the <strong>feature1</strong> spec then we&#8217;d have to add the origin of the <strong>feature3</strong> spec to the dependency declaration. Assuming that the feature-pack the <strong>feature1</strong> spec belongs to declared a dependecy named <strong>fp2</strong> on the feature-pack the <strong>feature3</strong> spec belongs to, the dependency declaration will look like this:</p>
+<p>It is allowed to delcalre dependencies on features that come from other feature-packs. If the specs of those features come from feature-packs that appear to be dependencies of the feature-pack the feature dependencies are configured in then those feature specs will most probably be located by the mechanism automatically (by navigating the feature-pack dependency tree). The mechanism might need some help resolving the specs of the dependencies only if they belong to a feature-pack that doesn&#8217;t appear to be a dependency of the feature-pack where the dependencies are defined or if there are multiple feature specs with the same name in the feature-pack dependency hierarchy and it&#8217;s not obvious which one is targeted by the dependency.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+the feature spec resolution mechanism will pick the first feature spec with the matching name met while navigating the feature-pack dependency tree.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>There is a way though to specify the origin of the feature spec used in the dependency. If <code>feature3</code> spec was from another feature-pack than <code>feature1</code> spec then to be precise we could have added the origin of <code>feature3</code> spec to the dependency declaration. Assuming that the feature-pack <code>feature1</code> spec belongs to declared a dependecy named <code>fp2</code> on the feature-pack <code>feature3</code> spec belongs to, the dependency declaration would look like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2804,7 +2828,7 @@ When a circular reference graph is identified, the feature that was added to the
 <div class="sect5">
 <h6 id="_implicit_inclusion_of_feature_dependencies"><a class="anchor" href="#_implicit_inclusion_of_feature_dependencies"></a><a class="link" href="#_implicit_inclusion_of_feature_dependencies">Implicit inclusion of feature dependencies</a></h6>
 <div class="paragraph">
-<p>Like references, dependencies also support the <strong>include</strong> attribute. If the dependency is declared with the <strong>include=true</strong>, the target of the dependency will implicitly be included into the configuration unless it is already present. Here is an example of an implicitly included feature dependency:</p>
+<p>Like references, dependencies also support <code>include</code> attribute. If the dependency is declared with <code>include=true</code>, the target of the dependency will implicitly be included into the configuration unless it is already present. Here is an example of an implicitly included feature dependency:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2821,12 +2845,12 @@ When a circular reference graph is identified, the feature that was added to the
 <div class="sect4">
 <h5 id="_feature_capabilities"><a class="anchor" href="#_feature_capabilities"></a><a class="link" href="#_feature_capabilities">Feature capabilities</a></h5>
 <div class="paragraph">
-<p><a id="caps"></a>In the actual provisioned product, the components that are represented as features in the configuration model may provide certain runtime capabilities that other components also represented as features in the configuration model may depend upon. There two reasons why this <strong>may</strong> be important when resolving the configuration model for the installation to be provisioned:</p>
+<p><a id="caps"></a>In the actual provisioned installation, the components that are represented as features in the configuration model may provide certain runtime capabilities that other components, also represented as features in the configuration model, may depend upon. There are two reasons why this <strong>may</strong> be important when resolving the configuration model for the installation to be provisioned:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>to make sure that the configuration is consistent in a sense that the runtime requirements of its components are satisfied;</p>
+<p>to make sure the configuration is consistent in a sense that the runtime requirements of its components are satisfied;</p>
 </li>
 <li>
 <p>to order the features in the configuration model for processing by the provisioning plugins based on their dependencies and runtime requirements.</p>
@@ -2834,7 +2858,7 @@ When a circular reference graph is identified, the feature that was added to the
 </ol>
 </div>
 <div class="paragraph">
-<p>Capabilities are represented as strings with a dot serving as a word separator. Here is an example of a feature providing a capability:</p>
+<p>Capabilities are represented as strings with a dot serving as a word separator. Here is an example of a feature spec providing a capability:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2850,7 +2874,7 @@ When a circular reference graph is identified, the feature that was added to the
 </div>
 </div>
 <div class="paragraph">
-<p>And here is a feature that expresses a requirement on the capability provided above</p>
+<p>And here is a feature spec that requires the capability provided above</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2872,7 +2896,7 @@ When a circular reference graph is identified, the feature that was added to the
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-In the examples above the capabilities were configured using constants. This type of a capability is called a <strong>static capability</strong>. As a consequence, all the features of the <strong>interface</strong> spec will provide the same capability <code>org.wildfly.network.interface</code>. And all the features of the <strong>socket-binding</strong> spec will require the same capabality <code>org.wildfly.network.interface</code>.
+In the examples above the capabilities were configured using constant values. This type of a capability is called a <strong>static capability</strong>. As a consequence, all the features of spec <code>interface</code> will provide the same capability <code>org.wildfly.network.interface</code>. And all the features of spec <code>socket-binding</code> will require the same capabality <code>org.wildfly.network.interface</code>.
 </td>
 </tr>
 </table>
@@ -2880,7 +2904,7 @@ In the examples above the capabilities were configured using constants. This typ
 <div class="sect5">
 <h6 id="_dynamic_capabilities"><a class="anchor" href="#_dynamic_capabilities"></a><a class="link" href="#_dynamic_capabilities">Dynamic capabilities</a></h6>
 <div class="paragraph">
-<p>It is also possible, however, to provide or require a capability that depends on the parameters of a specific feature. Dynamic capabilities are following the same dot-separated string format but include feature parameters names prefixed with the <code>$</code> character. The examples above could be enhanced with dynamic capabilities as</p>
+<p>It is also possible, however, to provide and/or require a capability that depends on the parameters of a specific feature. Dynamic capabilities are following the same dot-separated string format but include feature parameter names prefixed with <code>$</code> character. The examples above could be enhanced with dynamic capabilities as</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2914,8 +2938,8 @@ In the examples above the capabilities were configured using constants. This typ
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-xml" data-lang="xml"> &lt;feature-pack xmlns="urn:jboss:galleon:feature-pack:1.0"
-                groupId="org.jboss.pm.test" artifactId="fp1" version="1.0.0"&gt;
+<pre class="highlight"><code class="language-xml" data-lang="xml"> &lt;feature-pack xmlns="urn:jboss:galleon:feature-pack:2.0"
+                location="fp1@maven(org.jboss.universe:community-universe):1#1.0.0"&gt;
    &lt;config&gt;
      &lt;feature spec="interface"&gt;
        &lt;param name="name" value="public"/&gt;
@@ -2936,7 +2960,7 @@ In the examples above the capabilities were configured using constants. This typ
 </div>
 </div>
 <div class="paragraph">
-<p>In the example above feature <em>interface:name=public</em> provides capability <em>org.wildfly.network.interface.public</em> which is required by feature <em>socket-binding:name=http</em>. And feature <em>interface:name=secure</em> provides capability <em>org.wildfly.network.interface.secure</em> which is required by feature <em>socket-binding:name=https</em>.</p>
+<p>In the example above feature <code>interface:name=public</code> provides capability <code>org.wildfly.network.interface.public</code> which is required by feature <code>socket-binding:name=http</code>. And feature <code>interface:name=secure</code> provides capability <code>org.wildfly.network.interface.secure</code> which is required by feature <code>socket-binding:name=https</code>.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -2945,7 +2969,7 @@ In the examples above the capabilities were configured using constants. This typ
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-More than one parameter could be used in a capability name. The parameters may appear in any part of the name, not necessarily at the end as in the example. The only rule is to use the dot as a separator for the parameters and the static parts of the name.
+More than one parameter could be used in a capability name. The parameters may appear in any part of the name, not necessarily at the end as in the example. The only rule is to use dot as a separator for the parameters and the static parts of the name.
 </td>
 </tr>
 </table>
@@ -2955,10 +2979,10 @@ More than one parameter could be used in a capability name. The parameters may a
 <div class="sect4">
 <h5 id="_feature_package_dependencies"><a class="anchor" href="#_feature_package_dependencies"></a><a class="link" href="#_feature_package_dependencies">Feature package dependencies</a></h5>
 <div class="paragraph">
-<p><a id="feature-package-deps"></a>Feature specs representing configurable components of the installation may include dependencies on the feature-pack packages that contain the binaries of those installation components. So that, when a feature is included into a configuration, the packages it declared dependencies on will implicitly be added to the list of the installed packages.</p>
+<p><a id="feature-package-deps"></a>Feature specs representing configurable components of the installation may include dependencies on feature-pack packages that contain certain binary content (e.g. JAR files) of those installation components. So that, when a feature is included into configuration, the packages the feature will require at runtime will automatically be added to the list of the installed packages.</p>
 </div>
 <div class="paragraph">
-<p>Package dependencies are configured under the <strong>packages</strong> element of the feature spec which is equivalent to the <a href="#package-deps"><strong>dependencies</strong> element of the package spec metadata</a>. Here is an example</p>
+<p>Package dependencies are configured under <code>packages</code> element of the feature spec which is equivalent to the <a href="#package-deps"><code>dependencies</code> element of the package spec metadata</a>. Here is an example</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2978,21 +3002,21 @@ More than one parameter could be used in a capability name. The parameters may a
 </div>
 </div>
 <div class="paragraph">
-<p>In this case, a feature of the <strong>feature1</strong> spec will have:</p>
+<p>In this case, any feature of spec <code>feature1</code> will have:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>a required dependency on the package <strong>p1</strong>;</p>
+<p>a required dependency on package <code>p1</code>;</p>
 </li>
 <li>
-<p>an optional dependency on the package <strong>p2</strong>;</p>
+<p>an optional dependency on package <code>p2</code>;</p>
 </li>
 <li>
-<p>a required dependency on the package <strong>p2</strong> from the feature-pack dependency refered to as <strong>another-feature-pack</strong>;</p>
+<p>a required dependency on package <code>p2</code> from the feature-pack dependency refered to as <code>another-feature-pack</code>;</p>
 </li>
 <li>
-<p>an optional dependency on the package <strong>p3</strong> from the feature-pack dependency refered to as <strong>another-feature-pack</strong>.</p>
+<p>an optional dependency on package <code>p3</code> from the feature-pack dependency refered to as <code>another-feature-pack</code>.</p>
 </li>
 </ul>
 </div>
@@ -3000,7 +3024,7 @@ More than one parameter could be used in a capability name. The parameters may a
 <div class="sect4">
 <h5 id="_feature_annotations"><a class="anchor" href="#_feature_annotations"></a><a class="link" href="#_feature_annotations">Feature annotations</a></h5>
 <div class="paragraph">
-<p><a id="feature-annotations"></a>Feature specs may include a list of annotations. The provisioning mechanism includes a few pre-defined annotations. Product-specific annotations are also supported, they are simply parsed and attached to feature specs and made available to the provisioning plugins for processing. Here is an example of an annotated feature spec:</p>
+<p><a id="feature-annotations"></a>Feature specs may include a list of annotations. The provisioning mechanism includes a few pre-defined annotations. Product-specific annotations are also supported, they are simply parsed and attached to feature specs and are available to the provisioning plugins for processing. Here is an example of an annotated feature spec:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3023,8 +3047,8 @@ More than one parameter could be used in a capability name. The parameters may a
 <div class="sect3">
 <h4 id="_feature_groups"><a class="anchor" href="#_feature_groups"></a><a class="link" href="#_feature_groups">8.1.2. Feature groups</a></h4>
 <div class="paragraph">
-<p>A feature represents a minimal configuration unit. When a configuration model reaches a certain level of complexity though, using and manipulating features to define the final configuration may become impractical.
-Feature groups allow to group a set of features that represent a certain part of the configuration together and then later include them all into the final configuration as a group. For example</p>
+<p>A feature spec represents a minimal configuration unit. When a configuration model reaches a certain level of complexity though, using and manipulating features to define the final configuration may become impractical.
+Feature groups allow to group a set of features that represent a certain part of the configuration together and then include them all into the final configuration as a group. For example</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3043,8 +3067,8 @@ Feature groups allow to group a set of features that represent a certain part of
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-xml" data-lang="xml"> &lt;feature-pack xmlns="urn:jboss:galleon:feature-pack:1.0"
-                groupId="org.jboss.pm.test" artifactId="fp1" version="1.0.0"&gt;
+<pre class="highlight"><code class="language-xml" data-lang="xml"> &lt;feature-pack xmlns="urn:jboss:galleon:feature-pack:2.0"
+                location="fp1@maven(org.jboss.universe:community-universe):1#1.0.0"&gt;
    &lt;config&gt;
      &lt;feature-group name="group1"/&gt;
    &lt;/config&gt;
@@ -3052,10 +3076,25 @@ Feature groups allow to group a set of features that represent a certain part of
 </div>
 </div>
 <div class="paragraph">
-<p>First, we defined a feature group named <strong>group1</strong> which includes three features. The name of the group must be unique in the scope of the feature-pack. Feature groups are saved in the feature-pack&#8217;s <code>feature_groups</code> directory in XML files named after the feature groups (<strong>group1.xml</strong> in this example).</p>
+<p>First, we defined a feature group named <code>group1</code> which includes three features.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The name of the group must be unique in the scope of the feature-pack.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
-<p>Then in the default configuration of the feature-pack we simply included the <strong>group1</strong>.</p>
+<p>Feature groups are saved in the feature-pack&#8217;s <code>feature_groups</code> directory in XML files named after the feature groups (<code>group1.xml</code> in this example).</p>
+</div>
+<div class="paragraph">
+<p>Then in the default configuration of the feature-pack we simply included <code>group1</code>, which is equivalent to including the mentioned three features into the config directly.</p>
 </div>
 <div class="paragraph">
 <p>Besides features, feature groups may also include other feature groups. Continuing the example above:</p>
@@ -3073,7 +3112,7 @@ Feature groups allow to group a set of features that represent a certain part of
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-xml" data-lang="xml"> &lt;feature-pack xmlns="urn:jboss:galleon:feature-pack:1.0"
-                groupId="org.jboss.pm.test" artifactId="fp1" version="1.0.0"&gt;
+                location="fp1@maven(org.jboss.universe:community-universe):1#1.0.0"&gt;
    &lt;config&gt;
      &lt;feature-group name="group2"/&gt;
    &lt;/config&gt;
@@ -3081,28 +3120,40 @@ Feature groups allow to group a set of features that represent a certain part of
 </div>
 </div>
 <div class="paragraph">
-<p>The final configuration will now include all the four features. The order of the features in the resolved configuration will reflect the order in which the features were included into the configuration but also respecting the feature references and the dependencies, i.e.</p>
+<p>The final configuration will now include all the four features.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The order of the features in the resolved configuration will reflect the order in which the features were included into the configuration but also respecting the feature references and the dependencies, i.e.
+</td>
+</tr>
+</table>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><em>feature1:id=a1</em></p>
+<p><code>feature1:id=a1</code></p>
 </li>
 <li>
-<p><em>feature2:id=b1</em></p>
+<p><code>feature2:id=b1</code></p>
 </li>
 <li>
-<p><em>feature3:id=c1</em></p>
+<p><code>feature3:id=c1</code></p>
 </li>
 <li>
-<p><em>feature4:id=d1</em></p>
+<p><code>feature4:id=d1</code></p>
 </li>
 </ol>
 </div>
 <div class="sect4">
 <h5 id="_including_customized_feature_groups"><a class="anchor" href="#_including_customized_feature_groups"></a><a class="link" href="#_including_customized_feature_groups">Including customized feature groups</a></h5>
 <div class="paragraph">
-<p>When a feature group is included (into another feature group or the <strong>config</strong> element of the feature-pack configuration) the set of its features can be customized. There are two main kinds of customizations that are allowed when including a feature group:</p>
+<p>When a feature group is included (into another feature group or a <code>config</code> element of a feature-pack configuration) the set of its features can be customized. There are two main kinds of customizations that are allowed when including a feature group:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -3137,18 +3188,18 @@ Feature groups allow to group a set of features that represent a certain part of
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-When a feature group is included into another feature group or a <strong>config</strong>, the list of its direct entries (features and feature groups) defined by the feature group spec cannot be extended by applying customizations. <a href="#fg-indirect-ext">There is a way though to extend the feature set of the included feature group indirectly</a>.
+When a feature group is included into another feature group or a <code>config</code> element, the list of its direct entries (features and feature groups) defined by the feature group spec cannot be extended by applying customizations. <a href="#fg-indirect-ext">There is a way though to extend the feature set of the included feature group indirectly</a>.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>All the feature group customizations are expressed in the body of the <code>feature-group</code> XML element.</p>
+<p>All the feature group customizations are expressed in the body of <code>feature-group</code> XML element.</p>
 </div>
 <div class="sect5">
 <h6 id="_overwriting_parameters_of_features_from_a_feature_group"><a class="anchor" href="#_overwriting_parameters_of_features_from_a_feature_group"></a><a class="link" href="#_overwriting_parameters_of_features_from_a_feature_group">Overwriting parameters of features from a feature group</a></h6>
 <div class="paragraph">
-<p><a id="feature-param-overwrites"></a>The configuration of a feature can be customized by adding the <code>include</code> element with the <code>feature-id</code> attribute targeting its ID to the body of the <code>feature-group</code> element. E.g. suppose this is our feature spec:</p>
+<p><a id="feature-param-overwrites"></a>The configuration of a feature can be customized by adding <code>include</code> element with <code>feature-id</code> attribute targeting its ID to the body of the <code>feature-group</code> element. E.g. suppose this is our feature spec:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3248,7 +3299,7 @@ When a feature group is included into another feature group or a <strong>config<
 </div>
 </div>
 <div class="paragraph">
-<p>The group spec is</p>
+<p>The group is defined as</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3265,7 +3316,7 @@ When a feature group is included into another feature group or a <strong>config<
 </div>
 </div>
 <div class="paragraph">
-<p>And we want to customize the child feature when including the <strong>group1</strong> into the config.</p>
+<p>And we want to customize the child feature when including <code>group1</code> into the config.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3330,7 +3381,7 @@ When a feature group is included into another feature group or a <strong>config<
 <p><a id="fg-exclude-features-by-ids"></a>When a feature group is included into another group or a config, certain features can be excluded from the included feature set by simply specifying their IDs.</p>
 </div>
 <div class="paragraph">
-<p>Suppose, we have the following group spec:</p>
+<p>Suppose, we have defined the following group:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3349,12 +3400,11 @@ When a feature group is included into another feature group or a <strong>config<
     &lt;param name="id" value="b2"/&gt;
   &lt;/feature&gt;
 
-
 &lt;/feature-group-spec&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Here is how <strong>feature1:id=a1</strong> and <strong>feature2:id=b1</strong> can be excluded:</p>
+<p>Here is how <code>feature1:id=a1</code> and <code>feature2:id=b1</code> can be excluded when <code>group1</code> is added a configuration:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3367,7 +3417,7 @@ When a feature group is included into another feature group or a <strong>config<
 </div>
 </div>
 <div class="paragraph">
-<p>The config will include <strong>feature1:id=a2</strong> and <strong>feature2:id=b2</strong>.</p>
+<p>The config will include <code>feature1:id=a2</code> and <code>feature2:id=b2</code>.</p>
 </div>
 </div>
 <div class="sect5">
@@ -3395,12 +3445,11 @@ When a feature group is included into another feature group or a <strong>config<
     &lt;param name="id" value="b2"/&gt;
   &lt;/feature&gt;
 
-
 &lt;/feature-group-spec&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Here is how all the feature of the <strong>feature1</strong> spec can be excluded:</p>
+<p>Here is how all the feature of spec <code>feature1</code> can be excluded:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3412,13 +3461,13 @@ When a feature group is included into another feature group or a <strong>config<
 </div>
 </div>
 <div class="paragraph">
-<p>The config will include <strong>feature2:id=b1</strong> and <strong>feature2:id=b2</strong>.</p>
+<p>The config will include <code>feature2:id=b1</code> and <code>feature2:id=b2</code>.</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="_picking_features_from_a_group_by_ids"><a class="anchor" href="#_picking_features_from_a_group_by_ids"></a><a class="link" href="#_picking_features_from_a_group_by_ids">Picking features from a group by IDs</a></h6>
 <div class="paragraph">
-<p><a id="fg-include-features-by-ids"></a>When a feature group is included into another group or a config, by default all the features it contains are included but it is also possible to pick which ones exactly should be included.</p>
+<p><a id="fg-include-features-by-ids"></a>When a feature group is included into another feature group or a config, by default all the features it contains are included into the configuration. It is possible though to pick which ones exactly should be included.</p>
 </div>
 <div class="paragraph">
 <p>Suppose, we have the following group spec:</p>
@@ -3440,12 +3489,11 @@ When a feature group is included into another feature group or a <strong>config<
     &lt;param name="id" value="b2"/&gt;
   &lt;/feature&gt;
 
-
 &lt;/feature-group-spec&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Here is how <strong>feature1:id=a1</strong> and <strong>feature2:id=b1</strong> can be picked into the config:</p>
+<p>Here is how <code>feature1:id=a1</code> and <code>feature2:id=b1</code> can be picked into the configuration:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3464,19 +3512,28 @@ When a feature group is included into another feature group or a <strong>config<
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-<code>inherit-features</code> attribute indicates whether the whole feature set of the group should be included into the config or not. If this attribute is not specified, its value is assumed to be true.
+<code>inherit-features</code> attribute indicates whether the whole feature set of the group should be included into the config or not. If this attribute is not specified, its value is assumed to be <code>true</code>.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Then the <code>include</code> elements are picking the features that need to be included by their IDs.</p>
+<p>Then <code>include</code> elements are picking the features that need to be included into the configuration.</p>
 </div>
 <div class="paragraph">
-<p>The config will include <strong>feature1:id=a1</strong> and <strong>feature2:id=b1</strong>.</p>
+<p>The config will include <code>feature1:id=a1</code> and <code>feature2:id=b1</code>.</p>
 </div>
-<div class="paragraph">
-<p>The <code>include</code> elements can also be used to pick features from the excluded feature specs. The config below is equivalent to the config above.</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<code>include</code> elements can also be used to pick features from the excluded feature specs. The config below is equivalent to the config above.
+</td>
+</tr>
+</table>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3494,7 +3551,7 @@ When a feature group is included into another feature group or a <strong>config<
 <div class="sect5">
 <h6 id="_including_features_of_specific_feature_specs_from_a_group"><a class="anchor" href="#_including_features_of_specific_feature_specs_from_a_group"></a><a class="link" href="#_including_features_of_specific_feature_specs_from_a_group">Including features of specific feature specs from a group</a></h6>
 <div class="paragraph">
-<p><a id="fg-include-features-by-specs"></a>When a feature group is included into another group or a config, by default all the features it contains are included but it is also possible to pick features of which feature specs should be included.</p>
+<p><a id="fg-include-features-by-specs"></a>When a feature group is included into another group or a config, by default all the features it contains are added to the configuration. There is a way though to pick features of which feature specs should be included.</p>
 </div>
 <div class="paragraph">
 <p>Suppose, we have the following group spec:</p>
@@ -3516,12 +3573,11 @@ When a feature group is included into another feature group or a <strong>config<
     &lt;param name="id" value="b2"/&gt;
   &lt;/feature&gt;
 
-
 &lt;/feature-group-spec&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Here is how all the features of <strong>feature1</strong> can be included into the config:</p>
+<p>Here is how all the features of spec <code>feature1</code> can be included into the config:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3539,16 +3595,16 @@ When a feature group is included into another feature group or a <strong>config<
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-<code>inherit-features</code> attribute indicates whether the whole feature set of the group should be included into the config or not. If this attribute is not specified, its value is assumed to be true.
+<code>inherit-features</code> attribute indicates whether the whole feature set of the group should be included into the config or not. If this attribute is not specified, its value is assumed to be <code>true</code>.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Then the <code>include</code> element is specifying the feature spec features of which should be included into the config.</p>
+<p>Then <code>include</code> element is specifying the feature spec features of which should be included into the config.</p>
 </div>
 <div class="paragraph">
-<p>The config will include <strong>feature1:id=a1</strong> and <strong>feature1:id=a2</strong>.</p>
+<p>The config will include <code>feature1:id=a1</code> and <code>feature1:id=a2</code>.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -3594,7 +3650,7 @@ Let&#8217;s edit the example from the previous paragraph to demonstrate that. Th
 </div>
 </div>
 <div class="paragraph">
-<p>The group spec will now include only parent feature</p>
+<p>The group definition will now include only parent feature</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3624,7 +3680,7 @@ Let&#8217;s edit the example from the previous paragraph to demonstrate that. Th
 </div>
 </div>
 <div class="paragraph">
-<p>The resolved configuration will contain the two features:</p>
+<p>The resolved configuration will contain both features:</p>
 </div>
 <table class="tableblock frame-all grid-all">
 <colgroup>
@@ -3676,7 +3732,10 @@ Let&#8217;s edit the example from the previous paragraph to demonstrate that. Th
 <div class="sect4">
 <h5 id="_including_features_and_feature_groups_from_other_feature_packs"><a class="anchor" href="#_including_features_and_feature_groups_from_other_feature_packs"></a><a class="link" href="#_including_features_and_feature_groups_from_other_feature_packs">Including features and feature groups from other feature-packs</a></h5>
 <div class="paragraph">
-<p>Feature groups, as well as <strong>config</strong> elements in the <strong>feature-pack.xml</strong>, may include features and feature groups from other feature-packs. This is done by including one or more <code>feature-pack</code> element and specifying the origin of the included features and feature groups in its <code>dependency</code> attribute. For example</p>
+<p>Feature groups, as well as <code>config</code> elements in <code>feature-pack.xml</code>, may include features and feature groups from other feature-packs. If those feature-packs appear to be dependencies (direct or transitive) of the feature-pack that uses their feature specs and groups in its configuration, the mechanism will most probably be able to resolve the origins of those feature specs and groups by navigating the feature-pack dependency tree.</p>
+</div>
+<div class="paragraph">
+<p>However, if there are multiple feature specs or feature groups with the same name in the feature-pack dependency hierarchy, it may become confusing which feature spec or feature group was meant as the target. In this case, the origin of those feature specs and feature groups can be specified with element <code>origin</code> and its attribute 'name' referencing the corresponding feature-pack dependency declared in the <code>feature-pack.xml</code>. For example</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3708,19 +3767,19 @@ Let&#8217;s edit the example from the previous paragraph to demonstrate that. Th
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><em>feature1:id=a1</em> from the local feature-pack;</p>
+<p><code>feature1:id=a1</code> from the local feature-pack;</p>
 </li>
 <li>
-<p>features from <em>group2</em> from <strong>another-feature-pack</strong>;</p>
+<p>features from <code>group2</code> from <code>another-feature-pack</code>;</p>
 </li>
 <li>
-<p><em>feature2:id=b1</em> from <strong>another-feature-pack</strong>;</p>
+<p><code>feature2:id=b1</code> from <code>another-feature-pack</code>;</p>
 </li>
 <li>
-<p>features from <em>group3</em> from the local feature-pack;</p>
+<p>features from <code>group3</code> from the local feature-pack;</p>
 </li>
 <li>
-<p>features from <em>group3</em> from <strong>another-feature-pack</strong>.</p>
+<p>features from <code>group3</code> from <code>another-feature-pack</code>.</p>
 </li>
 </ol>
 </div>
@@ -3728,10 +3787,10 @@ Let&#8217;s edit the example from the previous paragraph to demonstrate that. Th
 <div class="sect4">
 <h5 id="_nesting_feature_groups_under_features"><a class="anchor" href="#_nesting_feature_groups_under_features"></a><a class="link" href="#_nesting_feature_groups_under_features">Nesting feature groups under features</a></h5>
 <div class="paragraph">
-<p>It was mentioned in an earlier chapter that a <a href="#feature-fk-init">feature may nest other features that reference it</a>. <a id="fg-in-features"></a>It is also possible to nest a feature group under a feature with the condition that all the features included directly into the spec of the feature group reference the same parent feature.</p>
+<p>It was mentioned in an earlier chapter that a <a href="#feature-fk-init">feature may nest other features that reference it</a>. <a id="fg-in-features"></a>It is also possible to nest a feature group under a feature with the condition that all the features included directly into the definition of the feature group reference the same parent feature.</p>
 </div>
 <div class="paragraph">
-<p>For example, suppose we have a parent spec <strong>featureP</strong> and child spec <strong>featureA</strong> and <strong>featureB</strong>:</p>
+<p>For example, suppose we have a parent feature spec <code>featureP</code> and child feature specs <code>featureA</code> and <code>featureB</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3769,7 +3828,7 @@ Let&#8217;s edit the example from the previous paragraph to demonstrate that. Th
 </div>
 </div>
 <div class="paragraph">
-<p>Now let&#8217;s suppose that there is a group which consists of features of <strong>featureA</strong> and <strong>featureB</strong> specs.</p>
+<p>Now let&#8217;s suppose that there is a group which includes features of <code>featureA</code> and <code>featureB</code> specs.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3786,7 +3845,7 @@ Let&#8217;s edit the example from the previous paragraph to demonstrate that. Th
 </div>
 </div>
 <div class="paragraph">
-<p>This group can be nested under any instance of <strong>featureP</strong> and the <strong>parent</strong> parameters of the features in the group will implicitly be initialized to the value of the <strong>parent</strong> parameter of the outer <strong>featureP</strong> instance.</p>
+<p>This group can be nested under any instance of <code>featureP</code> and parameter <code>parent</code> of the features in the group will implicitly be initialized to the value of parameter <code>parent</code> of the outer <code>featureP</code> instance.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3808,22 +3867,22 @@ Let&#8217;s edit the example from the previous paragraph to demonstrate that. Th
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><em>featureP:parent=p1</em>;</p>
+<p><code>featureP:parent=p1</code>;</p>
 </li>
 <li>
-<p><em>featureP:parent=p2</em>;</p>
+<p><code>featureP:parent=p2</code>;</p>
 </li>
 <li>
-<p><em>featureA:parent=p1,a=a1</em>;</p>
+<p><code>featureA:parent=p1,a=a1</code>;</p>
 </li>
 <li>
-<p><em>featureA:parent=p2,a=a1</em>;</p>
+<p><code>featureA:parent=p2,a=a1</code>;</p>
 </li>
 <li>
-<p><em>featureB:parent=p1,b=b1</em>;</p>
+<p><code>featureB:parent=p1,b=b1</code>;</p>
 </li>
 <li>
-<p><em>featureB:parent=p2,b=b1</em>.</p>
+<p><code>featureB:parent=p2,b=b1</code>.</p>
 </li>
 </ol>
 </div>
@@ -3831,7 +3890,7 @@ Let&#8217;s edit the example from the previous paragraph to demonstrate that. Th
 <div class="sect4">
 <h5 id="_merging_feature_groups"><a class="anchor" href="#_merging_feature_groups"></a><a class="link" href="#_merging_feature_groups">Merging feature groups</a></h5>
 <div class="paragraph">
-<p>There could be a situation when the same feature group is brought into the config as a dependency of other feature groups. Which means its basic feature set is included multiple times but, taking into account possible customizations, each time it might be slightly different.</p>
+<p>There could be a situation when the same feature group is brought into the config as a dependency of a few other feature groups. Which means its basic feature set is included into the final configuration multiple times but, taking into account possible customizations, each time it might be slightly different.</p>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -7042,7 +7101,7 @@ applies when fetching explicitly feature-packs.</p>
 <div id="footer">
 <div id="footer-text">
 Version 2.0.0.Beta2-SNAPSHOT<br>
-Last updated 2018-08-17 00:42:51 CEST
+Last updated 2018-08-17 09:17:25 CEST
 </div>
 </div>
 </body>
