@@ -49,6 +49,11 @@ public class FeatureGroup extends FeatureGroupSupport {
             throw new UnsupportedOperationException();
         }
 
+        @Override
+        public Builder addDependency(String depName) {
+            throw new UnsupportedOperationException();
+        }
+
         public FeatureGroup build() throws ProvisioningDescriptionException {
             return new FeatureGroup(this);
         }

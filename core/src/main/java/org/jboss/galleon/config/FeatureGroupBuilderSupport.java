@@ -76,6 +76,8 @@ public abstract class FeatureGroupBuilderSupport<B extends FeatureGroupBuilderSu
 
     public abstract B setConfigDep(String depName, ConfigId configId);
 
+    public abstract B addDependency(String name);
+
     @SuppressWarnings("unchecked")
     public B setInheritFeatures(boolean inheritFeatures) {
         this.inheritFeatures = inheritFeatures;

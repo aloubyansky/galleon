@@ -71,6 +71,14 @@ public abstract class ConfigCustomizationsBuilder<B extends ConfigCustomizations
         return (B) this;
     }
 
+    public boolean hasDefinedConfigs() {
+        return !definedConfigs.isEmpty();
+    }
+
+    public List<ConfigModel> getDefinedConfigs() {
+        return definedConfigs;
+    }
+
     @SuppressWarnings("unchecked")
     public B removeConfig(ConfigId id) throws ProvisioningDescriptionException {
         int index = getDefinedConfigIndex(id);

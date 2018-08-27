@@ -355,6 +355,9 @@ public class FeatureGroupXml {
                         case CONFIG_DEPS:
                             readConfigDeps(reader, builder);
                             break;
+                        case DEPENDS:
+                            readConfigDepends(reader, builder);
+                            break;
                         default:
                             throw ParsingUtils.unexpectedContent(reader);
                     }
@@ -364,6 +367,25 @@ public class FeatureGroupXml {
             }
         }
         throw ParsingUtils.endOfDocument(reader.getLocation());
+    }
+
+    private static void readConfigDepends(XMLExtendedStreamReader reader, FeatureGroupBuilderSupport<?> builder) throws XMLStreamException {
+        String name = null;
+        for (int i = 0; i < reader.getAttributeCount(); i++) {
+            final Attribute attribute = Attribute.of(reader.getAttributeName(i));
+            switch (attribute) {
+                case NAME:
+                    name = reader.getAttributeValue(i);
+                    break;
+                default:
+                    throw ParsingUtils.unexpectedContent(reader);
+            }
+        }
+        if(name == null) {
+            throw ParsingUtils.missingAttributes(reader.getLocation(), Collections.singleton(Attribute.NAME));
+        }
+        builder.addDependency(name);
+        ParsingUtils.parseNoContent(reader);
     }
 
     private static void readProps(XMLExtendedStreamReader reader, FeatureGroupBuilderSupport<?> builder) throws XMLStreamException {

@@ -64,6 +64,13 @@ public class ConfigXmlWriter extends BaseXmlWriter<ConfigModel> {
             }
         }
 
+        if(config.hasDependencies()) {
+            for(String dep : config.getDependencies()) {
+                final ElementNode configDep = addElement(configE, FeatureGroupXml.Element.DEPENDS.getLocalName(), ns);
+                addAttribute(configDep, FeatureGroupXml.Attribute.NAME.getLocalName(), dep);
+            }
+        }
+
         FeatureGroupXmlWriter.addFeatureGroupDepBody(config, configE, ns);
         return configE;
     }

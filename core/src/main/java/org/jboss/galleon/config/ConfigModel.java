@@ -19,6 +19,7 @@ package org.jboss.galleon.config;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import org.jboss.galleon.ProvisioningDescriptionException;
 import org.jboss.galleon.spec.FeatureId;
@@ -42,6 +43,7 @@ public class ConfigModel extends FeatureGroupSupport {
         private String model;
         private Map<String, String> props = Collections.emptyMap();
         private Map<String, ConfigId> configDeps = Collections.emptyMap();
+        private Set<String> deps = Collections.emptySet();
 
         protected Builder() {
             super();
@@ -64,7 +66,13 @@ public class ConfigModel extends FeatureGroupSupport {
         }
 
         public Builder setConfigDep(String depName, ConfigId configId) {
-            configDeps = CollectionUtils.put(configDeps, depName, configId);
+            configDeps = CollectionUtils.putLinked(configDeps, depName, configId);
+            return this;
+        }
+
+        @Override
+        public Builder addDependency(String name) {
+            deps = CollectionUtils.addLinked(deps, name);
             return this;
         }
 
@@ -84,6 +92,7 @@ public class ConfigModel extends FeatureGroupSupport {
     final ConfigId id;
     final Map<String, String> props;
     final Map<String, ConfigId> configDeps;
+    final Set<String> deps;
     private final Builder builder;
 
     protected ConfigModel(Builder builder) throws ProvisioningDescriptionException {
@@ -91,6 +100,7 @@ public class ConfigModel extends FeatureGroupSupport {
         this.id = new ConfigId(builder.model, builder.name);
         this.props = CollectionUtils.unmodifiable(builder.props);
         this.configDeps = CollectionUtils.unmodifiable(builder.configDeps);
+        this.deps = CollectionUtils.unmodifiable(builder.deps);
         this.builder = builder;
     }
 
@@ -121,6 +131,19 @@ public class ConfigModel extends FeatureGroupSupport {
         return true;
     }
 
+    public boolean isEmpty() {
+        return items.isEmpty() &&
+                inheritFeatures &&
+                includedFeatures.isEmpty() &&
+                excludedFeatures.isEmpty() &&
+                includedSpecs.isEmpty() &&
+                excludedSpecs.isEmpty() &&
+                externalFgConfigs.isEmpty() &&
+                props.isEmpty() &&
+                deps.isEmpty() &&
+                configDeps.isEmpty();
+    }
+
     public boolean hasConfigDeps() {
         return !configDeps.isEmpty();
     }
@@ -129,11 +152,20 @@ public class ConfigModel extends FeatureGroupSupport {
         return configDeps;
     }
 
+    public boolean hasDependencies() {
+        return !deps.isEmpty();
+    }
+
+    public Set<String> getDependencies() {
+        return deps;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
         result = prime * result + ((configDeps == null) ? 0 : configDeps.hashCode());
+        result = prime * result + ((deps == null) ? 0 : deps.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((props == null) ? 0 : props.hashCode());
         return result;
@@ -152,6 +184,11 @@ public class ConfigModel extends FeatureGroupSupport {
             if (other.configDeps != null)
                 return false;
         } else if (!configDeps.equals(other.configDeps))
+            return false;
+        if (deps == null) {
+            if (other.deps != null)
+                return false;
+        } else if (!deps.equals(other.deps))
             return false;
         if (id == null) {
             if (other.id != null)
@@ -181,6 +218,10 @@ public class ConfigModel extends FeatureGroupSupport {
         if(!configDeps.isEmpty()) {
             buf.append(" config-deps=");
             StringUtils.append(buf, configDeps.entrySet());
+        }
+        if(!deps.isEmpty()) {
+            buf.append(" deps=");
+            StringUtils.append(buf, deps);
         }
         if(!inheritFeatures) {
             buf.append(" inherit-features=false");

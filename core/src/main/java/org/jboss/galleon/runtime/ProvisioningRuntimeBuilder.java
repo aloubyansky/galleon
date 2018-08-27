@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -143,10 +144,15 @@ public class ProvisioningRuntimeBuilder {
         }
     }
 
+    private Set<ConfigId> configsToBuild = new LinkedHashSet<>();
+
     private ProvisioningRuntime doBuild() throws ProvisioningException {
 
         config = layout.getConfig();
         fpConfigStack = new FpStack(config);
+
+        Set<ConfigId> configDeps = new LinkedHashSet<>();
+        collectDefaultConfigs(configDeps);
 
         // the configs are processed in the reverse order to correctly implement config overwrites
 
@@ -206,7 +212,7 @@ public class ProvisioningRuntimeBuilder {
                 }
                 fpConfigStack.activateConfigStack(i);
                 final FPID fpid = modelOnlyFPIDs.get(i);
-                thisOrigin = fpid == null ? null : getFpBuilder(fpid.getProducer());
+                thisOrigin = fpid == null ? null : layout.getFeaturePack(fpid.getProducer());
                 setOrigin(thisOrigin);
                 processConfig(getConfigStack(modelOnlySpec.getId()), modelOnlySpec);
             }
@@ -227,8 +233,110 @@ public class ProvisioningRuntimeBuilder {
         modelOnlyConfigs = Collections.emptyMap();
     }
 
+    private void collectDefaultConfigs(Set<ConfigId> collectedDeps) throws ProvisioningException {
+        final Collection<FeaturePackConfig> fpConfigs = config.getFeaturePackDeps();
+        boolean extendedStackLevel = false;
+        if(config.hasTransitiveDeps()) {
+            for (FeaturePackConfig fpConfig : config.getTransitiveDeps()) {
+                extendedStackLevel |= fpConfigStack.push(fpConfig, extendedStackLevel);
+            }
+        }
+        for (FeaturePackConfig fpConfig : fpConfigs) {
+            extendedStackLevel |= fpConfigStack.push(fpConfig, extendedStackLevel);
+        }
+        while(fpConfigStack.hasNext()) {
+            collectDefaultConfigs(fpConfigStack.next(), collectedDeps);
+        }
+        if(extendedStackLevel) {
+            fpConfigStack.popLevel();
+        }
+    }
+
+    private void collectDefaultConfigs(FeaturePackConfig fpConfig, Set<ConfigId> collectedDeps) throws ProvisioningException {
+        thisOrigin = layout.getFeaturePack(fpConfig.getLocation().getProducer());
+        final FeaturePackRuntimeBuilder parentFp = setOrigin(thisOrigin);
+        System.out.println("collect def configs " + fpConfig.getLocation());
+        try {
+            if (fpConfig.hasDefinedConfigs()) {
+                final ProducerSpec producer = currentOrigin.getFPID().getProducer();
+                final List<ConfigModel> definedConfigs = fpConfig.getDefinedConfigs();
+                for (int i = definedConfigs.size() - 1; i >= 0; --i) {
+                    final ConfigModel config = definedConfigs.get(i);
+                    final ConfigId id = config.getId();
+                    if(id.isAnonymous() || configsToBuild.contains(id) || fpConfigStack.isFilteredOut(producer, id, true)) {
+                        continue;
+                    }
+                    configsToBuild.add(id);
+                    final ConfigModel originalFpConfig = currentOrigin.getConfig(config.getId());
+                    if (originalFpConfig != null) {
+                        if(originalFpConfig.hasDependencies()) {
+                            for(String depName : originalFpConfig.getDependencies()) {
+                                final ConfigId depId = new ConfigId(id.getModel(), depName);
+                                if(collectedDeps.contains(depId) || configsToBuild.contains(depId) || fpConfigStack.isFilteredOut(producer, depId, true)) {
+                                    continue;
+                                }
+                                collectedDeps.add(depId);
+                            }
+                        }
+                    }
+                }
+            }
+
+            boolean extendedStackLevel = false;
+            if (!fpConfig.isTransitive()) {
+                final FeaturePackSpec currentSpec = currentOrigin.spec;
+                if (currentSpec.hasDefinedConfigs()) {
+                    final ProducerSpec producer = currentOrigin.getFPID().getProducer();
+                    final List<ConfigModel> definedConfigs = currentSpec.getDefinedConfigs();
+                    for (int i = definedConfigs.size() - 1; i >= 0; --i) {
+                        final ConfigModel config = definedConfigs.get(i);
+                        final ConfigId id = config.getId();
+                        if(id.isAnonymous() || configsToBuild.contains(id) || fpConfigStack.isFilteredOut(producer, id, false)) {
+                            continue;
+                        }
+                        configsToBuild.add(id);
+                        final ConfigModel originalFpConfig = currentOrigin.getConfig(config.getId());
+                        if (originalFpConfig != null) {
+                            if(originalFpConfig.hasDependencies()) {
+                                for(String depName : originalFpConfig.getDependencies()) {
+                                    final ConfigId depId = new ConfigId(id.getModel(), depName);
+                                    if(collectedDeps.contains(depId) || configsToBuild.contains(depId) || fpConfigStack.isFilteredOut(producer, depId, true)) {
+                                        continue;
+                                    }
+                                    collectedDeps.add(depId);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (currentSpec.hasFeaturePackDeps()) {
+                    if (currentSpec.hasTransitiveDeps()) {
+                        for (FeaturePackConfig fpDep : currentSpec.getTransitiveDeps()) {
+                            extendedStackLevel |= fpConfigStack.push(fpDep, extendedStackLevel);
+                        }
+                    }
+                    for (FeaturePackConfig fpDep : currentSpec.getFeaturePackDeps()) {
+                        extendedStackLevel |= fpConfigStack.push(fpDep, extendedStackLevel);
+                    }
+                    if (extendedStackLevel) {
+                        while (fpConfigStack.hasNext()) {
+                            collectDefaultConfigs(fpConfigStack.next(), collectedDeps);
+                        }
+                    }
+                }
+            }
+            if (extendedStackLevel) {
+                fpConfigStack.popLevel();
+            }
+        } finally {
+            this.thisOrigin = parentFp;
+            setOrigin(parentFp);
+        }
+    }
+
     private void processFpConfig(FeaturePackConfig fpConfig) throws ProvisioningException {
-        thisOrigin = getFpBuilder(fpConfig.getLocation().getProducer());
+        thisOrigin = layout.getFeaturePack(fpConfig.getLocation().getProducer());
         final FeaturePackRuntimeBuilder parentFp = setOrigin(thisOrigin);
 
         try {
@@ -256,13 +364,23 @@ public class ProvisioningRuntimeBuilder {
                     final ProducerSpec producer = currentOrigin.getFPID().getProducer();
                     final List<ConfigModel> definedConfigs = currentSpec.getDefinedConfigs();
                     for (int i = definedConfigs.size() - 1; i >= 0; --i) {
-                        final ConfigModel config = definedConfigs.get(i);
+                        ConfigModel config = definedConfigs.get(i);
                         if (fpConfigStack.isFilteredOut(producer, config.getId(), false)) {
                             continue;
                         }
                         configStack = getConfigStack(config.getId());
+
+                        if(!config.getId().isAnonymous()) {
+                            final ConfigModel originalFpConfig = currentOrigin.getConfig(config.getId());
+                            if (originalFpConfig != null) {
+                                configStack.pushConfig(originalFpConfig);
+                                specConfigStacks = CollectionUtils.add(specConfigStacks, configStack);
+                            }
+                        }
+
                         configStack.pushConfig(config);
                         specConfigStacks = CollectionUtils.add(specConfigStacks, configStack);
+
                     }
                     configStack = null;
                 }
@@ -447,7 +565,7 @@ public class ProvisioningRuntimeBuilder {
             return thisOrigin;
         }
         final FeaturePackLocation fpl = currentOrigin == null ? config.getFeaturePackDep(depName).getLocation() : currentOrigin.spec.getFeaturePackDep(depName).getLocation();
-        return getFpBuilder(fpl.getProducer());
+        return layout.getFeaturePack(fpl.getProducer());
     }
 
     private FeaturePackRuntimeBuilder setThisOrigin(FeaturePackRuntimeBuilder origin) {
@@ -682,10 +800,6 @@ public class ProvisioningRuntimeBuilder {
         return resolvedDeps;
     }
 
-    FeaturePackRuntimeBuilder getFpBuilder(ProducerSpec producer) throws ProvisioningException {
-        return layout.getFeaturePack(producer);
-    }
-
     private void resolvePackage(final String pkgName) throws ProvisioningException {
         if(!resolvePackage(currentOrigin, pkgName, Collections.emptySet())) {
             throw new ProvisioningDescriptionException(Errors.packageNotFound(currentOrigin.producer.getLocation().getFPID(), pkgName));
@@ -712,7 +826,7 @@ public class ProvisioningRuntimeBuilder {
             if (visited.contains(fpDep.getLocation().getProducer())) {
                 continue;
             }
-            if(resolvePackage(getFpBuilder(fpDep.getLocation().getProducer()), name, visited)) {
+            if(resolvePackage(layout.getFeaturePack(fpDep.getLocation().getProducer()), name, visited)) {
                 return true;
             }
         }
@@ -904,7 +1018,7 @@ public class ProvisioningRuntimeBuilder {
             if (visitedProducers.contains(fpDep.getLocation().getProducer())) {
                 continue;
             }
-            final FeatureGroup fg = getFeatureGroupSpec(getFpBuilder(fpDep.getLocation().getProducer()), name, visitedProducers);
+            final FeatureGroup fg = getFeatureGroupSpec(layout.getFeaturePack(fpDep.getLocation().getProducer()), name, visitedProducers);
             if (fg != null) {
                 return fg;
             }
@@ -960,7 +1074,7 @@ public class ProvisioningRuntimeBuilder {
             if (visitedProducers.contains(fpl.getProducer())) {
                 continue;
             }
-            final ResolvedFeatureSpec fs = getFeatureSpec(getFpBuilder(fpl.getProducer()), name, visitedProducers, switchOrigin);
+            final ResolvedFeatureSpec fs = getFeatureSpec(layout.getFeaturePack(fpl.getProducer()), name, visitedProducers, switchOrigin);
             if (fs != null) {
                 return fs;
             }
