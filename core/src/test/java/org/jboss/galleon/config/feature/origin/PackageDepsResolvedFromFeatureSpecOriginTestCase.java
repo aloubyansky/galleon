@@ -47,7 +47,7 @@ public class PackageDepsResolvedFromFeatureSpecOriginTestCase extends PmInstallF
     protected void createFeaturePacks(FeaturePackCreator creator) throws ProvisioningException {
         creator
         .newFeaturePack(FP1_GAV)
-            .addSpec(FeatureSpec.builder("specA")
+            .addFeatureSpec(FeatureSpec.builder("specA")
                     .addParam(FeatureParameterSpec.createId("id"))
                     .addParam(FeatureParameterSpec.create("p1", "fp1"))
                     .addPackageDep("p1")

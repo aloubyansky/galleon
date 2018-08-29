@@ -45,10 +45,10 @@ public class InitFkWithDefaultIdValueFromNotMappedParamsTestCase extends PmInsta
     protected void createFeaturePacks(FeaturePackCreator creator) throws ProvisioningException {
         creator
         .newFeaturePack(FP_GAV)
-            .addSpec(FeatureSpec.builder("specA")
+            .addFeatureSpec(FeatureSpec.builder("specA")
                     .addParam(FeatureParameterSpec.create("a", true, false, "defaultA"))
                     .build())
-            .addSpec(FeatureSpec.builder("specB")
+            .addFeatureSpec(FeatureSpec.builder("specB")
                     .addParam(FeatureParameterSpec.createId("a"))
                     .addParam(FeatureParameterSpec.create("b", true, false, "defaultB"))
                     .addFeatureRef(FeatureReferenceSpec.create("specA"))

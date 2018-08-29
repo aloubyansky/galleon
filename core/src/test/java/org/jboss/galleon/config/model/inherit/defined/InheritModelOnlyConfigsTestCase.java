@@ -47,14 +47,14 @@ public class InheritModelOnlyConfigsTestCase extends PmInstallFeaturePackTestBas
     protected void createFeaturePacks(FeaturePackCreator creator) throws ProvisioningException {
         creator
         .newFeaturePack(FP1_GAV)
-            .addSpec(FeatureSpec.builder("specA")
+            .addFeatureSpec(FeatureSpec.builder("specA")
                     .addParam(FeatureParameterSpec.createId("name"))
                     .addParam(FeatureParameterSpec.create("p1"))
                     .addParam(FeatureParameterSpec.create("p2"))
                     .addParam(FeatureParameterSpec.create("p3"))
                     .addParam(FeatureParameterSpec.create("p4", "spec"))
                     .build())
-            .addSpec(FeatureSpec.builder("specB")
+            .addFeatureSpec(FeatureSpec.builder("specB")
                     .addParam(FeatureParameterSpec.createId("name"))
                     .addPackageDep("fc1.p1")
                     .build())

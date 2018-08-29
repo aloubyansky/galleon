@@ -16,13 +16,19 @@
  */
 package org.jboss.galleon.xml;
 
+import java.io.BufferedReader;
 import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import org.jboss.galleon.Errors;
+import org.jboss.galleon.ProvisioningException;
+import org.jboss.galleon.config.ConfigModel;
 import org.jboss.staxmapper.XMLElementReader;
 import org.jboss.staxmapper.XMLMapper;
 
@@ -60,10 +66,29 @@ public class XmlParsers {
         INSTANCE.doParse(reader, builder);
     }
 
+    public static ConfigModel parseConfigLayerSpec(Path p) throws ProvisioningException {
+        try(BufferedReader reader = Files.newBufferedReader(p)) {
+            return parseConfigLayerSpec(reader);
+        } catch (Exception e) {
+            throw new ProvisioningException(Errors.parseXml(p), e);
+        }
+    }
+
+    public static ConfigModel parseConfigLayerSpec(Reader reader) throws ProvisioningException {
+        ConfigModel.Builder builder = ConfigModel.builder();
+        try {
+            parse(reader, builder);
+        } catch (XMLStreamException e) {
+            throw new ProvisioningException("Failed to parse config layer spec", e);
+        }
+        return builder.build();
+    }
+
     private final XMLMapper mapper;
 
     private XmlParsers() {
         mapper = XMLMapper.Factory.create();
+        new ConfigLayerXmlParser10().plugin(this);
         new ConfigXmlParser10().plugin(this);
         new FeatureConfigXmlParser10().plugin(this);
         new FeatureGroupXmlParser10().plugin(this);

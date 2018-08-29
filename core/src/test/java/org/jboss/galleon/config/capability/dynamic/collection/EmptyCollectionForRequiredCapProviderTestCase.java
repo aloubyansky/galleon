@@ -42,7 +42,7 @@ public class EmptyCollectionForRequiredCapProviderTestCase extends PmInstallFeat
     protected void createFeaturePacks(FeaturePackCreator creator) throws ProvisioningException {
         creator
         .newFeaturePack(FP_GAV)
-            .addSpec(FeatureSpec.builder("specA")
+            .addFeatureSpec(FeatureSpec.builder("specA")
                     .providesCapability("cap.$p1")
                     .addParam(FeatureParameterSpec.createId("a"))
                     .addParam(FeatureParameterSpec.builder("p1").setType("[String]").build())

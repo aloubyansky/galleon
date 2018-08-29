@@ -40,11 +40,11 @@ public class InheritNoFeaturesFromFeatureGroupTestCase extends PmInstallFeatureP
     protected void createFeaturePacks(FeaturePackCreator creator) throws ProvisioningException {
         creator
         .newFeaturePack(LegacyGalleon1Universe.newFPID("org.jboss.pm.test:fp1", "1", "1.0.0.Final"))
-            .addSpec(FeatureSpec.builder("specA")
+            .addFeatureSpec(FeatureSpec.builder("specA")
                     .addParam(FeatureParameterSpec.createId("name"))
                     .addParam(FeatureParameterSpec.create("a", true))
                     .build())
-            .addSpec(FeatureSpec.builder("specB")
+            .addFeatureSpec(FeatureSpec.builder("specB")
                     .addParam(FeatureParameterSpec.createId("name"))
                     .addParam(FeatureParameterSpec.create("b", false))
                     .build())

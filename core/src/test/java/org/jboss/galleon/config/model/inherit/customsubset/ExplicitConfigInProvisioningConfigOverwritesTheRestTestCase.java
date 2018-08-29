@@ -17,11 +17,7 @@
 package org.jboss.galleon.config.model.inherit.customsubset;
 
 import org.jboss.galleon.universe.galleon1.LegacyGalleon1Universe;
-import org.jboss.galleon.util.IoUtils;
 import org.jboss.galleon.universe.FeaturePackLocation.FPID;
-
-import java.io.IOException;
-import java.nio.file.Paths;
 
 import org.jboss.galleon.ProvisioningDescriptionException;
 import org.jboss.galleon.ProvisioningException;
@@ -53,7 +49,7 @@ public class ExplicitConfigInProvisioningConfigOverwritesTheRestTestCase extends
     protected void createFeaturePacks(FeaturePackCreator creator) throws ProvisioningException {
         creator
         .newFeaturePack(FP1_GAV)
-            .addSpec(FeatureSpec.builder("specA")
+            .addFeatureSpec(FeatureSpec.builder("specA")
                     .addParam(FeatureParameterSpec.createId("name"))
                     .addParam(FeatureParameterSpec.create("p1", true))
                     .build())
@@ -78,13 +74,6 @@ public class ExplicitConfigInProvisioningConfigOverwritesTheRestTestCase extends
                     .build())
             .getCreator()
         .install();
-
-        try {
-            IoUtils.copy(repoHome, Paths.get("/home/aloubyansky/galleon-scripts"));
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
 
     @Override

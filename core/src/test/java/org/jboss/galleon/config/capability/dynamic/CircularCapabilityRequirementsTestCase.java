@@ -75,13 +75,13 @@ public class CircularCapabilityRequirementsTestCase extends PmInstallFeaturePack
     protected void createFeaturePacks(FeaturePackCreator creator) throws ProvisioningException {
         creator
         .newFeaturePack(FP_GAV)
-            .addSpec(FeatureSpec.builder("specA")
+            .addFeatureSpec(FeatureSpec.builder("specA")
                     .providesCapability("cap.$p1")
                     .requiresCapability("cap.$p2")
                     .addParam(FeatureParameterSpec.createId("p1"))
                     .addParam(FeatureParameterSpec.create("p2"))
                     .build())
-            .addSpec(FeatureSpec.builder("specB")
+            .addFeatureSpec(FeatureSpec.builder("specB")
                     .providesCapability("cap.$p1")
                     .requiresCapability("cap.$p2")
                     .addParam(FeatureParameterSpec.createId("p1"))

@@ -42,10 +42,10 @@ public class SimpleUnsatisfiedDynamicCapabilityRequirementTestCase extends PmIns
     protected void createFeaturePacks(FeaturePackCreator creator) throws ProvisioningException {
         creator
         .newFeaturePack(FP_GAV)
-            .addSpec(FeatureSpec.builder("specA")
+            .addFeatureSpec(FeatureSpec.builder("specA")
                     .addParam(FeatureParameterSpec.createId("a"))
                     .build())
-            .addSpec(FeatureSpec.builder("specB")
+            .addFeatureSpec(FeatureSpec.builder("specB")
                     .requiresCapability("cap.$b")
                     .addParam(FeatureParameterSpec.createId("b"))
                     .build())

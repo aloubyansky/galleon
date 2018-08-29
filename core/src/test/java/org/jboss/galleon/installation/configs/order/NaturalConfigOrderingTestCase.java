@@ -46,7 +46,7 @@ public class NaturalConfigOrderingTestCase extends ConfigOrderTestBase {
     protected void createFeaturePacks(FeaturePackCreator creator) throws ProvisioningException {
         creator
             .newFeaturePack(FP1_GAV)
-                .addSpec(FeatureSpec.builder("specA")
+                .addFeatureSpec(FeatureSpec.builder("specA")
                         .addParam(FeatureParameterSpec.createId("id"))
                         .build())
                 .addConfig(ConfigModel.builder(null, "configA")
@@ -86,10 +86,6 @@ public class NaturalConfigOrderingTestCase extends ConfigOrderTestBase {
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(new ResolvedSpecId(FP1_GAV.getProducer(),  "specA"), "id", "1")))
                         .build())
                 .addConfig(ProvisionedConfigBuilder.builder()
-                        .setName("configB")
-                        .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(new ResolvedSpecId(FP1_GAV.getProducer(),  "specA"), "id", "1")))
-                        .build())
-                .addConfig(ProvisionedConfigBuilder.builder()
                         .setModel("model1").setName("config1")
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(new ResolvedSpecId(FP1_GAV.getProducer(),  "specA"), "id", "11")))
                         .build())
@@ -105,6 +101,10 @@ public class NaturalConfigOrderingTestCase extends ConfigOrderTestBase {
                         .setModel("model2").setName("config2")
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(new ResolvedSpecId(FP1_GAV.getProducer(),  "specA"), "id", "22")))
                         .build())
+                .addConfig(ProvisionedConfigBuilder.builder()
+                        .setName("configB")
+                        .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(new ResolvedSpecId(FP1_GAV.getProducer(),  "specA"), "id", "1")))
+                        .build())
                 .build();
     }
 
@@ -112,11 +112,11 @@ public class NaturalConfigOrderingTestCase extends ConfigOrderTestBase {
     protected String[] configList() {
         return new String[] {
                 "configA",
-                "configB",
                 "model1 config1",
                 "model1 config2",
                 "model2 config1",
                 "model2 config2",
+                "configB"
         };
     }
 }

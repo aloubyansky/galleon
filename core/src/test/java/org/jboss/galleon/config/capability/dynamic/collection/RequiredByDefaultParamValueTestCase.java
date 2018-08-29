@@ -44,11 +44,11 @@ public class RequiredByDefaultParamValueTestCase extends PmInstallFeaturePackTes
     protected void createFeaturePacks(FeaturePackCreator creator) throws ProvisioningException {
         creator
         .newFeaturePack(FP_GAV)
-            .addSpec(FeatureSpec.builder("specA")
+            .addFeatureSpec(FeatureSpec.builder("specA")
                     .providesCapability("cap.$a")
                     .addParam(FeatureParameterSpec.createId("a"))
                     .build())
-            .addSpec(FeatureSpec.builder("specB")
+            .addFeatureSpec(FeatureSpec.builder("specB")
                     .requiresCapability("cap.$col")
                     .addParam(FeatureParameterSpec.createId("b"))
                     .addParam(FeatureParameterSpec.builder("col").setType("Set<String>").setDefaultValue("[1,2 , 3 ]").build())

@@ -31,6 +31,8 @@ public interface Constants {
     String FEATURE_PACK_XML = "feature-pack.xml";
     String HISTORY = "history";
     String HISTORY_LIST = "list";
+    String LAYERS = "layers";
+    String LAYER_SPEC_XML = "layer-spec.xml";
     String MODEL_XML = "model.xml";
     String MODULES_XML = "module.xml";
     String PACKAGE_XML = "package.xml";

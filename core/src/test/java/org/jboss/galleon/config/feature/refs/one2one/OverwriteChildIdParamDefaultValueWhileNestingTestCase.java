@@ -48,11 +48,11 @@ public class OverwriteChildIdParamDefaultValueWhileNestingTestCase extends PmIns
     protected void createFeaturePacks(FeaturePackCreator creator) throws ProvisioningException {
         creator
         .newFeaturePack(FP_GAV)
-            .addSpec(FeatureSpec.builder("specA")
+            .addFeatureSpec(FeatureSpec.builder("specA")
                     .addParam(FeatureParameterSpec.createId("id"))
                     .addParam(FeatureParameterSpec.create("p1", "spec"))
                     .build())
-            .addSpec(FeatureSpec.builder("specC")
+            .addFeatureSpec(FeatureSpec.builder("specC")
                     .addFeatureRef(FeatureReferenceSpec.builder("specA").mapParam("a", "id").build())
                     .addParam(FeatureParameterSpec.createId("id"))
                     .addParam(FeatureParameterSpec.create("a", true, false, "def"))

@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.jboss.galleon.Constants;
 import org.jboss.galleon.ProvisioningDescriptionException;
 import org.jboss.galleon.ProvisioningException;
@@ -65,7 +64,7 @@ class ConfigModelStack {
         }
 
         boolean push(FeatureGroupSupport fg) throws ProvisioningException {
-            final ResolvedFeatureGroupConfig resolvedFg = rt.resolveFeatureGroupConfig(fg);
+            final ResolvedFeatureGroupConfig resolvedFg = rt.resolveFeatureGroupConfig(ConfigModelStack.this, fg);
             if (!fg.isConfig() && !ConfigModelStack.this.isRelevant(resolvedFg)) {
                 return false;
             }
@@ -210,6 +209,10 @@ class ConfigModelStack {
         lastConfig = configs.get(poppedIndex - 1);
         lastProcessedScope.complete();
         return lastProcessedScope.config;
+    }
+
+    ConfigModel peekAtConfig() {
+        return lastConfig.config;
     }
 
     boolean pushGroup(FeatureGroupSupport fg) throws ProvisioningException {

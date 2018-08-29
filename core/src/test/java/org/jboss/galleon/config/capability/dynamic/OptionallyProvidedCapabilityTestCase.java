@@ -40,12 +40,12 @@ public class OptionallyProvidedCapabilityTestCase extends PmInstallFeaturePackTe
     protected void createFeaturePacks(FeaturePackCreator creator) throws ProvisioningException {
         creator
         .newFeaturePack(FP_GAV)
-            .addSpec(FeatureSpec.builder("specA")
+            .addFeatureSpec(FeatureSpec.builder("specA")
                     .providesCapability("cap.$c", true)
                     .addParam(FeatureParameterSpec.createId("a"))
                     .addParam(FeatureParameterSpec.create("c", true))
                     .build())
-            .addSpec(FeatureSpec.builder("specB")
+            .addFeatureSpec(FeatureSpec.builder("specB")
                     .requiresCapability("cap.$c")
                     .addParam(FeatureParameterSpec.createId("b"))
                     .addParam(FeatureParameterSpec.create("c"))

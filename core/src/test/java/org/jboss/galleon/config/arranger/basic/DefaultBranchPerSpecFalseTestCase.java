@@ -85,13 +85,13 @@ public class DefaultBranchPerSpecFalseTestCase extends PmInstallFeaturePackTestB
         creator
         .newFeaturePack(FP1_GAV)
 
-            .addSpec(FeatureSpec.builder("specA")
+            .addFeatureSpec(FeatureSpec.builder("specA")
                     .addParam(FeatureParameterSpec.createId("a"))
                     .build())
-            .addSpec(FeatureSpec.builder("specB")
+            .addFeatureSpec(FeatureSpec.builder("specB")
                     .addParam(FeatureParameterSpec.createId("b"))
                     .build())
-            .addSpec(FeatureSpec.builder("specC")
+            .addFeatureSpec(FeatureSpec.builder("specC")
                     .addParam(FeatureParameterSpec.createId("c"))
                     .build())
             .addConfig(ConfigModel.builder()

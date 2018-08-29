@@ -45,7 +45,7 @@ public class IncludeFeatureNotBeloningToFeatureGroupTestCase extends PmInstallFe
     protected void createFeaturePacks(FeaturePackCreator creator) throws ProvisioningException {
         creator
         .newFeaturePack(FP_GAV)
-            .addSpec(FeatureSpec.builder("specP")
+            .addFeatureSpec(FeatureSpec.builder("specP")
                     .addParam(FeatureParameterSpec.createId("parent"))
                     .build())
             .addFeatureGroup(FeatureGroup.builder("group1")

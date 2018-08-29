@@ -46,14 +46,14 @@ public class ReferenceIncludeExternalTestCase extends PmInstallFeaturePackTestBa
     protected void createFeaturePacks(FeaturePackCreator creator) throws ProvisioningException {
         creator
             .newFeaturePack(FP1_GAV)
-                .addSpec(FeatureSpec.builder("specA")
+                .addFeatureSpec(FeatureSpec.builder("specA")
                     .addParam(FeatureParameterSpec.createId("name"))
                     .addParam(FeatureParameterSpec.create("a", "aSpec"))
                     .build())
             .getCreator()
             .newFeaturePack(FP2_GAV)
                 .addDependency("fp1", FP1_GAV.getLocation())
-                .addSpec(FeatureSpec.builder("specB")
+                .addFeatureSpec(FeatureSpec.builder("specB")
                     .addParam(FeatureParameterSpec.createId("name"))
                     .addParam(FeatureParameterSpec.create("a", true))
                     .addFeatureRef(FeatureReferenceSpec.builder("specA")

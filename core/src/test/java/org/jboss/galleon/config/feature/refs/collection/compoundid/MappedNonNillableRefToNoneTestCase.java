@@ -43,11 +43,11 @@ public class MappedNonNillableRefToNoneTestCase extends PmInstallFeaturePackTest
     protected void createFeaturePacks(FeaturePackCreator creator) throws ProvisioningException {
         creator
         .newFeaturePack(FP_GAV)
-            .addSpec(FeatureSpec.builder("specA")
+            .addFeatureSpec(FeatureSpec.builder("specA")
                     .addParam(FeatureParameterSpec.createId("id"))
                     .addParam(FeatureParameterSpec.createId("a"))
                     .build())
-            .addSpec(FeatureSpec.builder("specB")
+            .addFeatureSpec(FeatureSpec.builder("specB")
                     .addParam(FeatureParameterSpec.createId("id"))
                     .addParam(FeatureParameterSpec.createId("b"))
                     .addParam(FeatureParameterSpec.builder("afk").setType("List<String>").build())

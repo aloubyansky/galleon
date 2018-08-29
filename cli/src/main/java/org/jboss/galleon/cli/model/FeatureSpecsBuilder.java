@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.Set;
 import javax.xml.stream.XMLStreamException;
 
+import org.jboss.galleon.ProvisioningDescriptionException;
 import org.jboss.galleon.ProvisioningException;
 import org.jboss.galleon.cli.PmSession;
 import org.jboss.galleon.runtime.ResolvedSpecId;
@@ -135,7 +136,7 @@ public class FeatureSpecsBuilder {
                                         specInfo.setMissingPackages(missingPackages);
                                         allspecs.put(resolved, specInfo);
                                         fSpecs.add(specInfo);
-                                    } catch (XMLStreamException ex) {
+                                    } catch (XMLStreamException | ProvisioningDescriptionException ex) {
                                         throw new RuntimeException(ex);
                                     }
                                 }
@@ -186,7 +187,7 @@ public class FeatureSpecsBuilder {
         }
     }
 
-    private static FeatureSpec getFeatureSpec(FileSystem fs, String name) throws IOException, XMLStreamException {
+    private static FeatureSpec getFeatureSpec(FileSystem fs, String name) throws IOException, XMLStreamException, ProvisioningDescriptionException {
         final Path path = fs.getPath("features/" + name + "/spec.xml");
         byte[] content = Files.readAllBytes(path);
         ByteArrayInputStream stream = new ByteArrayInputStream(content);

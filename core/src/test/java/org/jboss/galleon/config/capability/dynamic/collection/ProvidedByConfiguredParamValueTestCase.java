@@ -44,12 +44,12 @@ public class ProvidedByConfiguredParamValueTestCase extends PmInstallFeaturePack
     protected void createFeaturePacks(FeaturePackCreator creator) throws ProvisioningException {
         creator
         .newFeaturePack(FP_GAV)
-            .addSpec(FeatureSpec.builder("specA")
+            .addFeatureSpec(FeatureSpec.builder("specA")
                     .providesCapability("cap.$col")
                     .addParam(FeatureParameterSpec.createId("a"))
                     .addParam(FeatureParameterSpec.builder("col").setType("[String]").build())
                     .build())
-            .addSpec(FeatureSpec.builder("specB")
+            .addFeatureSpec(FeatureSpec.builder("specB")
                     .requiresCapability("cap.$req")
                     .addParam(FeatureParameterSpec.createId("b"))
                     .addParam(FeatureParameterSpec.create("req"))

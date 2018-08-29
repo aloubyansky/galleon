@@ -47,7 +47,7 @@ public class ResolveFgFromFirstDepOnBranchTestCase extends PmInstallFeaturePackT
     protected void createFeaturePacks(FeaturePackCreator creator) throws ProvisioningException {
         creator
         .newFeaturePack(FP1_GAV)
-            .addSpec(FeatureSpec.builder("specA")
+            .addFeatureSpec(FeatureSpec.builder("specA")
                     .addParam(FeatureParameterSpec.createId("id"))
                     .addParam(FeatureParameterSpec.create("p1", "spec"))
                     .build())
@@ -60,7 +60,7 @@ public class ResolveFgFromFirstDepOnBranchTestCase extends PmInstallFeaturePackT
             .getCreator()
         .newFeaturePack(FP2_GAV)
             .addDependency(FP1_GAV.getLocation())
-            .addSpec(FeatureSpec.builder("specB")
+            .addFeatureSpec(FeatureSpec.builder("specB")
                     .addParam(FeatureParameterSpec.createId("id"))
                     .addParam(FeatureParameterSpec.create("p1", "spec"))
                     .build())

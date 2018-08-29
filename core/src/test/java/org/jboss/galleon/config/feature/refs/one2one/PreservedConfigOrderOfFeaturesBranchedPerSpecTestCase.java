@@ -45,12 +45,12 @@ public class PreservedConfigOrderOfFeaturesBranchedPerSpecTestCase extends PmIns
     protected void createFeaturePacks(FeaturePackCreator creator) throws ProvisioningException {
         creator
         .newFeaturePack(FP_GAV)
-            .addSpec(FeatureSpec.builder("specX")
+            .addFeatureSpec(FeatureSpec.builder("specX")
                     .addParam(FeatureParameterSpec.createId("x"))
                     .addParam(FeatureParameterSpec.create("y", true))
                     .addFeatureRef(FeatureReferenceSpec.create("specY", true))
                     .build())
-            .addSpec(FeatureSpec.builder("specY")
+            .addFeatureSpec(FeatureSpec.builder("specY")
                     .addParam(FeatureParameterSpec.createId("y"))
                     .build())
             .addConfig(ConfigModel.builder()

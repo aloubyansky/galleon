@@ -72,6 +72,18 @@ public class LayoutUtils {
         return fpDir.resolve(Constants.PACKAGES).resolve(packageName).resolve(Constants.CONTENT);
     }
 
+    public static Path getLayerSpecXml(Path fpDir, String model, String name, boolean existing) throws ProvisioningDescriptionException {
+        Path p = fpDir.resolve(Constants.LAYERS);
+        if(model != null) {
+            p = p.resolve(model);
+        }
+        p = p.resolve(name).resolve(Constants.LAYER_SPEC_XML);
+        if(existing && !Files.exists(p)) {
+            throw new ProvisioningDescriptionException("Failed to locate XML file describing configuration layer " + name + " at " + p);
+        }
+        return p;
+    }
+
     public static Path getConfigXml(Path fpDir, ConfigId configId, boolean existing) throws ProvisioningDescriptionException {
         final String model = configId.getModel();
         final String name = configId.getName();

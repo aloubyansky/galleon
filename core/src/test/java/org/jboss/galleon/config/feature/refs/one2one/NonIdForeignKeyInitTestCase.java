@@ -46,15 +46,15 @@ public class NonIdForeignKeyInitTestCase extends PmInstallFeaturePackTestBase {
     protected void createFeaturePacks(FeaturePackCreator creator) throws ProvisioningException {
         creator
         .newFeaturePack(FP_GAV)
-            .addSpec(FeatureSpec.builder("specA")
+            .addFeatureSpec(FeatureSpec.builder("specA")
                     .addParam(FeatureParameterSpec.createId("id"))
                     .addParam(FeatureParameterSpec.create("p1", "spec"))
                     .build())
-            .addSpec(FeatureSpec.builder("specB")
+            .addFeatureSpec(FeatureSpec.builder("specB")
                     .addParam(FeatureParameterSpec.createId("id"))
                     .addParam(FeatureParameterSpec.create("p1", "spec"))
                     .build())
-            .addSpec(FeatureSpec.builder("specC")
+            .addFeatureSpec(FeatureSpec.builder("specC")
                     .addFeatureRef(FeatureReferenceSpec.builder("specB").mapParam("b", "id").build())
                     .addFeatureRef(FeatureReferenceSpec.builder("specA").mapParam("a", "id").build())
                     .addParam(FeatureParameterSpec.createId("id"))

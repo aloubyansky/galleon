@@ -71,11 +71,11 @@ public class RefAndStaticCapTestCase extends PmInstallFeaturePackTestBase {
     protected void createFeaturePacks(FeaturePackCreator creator) throws ProvisioningException {
         creator
         .newFeaturePack(FP_GAV)
-            .addSpec(FeatureSpec.builder("specA")
+            .addFeatureSpec(FeatureSpec.builder("specA")
                     .requiresCapability("cap.b")
                     .addParam(FeatureParameterSpec.createId("a"))
                     .build())
-            .addSpec(FeatureSpec.builder("specB")
+            .addFeatureSpec(FeatureSpec.builder("specB")
                     .providesCapability("cap.b")
                     .addFeatureRef(FeatureReferenceSpec.create("specA"))
                     .addParam(FeatureParameterSpec.createId("b"))

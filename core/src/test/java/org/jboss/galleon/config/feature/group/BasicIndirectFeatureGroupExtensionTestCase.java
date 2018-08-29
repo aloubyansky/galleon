@@ -47,10 +47,10 @@ public class BasicIndirectFeatureGroupExtensionTestCase extends PmInstallFeature
     protected void createFeaturePacks(FeaturePackCreator creator) throws ProvisioningException {
         creator
         .newFeaturePack(FP_GAV)
-            .addSpec(FeatureSpec.builder("specP")
+            .addFeatureSpec(FeatureSpec.builder("specP")
                     .addParam(FeatureParameterSpec.createId("parent"))
                     .build())
-            .addSpec(FeatureSpec.builder("specC")
+            .addFeatureSpec(FeatureSpec.builder("specC")
                     .addParam(FeatureParameterSpec.createId("parent"))
                     .addParam(FeatureParameterSpec.createId("child"))
                     .addParam(FeatureParameterSpec.create("a"))

@@ -48,15 +48,15 @@ public class ExcludeFeaturesWithIncompleteIdsTestCase extends PmInstallFeaturePa
     protected void createFeaturePacks(FeaturePackCreator creator) throws ProvisioningException {
         creator
         .newFeaturePack(FP_GAV)
-            .addSpec(FeatureSpec.builder("specA")
+            .addFeatureSpec(FeatureSpec.builder("specA")
                     .addParam(FeatureParameterSpec.createId("id"))
                     .build())
-            .addSpec(FeatureSpec.builder("specB")
+            .addFeatureSpec(FeatureSpec.builder("specB")
                     .addFeatureRef(FeatureReferenceSpec.builder("specA").mapParam("a", "id").build())
                     .addParam(FeatureParameterSpec.createId("id"))
                     .addParam(FeatureParameterSpec.createId("a"))
                     .build())
-            .addSpec(FeatureSpec.builder("specC")
+            .addFeatureSpec(FeatureSpec.builder("specC")
                     .addFeatureRef(FeatureReferenceSpec.builder("specA").mapParam("a", "id").build())
                     .addParam(FeatureParameterSpec.createId("id"))
                     .addParam(FeatureParameterSpec.createId("a"))

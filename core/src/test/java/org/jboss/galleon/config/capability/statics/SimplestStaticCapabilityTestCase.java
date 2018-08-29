@@ -44,11 +44,11 @@ public class SimplestStaticCapabilityTestCase extends PmInstallFeaturePackTestBa
     protected void createFeaturePacks(FeaturePackCreator creator) throws ProvisioningException {
         creator
         .newFeaturePack(FP_GAV)
-            .addSpec(FeatureSpec.builder("specA")
+            .addFeatureSpec(FeatureSpec.builder("specA")
                     .providesCapability("cap.a")
                     .addParam(FeatureParameterSpec.createId("a"))
                     .build())
-            .addSpec(FeatureSpec.builder("specB")
+            .addFeatureSpec(FeatureSpec.builder("specB")
                     .requiresCapability("cap.a")
                     .addParam(FeatureParameterSpec.createId("b"))
                     .build())

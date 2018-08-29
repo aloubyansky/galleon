@@ -117,6 +117,14 @@ public class ConfigCustomizations {
         return definedConfigs.values();
     }
 
+    public boolean hasDefinedConfig(ConfigId configId) {
+        return definedConfigs.containsKey(configId);
+    }
+
+    public ConfigModel getDefinedConfig(ConfigId configId) {
+        return definedConfigs.get(configId);
+    }
+
     public boolean hasModelOnlyConfigs() {
         return hasModelOnlyConfigs;
     }

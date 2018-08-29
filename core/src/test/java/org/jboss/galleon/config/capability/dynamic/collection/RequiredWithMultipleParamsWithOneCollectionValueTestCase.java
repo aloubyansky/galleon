@@ -44,13 +44,13 @@ public class RequiredWithMultipleParamsWithOneCollectionValueTestCase extends Pm
     protected void createFeaturePacks(FeaturePackCreator creator) throws ProvisioningException {
         creator
         .newFeaturePack(FP_GAV)
-            .addSpec(FeatureSpec.builder("specA")
+            .addFeatureSpec(FeatureSpec.builder("specA")
                     .providesCapability("cap.$a.$col.$p")
                     .addParam(FeatureParameterSpec.createId("a"))
                     .addParam(FeatureParameterSpec.builder("col").setType("List<String>").build())
                     .addParam(FeatureParameterSpec.create("p", "pi"))
                     .build())
-            .addSpec(FeatureSpec.builder("specB")
+            .addFeatureSpec(FeatureSpec.builder("specB")
                     .requiresCapability("cap.$p1.$p2.$p3")
                     .addParam(FeatureParameterSpec.createId("b"))
                     .addParam(FeatureParameterSpec.create("p1"))

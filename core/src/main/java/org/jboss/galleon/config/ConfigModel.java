@@ -43,7 +43,7 @@ public class ConfigModel extends FeatureGroupSupport {
         private String model;
         private Map<String, String> props = Collections.emptyMap();
         private Map<String, ConfigId> configDeps = Collections.emptyMap();
-        private Set<String> deps = Collections.emptySet();
+        private Set<String> layerDeps = Collections.emptySet();
 
         protected Builder() {
             super();
@@ -59,7 +59,6 @@ public class ConfigModel extends FeatureGroupSupport {
             return this;
         }
 
-        @Override
         public Builder setProperty(String name, String value) {
             props = CollectionUtils.put(props, name, value);
             return this;
@@ -70,9 +69,8 @@ public class ConfigModel extends FeatureGroupSupport {
             return this;
         }
 
-        @Override
-        public Builder addDependency(String name) {
-            deps = CollectionUtils.addLinked(deps, name);
+        public Builder addLayerDep(String layerName) {
+            layerDeps = CollectionUtils.addLinked(layerDeps, layerName);
             return this;
         }
 
@@ -92,7 +90,7 @@ public class ConfigModel extends FeatureGroupSupport {
     final ConfigId id;
     final Map<String, String> props;
     final Map<String, ConfigId> configDeps;
-    final Set<String> deps;
+    final Set<String> layerDeps;
     private final Builder builder;
 
     protected ConfigModel(Builder builder) throws ProvisioningDescriptionException {
@@ -100,7 +98,7 @@ public class ConfigModel extends FeatureGroupSupport {
         this.id = new ConfigId(builder.model, builder.name);
         this.props = CollectionUtils.unmodifiable(builder.props);
         this.configDeps = CollectionUtils.unmodifiable(builder.configDeps);
-        this.deps = CollectionUtils.unmodifiable(builder.deps);
+        this.layerDeps = CollectionUtils.unmodifiable(builder.layerDeps);
         this.builder = builder;
     }
 
@@ -116,12 +114,10 @@ public class ConfigModel extends FeatureGroupSupport {
         return id.getModel();
     }
 
-    @Override
     public boolean hasProperties() {
         return !props.isEmpty();
     }
 
-    @Override
     public Map<String, String> getProperties() {
         return props;
     }
@@ -129,19 +125,6 @@ public class ConfigModel extends FeatureGroupSupport {
     @Override
     public boolean isConfig() {
         return true;
-    }
-
-    public boolean isEmpty() {
-        return items.isEmpty() &&
-                inheritFeatures &&
-                includedFeatures.isEmpty() &&
-                excludedFeatures.isEmpty() &&
-                includedSpecs.isEmpty() &&
-                excludedSpecs.isEmpty() &&
-                externalFgConfigs.isEmpty() &&
-                props.isEmpty() &&
-                deps.isEmpty() &&
-                configDeps.isEmpty();
     }
 
     public boolean hasConfigDeps() {
@@ -152,12 +135,12 @@ public class ConfigModel extends FeatureGroupSupport {
         return configDeps;
     }
 
-    public boolean hasDependencies() {
-        return !deps.isEmpty();
+    public boolean hasLayerDeps() {
+        return !layerDeps.isEmpty();
     }
 
-    public Set<String> getDependencies() {
-        return deps;
+    public Set<String> getLayerDeps() {
+        return layerDeps;
     }
 
     @Override
@@ -165,8 +148,8 @@ public class ConfigModel extends FeatureGroupSupport {
         final int prime = 31;
         int result = super.hashCode();
         result = prime * result + ((configDeps == null) ? 0 : configDeps.hashCode());
-        result = prime * result + ((deps == null) ? 0 : deps.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + ((layerDeps == null) ? 0 : layerDeps.hashCode());
         result = prime * result + ((props == null) ? 0 : props.hashCode());
         return result;
     }
@@ -185,15 +168,15 @@ public class ConfigModel extends FeatureGroupSupport {
                 return false;
         } else if (!configDeps.equals(other.configDeps))
             return false;
-        if (deps == null) {
-            if (other.deps != null)
-                return false;
-        } else if (!deps.equals(other.deps))
-            return false;
         if (id == null) {
             if (other.id != null)
                 return false;
         } else if (!id.equals(other.id))
+            return false;
+        if (layerDeps == null) {
+            if (other.layerDeps != null)
+                return false;
+        } else if (!layerDeps.equals(other.layerDeps))
             return false;
         if (props == null) {
             if (other.props != null)
@@ -202,7 +185,6 @@ public class ConfigModel extends FeatureGroupSupport {
             return false;
         return true;
     }
-
 
     @Override
     public String toString() {
@@ -219,9 +201,9 @@ public class ConfigModel extends FeatureGroupSupport {
             buf.append(" config-deps=");
             StringUtils.append(buf, configDeps.entrySet());
         }
-        if(!deps.isEmpty()) {
-            buf.append(" deps=");
-            StringUtils.append(buf, deps);
+        if(layerDeps.isEmpty()) {
+            buf.append(" layer-deps=");
+            StringUtils.append(buf, layerDeps);
         }
         if(!inheritFeatures) {
             buf.append(" inherit-features=false");

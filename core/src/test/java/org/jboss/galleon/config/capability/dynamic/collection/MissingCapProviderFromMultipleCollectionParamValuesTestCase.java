@@ -42,12 +42,12 @@ public class MissingCapProviderFromMultipleCollectionParamValuesTestCase extends
     protected void createFeaturePacks(FeaturePackCreator creator) throws ProvisioningException {
         creator
         .newFeaturePack(FP_GAV)
-            .addSpec(FeatureSpec.builder("specA")
+            .addFeatureSpec(FeatureSpec.builder("specA")
                     .providesCapability("$a.$p")
                     .addParam(FeatureParameterSpec.createId("a"))
                     .addParam(FeatureParameterSpec.createId("p"))
                     .build())
-            .addSpec(FeatureSpec.builder("specB")
+            .addFeatureSpec(FeatureSpec.builder("specB")
                     .requiresCapability("$p1.$p2")
                     .addParam(FeatureParameterSpec.createId("b"))
                     .addParam(FeatureParameterSpec.builder("p1").setType("List<String>").build())

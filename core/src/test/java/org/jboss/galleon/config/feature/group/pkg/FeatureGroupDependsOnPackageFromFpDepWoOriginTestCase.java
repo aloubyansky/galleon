@@ -47,7 +47,7 @@ public class FeatureGroupDependsOnPackageFromFpDepWoOriginTestCase extends PmIns
         creator
         .newFeaturePack(FP1_GAV)
             .addDependency(FP2_GAV.getLocation())
-            .addSpec(FeatureSpec.builder("specA")
+            .addFeatureSpec(FeatureSpec.builder("specA")
                     .addParam(FeatureParameterSpec.createId("name"))
                     .addParam(FeatureParameterSpec.create("a", true))
                     .build())

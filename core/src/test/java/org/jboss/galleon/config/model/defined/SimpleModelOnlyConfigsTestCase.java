@@ -17,11 +17,7 @@
 package org.jboss.galleon.config.model.defined;
 
 import org.jboss.galleon.universe.galleon1.LegacyGalleon1Universe;
-import org.jboss.galleon.util.IoUtils;
 import org.jboss.galleon.universe.FeaturePackLocation.FPID;
-
-import java.io.IOException;
-import java.nio.file.Paths;
 
 import org.jboss.galleon.ProvisioningException;
 import org.jboss.galleon.config.ConfigModel;
@@ -49,7 +45,7 @@ public class SimpleModelOnlyConfigsTestCase extends PmInstallFeaturePackTestBase
     protected void createFeaturePacks(FeaturePackCreator creator) throws ProvisioningException {
         creator
         .newFeaturePack(FP_GAV)
-            .addSpec(FeatureSpec.builder("specA")
+            .addFeatureSpec(FeatureSpec.builder("specA")
                     .addParam(FeatureParameterSpec.createId("name"))
                     .addParam(FeatureParameterSpec.create("p1", true))
                     .build())
@@ -78,13 +74,6 @@ public class SimpleModelOnlyConfigsTestCase extends PmInstallFeaturePackTestBase
             .addConfig(ConfigModel.builder().setName("config-b").setModel("config1").build())
             .getCreator()
         .install();
-
-        try {
-            IoUtils.copy(repoHome, Paths.get("/home/olubyans/galleon-scripts"));
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
 
     @Override

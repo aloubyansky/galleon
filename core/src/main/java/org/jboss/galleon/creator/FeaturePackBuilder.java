@@ -48,6 +48,7 @@ import org.jboss.galleon.util.CollectionUtils;
 import org.jboss.galleon.util.IoUtils;
 import org.jboss.galleon.util.LayoutUtils;
 import org.jboss.galleon.util.ZipUtils;
+import org.jboss.galleon.xml.ConfigLayerXmlWriter;
 import org.jboss.galleon.xml.ConfigXmlWriter;
 import org.jboss.galleon.xml.FeatureGroupXmlWriter;
 import org.jboss.galleon.xml.FeaturePackXmlWriter;
@@ -69,6 +70,7 @@ public class FeaturePackBuilder {
     private Map<String, FeatureSpec> specs = Collections.emptyMap();
     private Map<String, FeatureGroup> featureGroups = Collections.emptyMap();
     private Map<ConfigId, ConfigModel> configs = Collections.emptyMap();
+    private Map<ConfigId, ConfigModel> layers = Collections.emptyMap();
     private FsTaskList tasks;
 
     FeaturePackBuilder(FeaturePackCreator creator) {
@@ -143,23 +145,33 @@ public class FeaturePackBuilder {
         return pkg;
     }
 
+    /**
+     * @deprecated in favor of addFeatureSpec(FeatureSpec spec)
+     * @param spec  feature spec
+     * @return  this builder
+     * @throws ProvisioningDescriptionException  in case of duplicate feature spec
+     */
     public FeaturePackBuilder addSpec(FeatureSpec spec) throws ProvisioningDescriptionException {
+        return addFeatureSpec(spec);
+    }
+
+    public FeaturePackBuilder addFeatureSpec(FeatureSpec spec) throws ProvisioningDescriptionException {
         if (specs.isEmpty()) {
             specs = new HashMap<>();
-        } else if (specs.containsKey(spec.getName())) {
+        }
+        if (specs.put(spec.getName(), spec) != null) {
             throw new ProvisioningDescriptionException("Feature-pack " + fpBuilder.getFPID() + ": duplicate spec name " + spec.getName());
         }
-        specs.put(spec.getName(), spec);
         return this;
     }
 
     public FeaturePackBuilder addFeatureGroup(FeatureGroup featureGroup) throws ProvisioningDescriptionException {
         if (featureGroups.isEmpty()) {
             featureGroups = new HashMap<>();
-        } else if (featureGroups.containsKey(featureGroup.getName())) {
+        }
+        if (featureGroups.put(featureGroup.getName(), featureGroup) != null) {
             throw new ProvisioningDescriptionException("Feature-pack " + fpBuilder.getFPID() + ": duplicate feature-group name " + featureGroup.getName());
         }
-        featureGroups.put(featureGroup.getName(), featureGroup);
         return this;
     }
 
@@ -178,12 +190,22 @@ public class FeaturePackBuilder {
         }
         if (configs.isEmpty()) {
             configs = new HashMap<>();
-        } else if (configs.containsKey(id)) {
+        }
+        if (configs.put(id, config) != null) {
             throw new ProvisioningDescriptionException("Feature-pack " + fpBuilder.getFPID() + ": duplicate config " + id);
         }
-        configs.put(id, config);
         if(asDefault) {
             fpBuilder.addConfig(ConfigModel.builder(id.getModel(), id.getName()).build());
+        }
+        return this;
+    }
+
+    public FeaturePackBuilder addConfigLayer(ConfigModel layer) throws ProvisioningDescriptionException {
+        if(layers.isEmpty()) {
+            layers = new HashMap<>();
+        }
+        if(layers.put(layer.getId(), layer) != null) {
+            throw new ProvisioningDescriptionException("Feature-pack " + fpBuilder.getFPID() + ": duplicate layer " + layer.getId());
         }
         return this;
     }
@@ -292,6 +314,17 @@ public class FeaturePackBuilder {
 
             if(!classes.isEmpty() || !plugins.isEmpty()) {
                 addPlugins(fpWorkDir);
+            }
+
+            if(!layers.isEmpty()) {
+                for(Map.Entry<ConfigId, ConfigModel> entry : layers.entrySet()) {
+                    final ConfigId id = entry.getKey();
+                    final Path xml = LayoutUtils.getLayerSpecXml(fpWorkDir, id.getModel(), id.getName(), false);
+                    if (Files.exists(xml)) {
+                        throw new ProvisioningException("Failed to create feature-pack: " + xml + " already exists");
+                    }
+                    ConfigLayerXmlWriter.getInstance().write(entry.getValue(), xml);
+                }
             }
 
             if(!configs.isEmpty()) {

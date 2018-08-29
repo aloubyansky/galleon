@@ -46,14 +46,14 @@ public class ResolveFirstFeatureSpecOnDependencyBranchTestCase extends PmInstall
     protected void createFeaturePacks(FeaturePackCreator creator) throws ProvisioningException {
         creator
         .newFeaturePack(FP1_GAV)
-            .addSpec(FeatureSpec.builder("specA")
+            .addFeatureSpec(FeatureSpec.builder("specA")
                     .addParam(FeatureParameterSpec.createId("id"))
                     .addParam(FeatureParameterSpec.create("p1", "fp1"))
                     .build())
             .getCreator()
         .newFeaturePack(FP2_GAV)
             .addDependency(FP1_GAV.getLocation())
-            .addSpec(FeatureSpec.builder("specA")
+            .addFeatureSpec(FeatureSpec.builder("specA")
                     .addParam(FeatureParameterSpec.createId("id"))
                     .addParam(FeatureParameterSpec.create("p1", "fp2"))
                     .build())

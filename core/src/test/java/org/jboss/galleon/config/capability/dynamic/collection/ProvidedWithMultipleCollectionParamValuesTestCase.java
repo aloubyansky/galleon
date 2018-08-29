@@ -45,13 +45,13 @@ public class ProvidedWithMultipleCollectionParamValuesTestCase extends PmInstall
     protected void createFeaturePacks(FeaturePackCreator creator) throws ProvisioningException {
         creator
         .newFeaturePack(FP_GAV)
-            .addSpec(FeatureSpec.builder("specA")
+            .addFeatureSpec(FeatureSpec.builder("specA")
                     .requiresCapability("$p2.$p1")
                     .addParam(FeatureParameterSpec.createId("a"))
                     .addParam(FeatureParameterSpec.builder("p1").setType("List<String>").build())
                     .addParam(FeatureParameterSpec.builder("p2").setType("List<String>").build())
                     .build())
-            .addSpec(FeatureSpec.builder("specB")
+            .addFeatureSpec(FeatureSpec.builder("specB")
                     .providesCapability("$p1.$p2")
                     .addParam(FeatureParameterSpec.createId("b"))
                     .addParam(FeatureParameterSpec.builder("p1").setType("List<String>").build())

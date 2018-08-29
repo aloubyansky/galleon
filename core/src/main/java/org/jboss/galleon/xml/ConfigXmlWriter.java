@@ -49,25 +49,35 @@ public class ConfigXmlWriter extends BaseXmlWriter<ConfigModel> {
             addAttribute(configE, Attribute.MODEL, config.getModel());
         }
 
+        if(config.hasProperties()) {
+            final ElementNode propsE = addElement(configE, Element.PROPS.getLocalName(), ns);
+            for(Map.Entry<String, String> prop : config.getProperties().entrySet()) {
+                final ElementNode propE = addElement(propsE, Element.PROP.getLocalName(), ns);
+                addAttribute(propE, Attribute.NAME, prop.getKey());
+                addAttribute(propE, Attribute.VALUE, prop.getValue());
+            }
+        }
+
         if(config.hasConfigDeps()) {
-            final ElementNode configDeps = addElement(configE, FeatureGroupXml.Element.CONFIG_DEPS.getLocalName(), ns);
+            final ElementNode configDeps = addElement(configE, Element.CONFIG_DEPS.getLocalName(), ns);
             for(Map.Entry<String, ConfigId> dep : config.getConfigDeps().entrySet()) {
-                final ElementNode configDep = addElement(configDeps, FeatureGroupXml.Element.CONFIG_DEP.getLocalName(), ns);
-                addAttribute(configDep, FeatureGroupXml.Attribute.ID.getLocalName(), dep.getKey());
+                final ElementNode configDep = addElement(configDeps, Element.CONFIG_DEP.getLocalName(), ns);
+                addAttribute(configDep, Attribute.ID.getLocalName(), dep.getKey());
                 final ConfigId configId = dep.getValue();
                 if(configId.getModel() != null) {
-                    addAttribute(configDep, FeatureGroupXml.Attribute.MODEL.getLocalName(), configId.getModel());
+                    addAttribute(configDep, Attribute.MODEL.getLocalName(), configId.getModel());
                 }
                 if(configId.getName() != null) {
-                    addAttribute(configDep, FeatureGroupXml.Attribute.NAME.getLocalName(), configId.getName());
+                    addAttribute(configDep, Attribute.NAME.getLocalName(), configId.getName());
                 }
             }
         }
 
-        if(config.hasDependencies()) {
-            for(String dep : config.getDependencies()) {
-                final ElementNode configDep = addElement(configE, FeatureGroupXml.Element.DEPENDS.getLocalName(), ns);
-                addAttribute(configDep, FeatureGroupXml.Attribute.NAME.getLocalName(), dep);
+        if(config.hasLayerDeps()) {
+            final ElementNode layers = addElement(configE, Element.LAYERS.getLocalName(), ns);
+            for(String layerName : config.getLayerDeps()) {
+                final ElementNode layer = addElement(layers, Element.LAYER.getLocalName(), ns);
+                addAttribute(layer, Attribute.NAME, layerName);
             }
         }
 

@@ -48,6 +48,7 @@ import org.jboss.galleon.xml.ConfigXmlParser;
 import org.jboss.galleon.xml.FeatureGroupXmlParser;
 import org.jboss.galleon.xml.FeatureSpecXmlParser;
 import org.jboss.galleon.xml.PackageXmlParser;
+import org.jboss.galleon.xml.XmlParsers;
 
 /**
  *
@@ -62,6 +63,7 @@ public class FeaturePackRuntimeBuilder implements FeaturePackLayout {
     Map<String, ResolvedFeatureSpec> featureSpecs = null;
     private Map<String, FeatureGroup> fgSpecs = null;
     private Map<ConfigId, ConfigModel> configs = null;
+    private Map<ConfigId, ConfigModel> layers = null;
 
     Map<String, PackageRuntime.Builder> pkgBuilders = Collections.emptyMap();
     List<String> pkgOrder = new ArrayList<>();
@@ -182,6 +184,25 @@ public class FeaturePackRuntimeBuilder implements FeaturePackLayout {
         } catch (Exception e) {
             throw new ProvisioningException(Errors.parseXml(p), e);
         }
+    }
+
+    ConfigModel getConfigLayer(ConfigId configId) throws ProvisioningException {
+        if(layers != null) {
+            final ConfigModel layer = layers.get(configId);
+            if(layer != null) {
+                return layer;
+            }
+        }
+        final Path p = LayoutUtils.getLayerSpecXml(dir, configId.getModel(), configId.getName(), false);
+        if (!Files.exists(p)) {
+            return null;
+        }
+        final ConfigModel layer = XmlParsers.parseConfigLayerSpec(p);
+        if (layers == null) {
+            layers = new HashMap<>();
+        }
+        layers.put(configId, layer);
+        return layer;
     }
 
     ResolvedFeatureSpec getFeatureSpec(String name) throws ProvisioningException {

@@ -45,7 +45,7 @@ public class LinkChainTestCase extends PmInstallFeaturePackTestBase {
     protected void createFeaturePacks(FeaturePackCreator creator) throws ProvisioningException {
         creator
         .newFeaturePack(FP_GAV)
-            .addSpec(FeatureSpec.builder("Link")
+            .addFeatureSpec(FeatureSpec.builder("Link")
                     .addParam(FeatureParameterSpec.createId("name"))
                     .addParam(FeatureParameterSpec.create("prev", true))
                     .addParam(FeatureParameterSpec.create("next", true))
