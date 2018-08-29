@@ -72,6 +72,7 @@ public class NonIdForeignKeyInitTestCase extends PmInstallFeaturePackTestBase {
                             .setParam("id", "c2"))
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .addFeature(
                             new FeatureConfig("specA")
                             .setParam("id", "a1")
@@ -95,6 +96,7 @@ public class NonIdForeignKeyInitTestCase extends PmInstallFeaturePackTestBase {
         return ProvisionedState.builder()
                 .addFeaturePack(ProvisionedFeaturePack.forFPID(FP_GAV))
                 .addConfig(ProvisionedConfigBuilder.builder()
+                        .setName("main")
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP_GAV.getProducer(), "specA", "id", "a1"))
                                 .setConfigParam("p1", "spec")
                                 .build())

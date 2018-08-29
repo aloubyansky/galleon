@@ -88,6 +88,7 @@ public class CircularCapabilityRequirementsTestCase extends PmInstallFeaturePack
                     .addParam(FeatureParameterSpec.create("p2"))
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .addFeature(
                             new FeatureConfig("specB")
                             .setParam("p1", "b1")
@@ -121,6 +122,7 @@ public class CircularCapabilityRequirementsTestCase extends PmInstallFeaturePack
         return ProvisionedState.builder()
                 .addFeaturePack(ProvisionedFeaturePack.forFPID(FP_GAV))
                 .addConfig(ProvisionedConfigBuilder.builder()
+                        .setName("main")
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP_GAV.getProducer(), "specB", "p1", "b1")).setConfigParam("p2", "a1").build())
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP_GAV.getProducer(), "specA", "p1", "a1")).setConfigParam("p2", "b1").build())
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP_GAV.getProducer(), "specA", "p1", "a2")).setConfigParam("p2", "b2").build())

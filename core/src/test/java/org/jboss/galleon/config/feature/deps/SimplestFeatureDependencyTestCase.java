@@ -54,6 +54,7 @@ public class SimplestFeatureDependencyTestCase extends PmInstallFeaturePackTestB
                     .addParam(FeatureParameterSpec.create("b", true))
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .addFeature(
                             new FeatureConfig("specB")
                             .setParam("id", "b")
@@ -77,6 +78,7 @@ public class SimplestFeatureDependencyTestCase extends PmInstallFeaturePackTestB
         return ProvisionedState.builder()
                 .addFeaturePack(ProvisionedFeaturePack.forFPID(FP_GAV))
                 .addConfig(ProvisionedConfigBuilder.builder()
+                        .setName("main")
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP_GAV.getProducer(), "specA", "id", "a")).build())
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP_GAV.getProducer(), "specB", "id", "b")).build())
                         .build())

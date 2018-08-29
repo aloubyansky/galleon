@@ -142,6 +142,7 @@ public class BasicParentChildrenNonBatchBranchesTestCase extends PmInstallFeatur
                     .addParam(FeatureParameterSpec.createId("i"))
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .addFeature(new FeatureConfig("specG").setParam("g", "1").setParam("e", "1").setParam("f", "1"))
                     .addFeature(new FeatureConfig("specH").setParam("h", "1"))
                     .addFeature(new FeatureConfig("specI").setParam("i", "1"))
@@ -171,7 +172,7 @@ public class BasicParentChildrenNonBatchBranchesTestCase extends PmInstallFeatur
                 .addFeaturePack(ProvisionedFeaturePack.builder(FP1_GAV)
                         .build())
                 .addConfig(ProvisionedConfigBuilder.builder()
-
+                        .setName("main")
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP1_GAV.getProducer(), "specA", "a", "1"))
                                 .build())
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.builder(FP1_GAV.getProducer(), "specB")

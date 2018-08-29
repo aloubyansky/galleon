@@ -49,10 +49,6 @@ public class NaturalConfigOrderingTestCase extends ConfigOrderTestBase {
                 .addSpec(FeatureSpec.builder("specA")
                         .addParam(FeatureParameterSpec.createId("id"))
                         .build())
-                .addConfig(ConfigModel.builder(null, null)
-                        .setProperty("id", "fp1")
-                        .addFeature(new FeatureConfig("specA").setParam("id", "1"))
-                        .build())
                 .addConfig(ConfigModel.builder(null, "configA")
                         .addFeature(new FeatureConfig("specA").setParam("id", "1"))
                         .build())
@@ -86,10 +82,6 @@ public class NaturalConfigOrderingTestCase extends ConfigOrderTestBase {
         return ProvisionedState.builder()
                 .addFeaturePack(ProvisionedFeaturePack.builder(FP1_GAV).build())
                 .addConfig(ProvisionedConfigBuilder.builder()
-                        .setProperty("id", "fp1")
-                        .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(new ResolvedSpecId(FP1_GAV.getProducer(),  "specA"), "id", "1")))
-                        .build())
-                .addConfig(ProvisionedConfigBuilder.builder()
                         .setName("configA")
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(new ResolvedSpecId(FP1_GAV.getProducer(),  "specA"), "id", "1")))
                         .build())
@@ -119,13 +111,12 @@ public class NaturalConfigOrderingTestCase extends ConfigOrderTestBase {
     @Override
     protected String[] configList() {
         return new String[] {
-                "anonymous fp1",
-                "configB",
                 "configA",
-                "model2 config2",
-                "model2 config1",
+                "configB",
+                "model1 config1",
                 "model1 config2",
-                "model1 config1"
+                "model2 config1",
+                "model2 config2",
         };
     }
 }

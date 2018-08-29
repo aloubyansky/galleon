@@ -57,6 +57,7 @@ public class ExcludedFeatureSpecDependencyIncludedFeatureTestCase extends PmInst
                             .setParam("id", "b"))
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .addFeatureGroup(FeatureGroup.builder("fg1")
                             .excludeFeature(FeatureId.create("specA", "id", "a"))
                             .build())
@@ -77,7 +78,7 @@ public class ExcludedFeatureSpecDependencyIncludedFeatureTestCase extends PmInst
 
     @Override
     protected void pmFailure(Throwable e) {
-        Assert.assertEquals("Failed to build config", e.getMessage());
+        Assert.assertEquals("Failed to build config named main", e.getMessage());
         e = (ProvisioningException) e.getCause();
         Assert.assertNotNull(e);
         Assert.assertEquals("{org.jboss.pm.test:fp1@galleon1}specB:id=b has unresolved dependency on {org.jboss.pm.test:fp1@galleon1}specA:id=a", e.getMessage());

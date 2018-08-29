@@ -109,6 +109,7 @@ public class MultipleCircularRefsSingleBatchTestCase extends PmInstallFeaturePac
                     .addFeatureRef(FeatureReferenceSpec.create("specC"))
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .addFeature(
                             new FeatureConfig("specA")
                             .setParam("a", "a1")
@@ -151,6 +152,7 @@ public class MultipleCircularRefsSingleBatchTestCase extends PmInstallFeaturePac
         return ProvisionedState.builder()
                 .addFeaturePack(ProvisionedFeaturePack.forFPID(FP_GAV))
                 .addConfig(ProvisionedConfigBuilder.builder()
+                        .setName("main")
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP_GAV.getProducer(), "specA", "a", "a1"))
                                 .setConfigParam("b", "b1")
                                 .setConfigParam("e", "e1")

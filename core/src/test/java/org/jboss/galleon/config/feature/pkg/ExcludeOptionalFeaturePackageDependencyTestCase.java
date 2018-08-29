@@ -62,6 +62,7 @@ public class ExcludeOptionalFeaturePackageDependencyTestCase extends PmInstallFe
                     .addPackageDep("specB.pkg", true)
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .setProperty("prop1", "value1")
                     .setProperty("prop2", "value2")
                     .addFeature(
@@ -98,6 +99,7 @@ public class ExcludeOptionalFeaturePackageDependencyTestCase extends PmInstallFe
                         .addPackage("p2")
                         .build())
                 .addConfig(ProvisionedConfigBuilder.builder()
+                        .setName("main")
                         .setProperty("prop1", "value1")
                         .setProperty("prop2", "value2")
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP_GAV.getProducer(), "specA", "name", "a")).build())

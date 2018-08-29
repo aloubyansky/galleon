@@ -51,6 +51,7 @@ public class OptionallyProvidedCapabilityTestCase extends PmInstallFeaturePackTe
                     .addParam(FeatureParameterSpec.create("c"))
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .addFeature(
                             new FeatureConfig("specB")
                             .setParam("b", "b1")
@@ -83,7 +84,7 @@ public class OptionallyProvidedCapabilityTestCase extends PmInstallFeaturePackTe
 
     @Override
     protected void pmFailure(Throwable e) {
-        Assert.assertEquals("Failed to build config", e.getMessage());
+        Assert.assertEquals("Failed to build config named main", e.getMessage());
         e = (ProvisioningException) e.getCause();
         Assert.assertNotNull(e);
         Assert.assertEquals(

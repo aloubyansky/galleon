@@ -54,6 +54,7 @@ public class NotMappedRefToInvalidTargetTestCase extends PmInstallFeaturePackTes
                     .addFeatureRef(FeatureReferenceSpec.create("specA"))
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .addFeature(
                             new FeatureConfig("specB")
                             .setParam("id", "1")
@@ -80,7 +81,7 @@ public class NotMappedRefToInvalidTargetTestCase extends PmInstallFeaturePackTes
 
     @Override
     protected void pmFailure(Throwable t) {
-        Assert.assertEquals(Errors.failedToBuildConfigSpec(null, null), t.getLocalizedMessage());
+        Assert.assertEquals(Errors.failedToBuildConfigSpec(null, "main"), t.getLocalizedMessage());
     }
 
     @Override

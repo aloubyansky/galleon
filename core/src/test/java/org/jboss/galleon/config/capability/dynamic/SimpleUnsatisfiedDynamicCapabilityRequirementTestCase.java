@@ -50,6 +50,7 @@ public class SimpleUnsatisfiedDynamicCapabilityRequirementTestCase extends PmIns
                     .addParam(FeatureParameterSpec.createId("b"))
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .addFeature(
                             new FeatureConfig("specB")
                             .setParam("b", "b1"))
@@ -73,7 +74,7 @@ public class SimpleUnsatisfiedDynamicCapabilityRequirementTestCase extends PmIns
 
     @Override
     protected void pmFailure(Throwable e) {
-        Assert.assertEquals("Failed to build config", e.getMessage());
+        Assert.assertEquals("Failed to build config named main", e.getMessage());
         e = (ProvisioningException) e.getCause();
         Assert.assertNotNull(e);
         Assert.assertEquals("No provider found for capability cap.b1 required by {org.jboss.pm.test:fp1@galleon1}specB:b=b1 as cap.$b", e.getMessage());

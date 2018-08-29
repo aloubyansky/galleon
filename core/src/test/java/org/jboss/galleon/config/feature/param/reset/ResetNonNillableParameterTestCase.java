@@ -55,6 +55,7 @@ public class ResetNonNillableParameterTestCase extends PmInstallFeaturePackTestB
                             .setParam("p1", "group1"))
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .addFeatureGroup(FeatureGroup.builder("group1")
                             .includeFeature(FeatureId.create("specA", "name", "a1"),
                                     new FeatureConfig().resetParam("p1"))
@@ -71,7 +72,7 @@ public class ResetNonNillableParameterTestCase extends PmInstallFeaturePackTestB
 
     @Override
     protected String[] pmErrors() {
-        return new String[] {Errors.failedToBuildConfigSpec(null, null),
+        return new String[] {Errors.failedToBuildConfigSpec(null, "main"),
                 Errors.nonNillableParameterIsNull(ResolvedFeatureId.create(FP_GAV.getProducer(), "specA", "name", "a1"), "p1")};
     }
 

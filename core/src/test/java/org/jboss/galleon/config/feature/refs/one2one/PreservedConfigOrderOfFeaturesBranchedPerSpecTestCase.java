@@ -54,6 +54,7 @@ public class PreservedConfigOrderOfFeaturesBranchedPerSpecTestCase extends PmIns
                     .addParam(FeatureParameterSpec.createId("y"))
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .setProperty(ConfigModel.BRANCH_PER_SPEC, "true")
                     .addFeature(
                             new FeatureConfig("specX")
@@ -90,6 +91,7 @@ public class PreservedConfigOrderOfFeaturesBranchedPerSpecTestCase extends PmIns
         return ProvisionedState.builder()
                 .addFeaturePack(ProvisionedFeaturePack.forFPID(FP_GAV))
                 .addConfig(ProvisionedConfigBuilder.builder()
+                        .setName("main")
                         .setProperty(ConfigModel.BRANCH_PER_SPEC, "true")
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP_GAV.getProducer(), "specY", "y", "y1"))
                                 .build())

@@ -60,6 +60,7 @@ public class InvalidTargetIdParamInFkMappingInReferenceWithIncludeTrueTestCase e
                             .build())
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .addFeature(
                             new FeatureConfig("specB")
                             .setParam("id", "b")
@@ -81,7 +82,7 @@ public class InvalidTargetIdParamInFkMappingInReferenceWithIncludeTrueTestCase e
 
     @Override
     protected void pmFailure(Throwable e) throws ProvisioningDescriptionException {
-        Assert.assertEquals(Errors.failedToResolveConfigSpec(null, null), e.getLocalizedMessage());
+        Assert.assertEquals(Errors.failedToResolveConfigSpec(null, "main"), e.getLocalizedMessage());
         Throwable t = e.getCause();
         Assert.assertNotNull(t);
         Assert.assertEquals(Errors.failedToProcess(FP_GAV,

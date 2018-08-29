@@ -61,6 +61,7 @@ public class FeatureDependencyIncludeTrueOverwritesFalseBranchedPerSpecTestCase 
                     .addFeatureDep(FeatureDependencySpec.create(FeatureId.create("specA", "id", "a2"), false))
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .setProperty(ConfigModel.BRANCH_PER_SPEC, "true")
                     .addFeature(
                             new FeatureConfig("specB")
@@ -87,6 +88,7 @@ public class FeatureDependencyIncludeTrueOverwritesFalseBranchedPerSpecTestCase 
         return ProvisionedState.builder()
                 .addFeaturePack(ProvisionedFeaturePack.forFPID(FP_GAV))
                 .addConfig(ProvisionedConfigBuilder.builder()
+                        .setName("main")
                         .setProperty(ConfigModel.BRANCH_PER_SPEC, "true")
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP_GAV.getProducer(), "specA", "id", "a1")).build())
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP_GAV.getProducer(), "specA", "id", "a2")).build())

@@ -57,6 +57,7 @@ public class RequiredWithMultipleCollectionParamValuesTestCase extends PmInstall
                     .addParam(FeatureParameterSpec.builder("p2").setType("List<String>").build())
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .addFeature(
                             new FeatureConfig("specB")
                             .setParam("b", "b1")
@@ -93,6 +94,7 @@ public class RequiredWithMultipleCollectionParamValuesTestCase extends PmInstall
         return ProvisionedState.builder()
                 .addFeaturePack(ProvisionedFeaturePack.forFPID(FP_GAV))
                 .addConfig(ProvisionedConfigBuilder.builder()
+                        .setName("main")
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.builder(FP_GAV.getProducer(), "specA").setParam("a", "1").setParam("p", "a").build()).build())
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.builder(FP_GAV.getProducer(), "specA").setParam("a", "2").setParam("p", "a").build()).build())
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.builder(FP_GAV.getProducer(), "specA").setParam("a", "1").setParam("p", "b").build()).build())

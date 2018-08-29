@@ -57,6 +57,7 @@ public class MappedNonNillableRefToNoneTestCase extends PmInstallFeaturePackTest
                             .build())
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .addFeature(
                             new FeatureConfig("specB")
                             .setParam("id", "1")
@@ -83,7 +84,7 @@ public class MappedNonNillableRefToNoneTestCase extends PmInstallFeaturePackTest
 
     @Override
     protected void pmFailure(Throwable t) {
-        Assert.assertEquals(Errors.failedToBuildConfigSpec(null, null), t.getLocalizedMessage());
+        Assert.assertEquals(Errors.failedToBuildConfigSpec(null, "main"), t.getLocalizedMessage());
     }
 
     @Override

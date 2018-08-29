@@ -62,6 +62,7 @@ public class ParameterOverwriteTestCase extends PmInstallFeaturePackTestBase {
                             .setParam("p3", "group3"))
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .addFeatureGroup(FeatureGroup.builder("group1")
                             .includeFeature(FeatureId.create("specA", "name", "a1"),
                                     new FeatureConfig("specA")
@@ -92,6 +93,7 @@ public class ParameterOverwriteTestCase extends PmInstallFeaturePackTestBase {
                         .addPackage("p1")
                         .build())
                 .addConfig(ProvisionedConfigBuilder.builder()
+                        .setName("main")
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP_GAV.getProducer(), "specA", "name", "a1"))
                                 .setConfigParam("p1", "config1")
                                 .setConfigParam("p2", "groupConfig2")

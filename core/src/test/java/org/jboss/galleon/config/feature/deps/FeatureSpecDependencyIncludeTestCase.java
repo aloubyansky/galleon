@@ -61,6 +61,7 @@ public class FeatureSpecDependencyIncludeTestCase extends PmInstallFeaturePackTe
                     .addFeatureDep(FeatureDependencySpec.create(FeatureId.create("specB", "id", "b"), true))
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .addFeature(
                             new FeatureConfig("specC")
                             .setParam("id", "c"))
@@ -79,6 +80,7 @@ public class FeatureSpecDependencyIncludeTestCase extends PmInstallFeaturePackTe
         return ProvisionedState.builder()
                 .addFeaturePack(ProvisionedFeaturePack.forFPID(FP_GAV))
                 .addConfig(ProvisionedConfigBuilder.builder()
+                        .setName("main")
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP_GAV.getProducer(), "specA", "id", "a")).build())
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP_GAV.getProducer(), "specB", "id", "b")).build())
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP_GAV.getProducer(), "specC", "id", "c")).build())

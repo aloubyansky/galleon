@@ -58,6 +58,7 @@ public class FeatureGroupDependsOnPackageFromFpDepWoOriginTestCase extends PmIns
                     .addPackageDep("p2")
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .addFeatureGroup(FeatureGroup.forGroup("fg1"))
                     .build())
             .newPackage("p1")
@@ -87,6 +88,7 @@ public class FeatureGroupDependsOnPackageFromFpDepWoOriginTestCase extends PmIns
                         .addPackage("p1")
                         .build())
                 .addConfig(ProvisionedConfigBuilder.builder()
+                        .setName("main")
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP1_GAV.getProducer(), "specA", "name", "a1")).build())
                         .build())
                 .build();

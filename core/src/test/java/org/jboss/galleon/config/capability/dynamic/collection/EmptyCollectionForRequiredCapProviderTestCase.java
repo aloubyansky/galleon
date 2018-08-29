@@ -48,6 +48,7 @@ public class EmptyCollectionForRequiredCapProviderTestCase extends PmInstallFeat
                     .addParam(FeatureParameterSpec.builder("p1").setType("[String]").build())
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .addFeature(
                             new FeatureConfig("specA")
                             .setParam("a", "1")
@@ -65,7 +66,7 @@ public class EmptyCollectionForRequiredCapProviderTestCase extends PmInstallFeat
     @Override
     protected String[] pmErrors() throws ProvisioningException {
         return new String[] {
-                Errors.failedToBuildConfigSpec(null, null),
+                Errors.failedToBuildConfigSpec(null, "main"),
                 "Failed to resolve capability cap.$p1 for {org.jboss.pm.test:fp1@galleon1}specA:a=1",
                 Errors.capabilityMissingParameter(CapabilitySpec.fromString("cap.$p1"), "p1")
         };

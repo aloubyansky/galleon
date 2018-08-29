@@ -107,6 +107,7 @@ public class ParentChildrenBranchPerParentChildrenPerSpecWithBatchTrueTestCase e
                     .addParam(FeatureParameterSpec.createId("c"))
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .setProperty(ConfigModel.BRANCH_IS_BATCH, "true")
                     .setProperty(ConfigModel.BRANCH_PER_SPEC, "true")
 
@@ -138,6 +139,7 @@ public class ParentChildrenBranchPerParentChildrenPerSpecWithBatchTrueTestCase e
                 .addFeaturePack(ProvisionedFeaturePack.builder(FP1_GAV)
                         .build())
                 .addConfig(ProvisionedConfigBuilder.builder()
+                        .setName("main")
                         .setProperty(ConfigModel.BRANCH_IS_BATCH, "true")
                         .setProperty(ConfigModel.BRANCH_PER_SPEC, "true")
 

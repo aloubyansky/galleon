@@ -107,6 +107,7 @@ public class CircularDepsBetweenBranchesWithAssignedIdsTestCase extends PmInstal
                     .addParam(FeatureParameterSpec.create("requiredCap"))
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .addFeature(new FeatureConfig("specD").setParam("d", "1").setParam("requiredCap", "cap1"))
                     .addFeature(new FeatureConfig("specC").setParam("c", "1").setParam("requiredCap", "cap2"))
                     .addFeature(new FeatureConfig("specB").setParam("b", "1").setParam("providedCap", "cap2"))
@@ -129,6 +130,7 @@ public class CircularDepsBetweenBranchesWithAssignedIdsTestCase extends PmInstal
                 .addFeaturePack(ProvisionedFeaturePack.builder(FP1_GAV)
                         .build())
                 .addConfig(ProvisionedConfigBuilder.builder()
+                        .setName("main")
 
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP1_GAV.getProducer(), "specA", "a", "1"))
                                 .setConfigParam("providedCap", "cap1")

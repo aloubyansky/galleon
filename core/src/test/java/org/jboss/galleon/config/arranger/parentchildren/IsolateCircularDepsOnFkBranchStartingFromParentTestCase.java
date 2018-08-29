@@ -128,6 +128,7 @@ public class IsolateCircularDepsOnFkBranchStartingFromParentTestCase extends PmI
                     .build())
 
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .setProperty(ConfigModel.BRANCH_IS_BATCH, "true")
                     .setProperty(ConfigModel.ISOLATE_CIRCULAR_DEPS, "true")
 
@@ -164,6 +165,7 @@ public class IsolateCircularDepsOnFkBranchStartingFromParentTestCase extends PmI
                 .addFeaturePack(ProvisionedFeaturePack.builder(FP1_GAV)
                         .build())
                 .addConfig(ProvisionedConfigBuilder.builder()
+                        .setName("main")
                         .setProperty(ConfigModel.BRANCH_IS_BATCH, "true")
                         .setProperty(ConfigModel.ISOLATE_CIRCULAR_DEPS, "true")
 

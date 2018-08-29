@@ -58,6 +58,7 @@ public class ProvidedWithMultipleParamsWithOneCollectionValueTestCase extends Pm
                     .addParam(FeatureParameterSpec.create("p3"))
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .addFeature(
                             new FeatureConfig("specB")
                             .setParam("b", "b1")
@@ -89,6 +90,7 @@ public class ProvidedWithMultipleParamsWithOneCollectionValueTestCase extends Pm
         return ProvisionedState.builder()
                 .addFeaturePack(ProvisionedFeaturePack.forFPID(FP_GAV))
                 .addConfig(ProvisionedConfigBuilder.builder()
+                        .setName("main")
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP_GAV.getProducer(), "specA", "a", "a1")).setConfigParam("col", "[x, y]").setConfigParam("p", "pi").build())
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP_GAV.getProducer(), "specB", "b", "b1")).setConfigParam("p1", "a1").setConfigParam("p2", "x").setConfigParam("p3", "pi").build())
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP_GAV.getProducer(), "specB", "b", "b2")).setConfigParam("p1", "a1").setConfigParam("p2", "y").setConfigParam("p3", "pi").build())

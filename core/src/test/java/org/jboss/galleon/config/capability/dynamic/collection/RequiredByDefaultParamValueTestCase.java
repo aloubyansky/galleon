@@ -54,6 +54,7 @@ public class RequiredByDefaultParamValueTestCase extends PmInstallFeaturePackTes
                     .addParam(FeatureParameterSpec.builder("col").setType("Set<String>").setDefaultValue("[1,2 , 3 ]").build())
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .addFeature(
                             new FeatureConfig("specA")
                             .setParam("a", "3"))
@@ -81,6 +82,7 @@ public class RequiredByDefaultParamValueTestCase extends PmInstallFeaturePackTes
         return ProvisionedState.builder()
                 .addFeaturePack(ProvisionedFeaturePack.forFPID(FP_GAV))
                 .addConfig(ProvisionedConfigBuilder.builder()
+                        .setName("main")
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP_GAV.getProducer(), "specA", "a", "3")).build())
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP_GAV.getProducer(), "specA", "a", "1")).build())
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP_GAV.getProducer(), "specA", "a", "2")).build())

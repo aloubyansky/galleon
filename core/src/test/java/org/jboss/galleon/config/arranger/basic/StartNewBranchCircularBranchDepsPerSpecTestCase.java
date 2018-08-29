@@ -128,6 +128,7 @@ public class StartNewBranchCircularBranchDepsPerSpecTestCase extends PmInstallFe
                     .build())
 
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .setProperty(ConfigModel.BRANCH_PER_SPEC, "true")
                     .addFeature(new FeatureConfig("specA2").setParam("a", "1").setParam("a1", "1").setParam("a2", "1"))
                     .addFeature(new FeatureConfig("specA2").setParam("a", "1").setParam("a1", "2").setParam("a2", "1"))
@@ -158,6 +159,7 @@ public class StartNewBranchCircularBranchDepsPerSpecTestCase extends PmInstallFe
                 .addFeaturePack(ProvisionedFeaturePack.builder(FP1_GAV)
                         .build())
                 .addConfig(ProvisionedConfigBuilder.builder()
+                        .setName("main")
                         .setProperty(ConfigModel.BRANCH_PER_SPEC, "true")
 
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP1_GAV.getProducer(), "specA", "a", "1")).build())

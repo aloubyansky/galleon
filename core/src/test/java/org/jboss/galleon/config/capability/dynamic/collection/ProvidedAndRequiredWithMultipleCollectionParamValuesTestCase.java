@@ -57,6 +57,7 @@ public class ProvidedAndRequiredWithMultipleCollectionParamValuesTestCase extend
                     .addParam(FeatureParameterSpec.builder("p2").setType("List<String>").build())
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .addFeature(
                             new FeatureConfig("specA")
                             .setParam("a", "1")
@@ -93,6 +94,7 @@ public class ProvidedAndRequiredWithMultipleCollectionParamValuesTestCase extend
         return ProvisionedState.builder()
                 .addFeaturePack(ProvisionedFeaturePack.forFPID(FP_GAV))
                 .addConfig(ProvisionedConfigBuilder.builder()
+                        .setName("main")
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP_GAV.getProducer(), "specB", "b", "b1")).setConfigParam("p1", "[1, 2]").setConfigParam("p2", "[a, b]").build())
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.builder(FP_GAV.getProducer(), "specA").setParam("a", "1").setParam("p", "a").build()).build())
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.builder(FP_GAV.getProducer(), "specA").setParam("a", "1").setParam("p", "b").build()).build())

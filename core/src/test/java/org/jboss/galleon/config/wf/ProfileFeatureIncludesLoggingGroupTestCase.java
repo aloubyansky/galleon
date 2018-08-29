@@ -185,7 +185,7 @@ public class ProfileFeatureIncludesLoggingGroupTestCase extends PmInstallFeature
                                     .setParam("name", "COLOR-PATTERN")
                                     .setParam("pattern", "%K{level}%d{HH:mm:ss,SSS} %-5p [%c] (%t) %s%e%n")))
                     .build())
-            .addConfig(ConfigModel.builder()
+            .addConfig(ConfigModel.builder().setName("main")
                     .setProperty("prop1", "value1")
                     .setProperty("prop2", "value2")
                     .setProperty(ConfigModel.BRANCH_PER_SPEC, "true")
@@ -252,6 +252,7 @@ public class ProfileFeatureIncludesLoggingGroupTestCase extends PmInstallFeature
     @Override
     protected ProvisionedState provisionedState() throws ProvisioningException {
         final ProvisionedConfigBuilder config1 = ProvisionedConfigBuilder.builder()
+                .setName("main")
         .setProperty("prop1", "value1")
         .setProperty("prop2", "value2")
         .setProperty(ConfigModel.BRANCH_PER_SPEC, "true")

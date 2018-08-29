@@ -53,6 +53,7 @@ public class AnonymousFeaturesWithBranchPerSpecFalseTestCase extends PmInstallFe
                     .addParam(FeatureParameterSpec.create("b"))
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .setProperty(ConfigModel.BRANCH_PER_SPEC, "false")
                     .addFeature(new FeatureConfig("specA").setParam("a", "1"))
                     .addFeature(new FeatureConfig("specB").setParam("b", "1"))
@@ -79,6 +80,7 @@ public class AnonymousFeaturesWithBranchPerSpecFalseTestCase extends PmInstallFe
                 .addFeaturePack(ProvisionedFeaturePack.builder(FP1_GAV)
                         .build())
                 .addConfig(ProvisionedConfigBuilder.builder()
+                        .setName("main")
                         .setProperty(ConfigModel.BRANCH_PER_SPEC, "false")
 
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP1_GAV.getProducer(), "specA", "a", "1")).build())

@@ -50,6 +50,7 @@ public class EmptyCollectionForOptionalCapConsumerTestCase extends PmInstallFeat
                     .addParam(FeatureParameterSpec.builder("p1").setType("[String]").build())
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .addFeature(
                             new FeatureConfig("specA")
                             .setParam("a", "1")
@@ -69,6 +70,7 @@ public class EmptyCollectionForOptionalCapConsumerTestCase extends PmInstallFeat
         return ProvisionedState.builder()
                 .addFeaturePack(ProvisionedFeaturePack.forFPID(FP_GAV))
                 .addConfig(ProvisionedConfigBuilder.builder()
+                        .setName("main")
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP_GAV.getProducer(), "specA", "a", "1")).setConfigParam("p1", "[]").build())
                         .build())
                 .build();

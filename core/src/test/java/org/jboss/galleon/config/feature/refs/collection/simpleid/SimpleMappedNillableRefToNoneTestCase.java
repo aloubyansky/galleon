@@ -58,6 +58,7 @@ public class SimpleMappedNillableRefToNoneTestCase extends PmInstallFeaturePackT
                             .build())
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .addFeature(
                             new FeatureConfig("specB")
                             .setParam("b", "b1")
@@ -80,6 +81,7 @@ public class SimpleMappedNillableRefToNoneTestCase extends PmInstallFeaturePackT
         return ProvisionedState.builder()
                 .addFeaturePack(ProvisionedFeaturePack.forFPID(FP_GAV))
                 .addConfig(ProvisionedConfigBuilder.builder()
+                        .setName("main")
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP_GAV.getProducer(), "specB", "b", "b1"))
                                 .setConfigParam("afk", "[]")
                                 .build())

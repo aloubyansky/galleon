@@ -54,6 +54,7 @@ public class PreservedConfigOrderOfFeaturesTestCase extends PmInstallFeaturePack
                     .addParam(FeatureParameterSpec.createId("y"))
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .addFeature(
                             new FeatureConfig("specX")
                             .setParam("x", "x1")
@@ -89,6 +90,7 @@ public class PreservedConfigOrderOfFeaturesTestCase extends PmInstallFeaturePack
         return ProvisionedState.builder()
                 .addFeaturePack(ProvisionedFeaturePack.forFPID(FP_GAV))
                 .addConfig(ProvisionedConfigBuilder.builder()
+                        .setName("main")
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP_GAV.getProducer(), "specY", "y", "y3"))
                                 .build())
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP_GAV.getProducer(), "specX", "x", "x1"))

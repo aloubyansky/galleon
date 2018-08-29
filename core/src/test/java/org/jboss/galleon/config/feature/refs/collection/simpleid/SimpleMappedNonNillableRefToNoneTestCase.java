@@ -55,6 +55,7 @@ public class SimpleMappedNonNillableRefToNoneTestCase extends PmInstallFeaturePa
                             .build())
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .addFeature(
                             new FeatureConfig("specB")
                             .setParam("b", "b1")
@@ -75,7 +76,7 @@ public class SimpleMappedNonNillableRefToNoneTestCase extends PmInstallFeaturePa
     @Override
     protected String[] pmErrors() {
         return new String[] {
-                Errors.failedToBuildConfigSpec(null, null),
+                Errors.failedToBuildConfigSpec(null, "main"),
                 "Reference specA of {org.jboss.pm.test:fp1@galleon1}specB:b=b1 cannot be null"
         };
     }

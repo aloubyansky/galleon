@@ -107,6 +107,7 @@ public class BranchPerSpecTrueBatchTrueTestCase extends PmInstallFeaturePackTest
                     .addParam(FeatureParameterSpec.createId("d"))
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .setProperty(ConfigModel.BRANCH_PER_SPEC, "true")
                     .setProperty(ConfigModel.BRANCH_IS_BATCH, "true")
 
@@ -143,6 +144,7 @@ public class BranchPerSpecTrueBatchTrueTestCase extends PmInstallFeaturePackTest
                 .addFeaturePack(ProvisionedFeaturePack.builder(FP1_GAV)
                         .build())
                 .addConfig(ProvisionedConfigBuilder.builder()
+                        .setName("main")
                         .setProperty(ConfigModel.BRANCH_PER_SPEC, "true")
                         .setProperty(ConfigModel.BRANCH_IS_BATCH, "true")
 

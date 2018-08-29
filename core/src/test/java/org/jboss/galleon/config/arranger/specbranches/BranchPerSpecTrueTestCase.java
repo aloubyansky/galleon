@@ -103,6 +103,7 @@ public class BranchPerSpecTrueTestCase extends PmInstallFeaturePackTestBase {
                     .addParam(FeatureParameterSpec.createId("d"))
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .setProperty(ConfigModel.BRANCH_PER_SPEC, "true")
 
                     .addFeature(new FeatureConfig("specA").setParam("a", "1"))
@@ -138,6 +139,7 @@ public class BranchPerSpecTrueTestCase extends PmInstallFeaturePackTestBase {
                 .addFeaturePack(ProvisionedFeaturePack.builder(FP1_GAV)
                         .build())
                 .addConfig(ProvisionedConfigBuilder.builder()
+                        .setName("main")
                         .setProperty(ConfigModel.BRANCH_PER_SPEC, "true")
 
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP1_GAV.getProducer(), "specA", "a", "1")).build())

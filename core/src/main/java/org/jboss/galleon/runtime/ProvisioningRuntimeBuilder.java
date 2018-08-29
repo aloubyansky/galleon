@@ -158,9 +158,10 @@ public class ProvisioningRuntimeBuilder {
 
         List<ConfigModelStack> fpConfigResolvers = Collections.emptyList();
         if(config.hasDefinedConfigs()) {
-            final List<ConfigModel> definedConfigs = config.getDefinedConfigs();
-            for (int i = definedConfigs.size() - 1; i >= 0; --i) {
-                final ConfigModel config = definedConfigs.get(i);
+            //final List<ConfigModel> definedConfigs = config.getDefinedConfigs();
+            //for (int i = definedConfigs.size() - 1; i >= 0; --i) {
+                //final ConfigModel config = definedConfigs.get(i);
+            for(ConfigModel config : config.getDefinedConfigs()) {
                 if (fpConfigStack.isFilteredOut(null, config.getId(), true)) {
                     continue;
                 }
@@ -259,9 +260,10 @@ public class ProvisioningRuntimeBuilder {
         try {
             if (fpConfig.hasDefinedConfigs()) {
                 final ProducerSpec producer = currentOrigin.getFPID().getProducer();
-                final List<ConfigModel> definedConfigs = fpConfig.getDefinedConfigs();
-                for (int i = definedConfigs.size() - 1; i >= 0; --i) {
-                    final ConfigModel config = definedConfigs.get(i);
+                //final List<ConfigModel> definedConfigs = fpConfig.getDefinedConfigs();
+                //for (int i = definedConfigs.size() - 1; i >= 0; --i) {
+                //    final ConfigModel config = definedConfigs.get(i);
+                for(ConfigModel config : fpConfig.getDefinedConfigs()) {
                     final ConfigId id = config.getId();
                     if(id.isAnonymous() || configsToBuild.contains(id) || fpConfigStack.isFilteredOut(producer, id, true)) {
                         continue;
@@ -287,9 +289,10 @@ public class ProvisioningRuntimeBuilder {
                 final FeaturePackSpec currentSpec = currentOrigin.spec;
                 if (currentSpec.hasDefinedConfigs()) {
                     final ProducerSpec producer = currentOrigin.getFPID().getProducer();
-                    final List<ConfigModel> definedConfigs = currentSpec.getDefinedConfigs();
-                    for (int i = definedConfigs.size() - 1; i >= 0; --i) {
-                        final ConfigModel config = definedConfigs.get(i);
+                    //final List<ConfigModel> definedConfigs = currentSpec.getDefinedConfigs();
+                    //for (int i = definedConfigs.size() - 1; i >= 0; --i) {
+                    //    final ConfigModel config = definedConfigs.get(i);
+                    for(ConfigModel config : currentSpec.getDefinedConfigs()) {
                         final ConfigId id = config.getId();
                         if(id.isAnonymous() || configsToBuild.contains(id) || fpConfigStack.isFilteredOut(producer, id, false)) {
                             continue;
@@ -343,9 +346,10 @@ public class ProvisioningRuntimeBuilder {
             List<ConfigModelStack> fpConfigStacks = Collections.emptyList();
             if (fpConfig.hasDefinedConfigs()) {
                 final ProducerSpec producer = currentOrigin.getFPID().getProducer();
-                final List<ConfigModel> definedConfigs = fpConfig.getDefinedConfigs();
-                for (int i = definedConfigs.size() - 1; i >= 0; --i) {
-                    final ConfigModel config = definedConfigs.get(i);
+                //final List<ConfigModel> definedConfigs = fpConfig.getDefinedConfigs();
+                //for (int i = definedConfigs.size() - 1; i >= 0; --i) {
+                //    final ConfigModel config = definedConfigs.get(i);
+                for(ConfigModel config : fpConfig.getDefinedConfigs()) {
                     if (fpConfigStack.isFilteredOut(producer, config.getId(), true)) {
                         continue;
                     }
@@ -362,9 +366,10 @@ public class ProvisioningRuntimeBuilder {
                 final FeaturePackSpec currentSpec = currentOrigin.spec;
                 if (currentSpec.hasDefinedConfigs()) {
                     final ProducerSpec producer = currentOrigin.getFPID().getProducer();
-                    final List<ConfigModel> definedConfigs = currentSpec.getDefinedConfigs();
-                    for (int i = definedConfigs.size() - 1; i >= 0; --i) {
-                        ConfigModel config = definedConfigs.get(i);
+                    //final List<ConfigModel> definedConfigs = currentSpec.getDefinedConfigs();
+                    //for (int i = definedConfigs.size() - 1; i >= 0; --i) {
+                    //    ConfigModel config = definedConfigs.get(i);
+                    for(ConfigModel config : currentSpec.getDefinedConfigs()) {
                         if (fpConfigStack.isFilteredOut(producer, config.getId(), false)) {
                             continue;
                         }

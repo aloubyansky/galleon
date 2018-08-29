@@ -103,6 +103,7 @@ public class CircularRefsLoopOfThreeTestCase extends PmInstallFeaturePackTestBas
                     .addFeatureRef(FeatureReferenceSpec.create("specA"))
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .addFeature(
                             new FeatureConfig("specA")
                             .setParam("a", "a1")
@@ -159,6 +160,7 @@ public class CircularRefsLoopOfThreeTestCase extends PmInstallFeaturePackTestBas
         return ProvisionedState.builder()
                 .addFeaturePack(ProvisionedFeaturePack.forFPID(FP_GAV))
                 .addConfig(ProvisionedConfigBuilder.builder()
+                        .setName("main")
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP_GAV.getProducer(), "specA", "a", "a1"))
                                 .setConfigParam("b", "b1")
                                 .build())

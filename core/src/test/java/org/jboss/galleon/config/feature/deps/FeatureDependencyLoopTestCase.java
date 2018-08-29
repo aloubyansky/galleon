@@ -58,6 +58,7 @@ public class FeatureDependencyLoopTestCase extends PmInstallFeaturePackTestBase 
                     .addParam(FeatureParameterSpec.create("c", true))
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .addFeature(
                             new FeatureConfig("specC")
                             .setParam("id", "c")
@@ -88,6 +89,7 @@ public class FeatureDependencyLoopTestCase extends PmInstallFeaturePackTestBase 
         return ProvisionedState.builder()
                 .addFeaturePack(ProvisionedFeaturePack.forFPID(FP_GAV))
                 .addConfig(ProvisionedConfigBuilder.builder()
+                        .setName("main")
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP_GAV.getProducer(), "specC", "id", "c")).build())
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP_GAV.getProducer(), "specA", "id", "a")).build())
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP_GAV.getProducer(), "specB", "id", "b")).build())

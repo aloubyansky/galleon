@@ -70,6 +70,7 @@ public class OverwriteInitializedChildIdParamWhileNestingTestCase extends PmInst
                             .setParam("id", "c2"))
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .addFeature(
                             new FeatureConfig("specA")
                             .setParam("id", "a1")
@@ -91,7 +92,7 @@ public class OverwriteInitializedChildIdParamWhileNestingTestCase extends PmInst
 
     @Override
     protected void pmFailure(Throwable e) throws ProvisioningDescriptionException {
-        Assert.assertEquals("Failed to resolve config", e.getMessage());
+        Assert.assertEquals("Failed to resolve config named main", e.getMessage());
         e = e.getCause();
         Assert.assertNotNull(e);
         Assert.assertEquals(Errors.failedToProcess(FP_GAV,

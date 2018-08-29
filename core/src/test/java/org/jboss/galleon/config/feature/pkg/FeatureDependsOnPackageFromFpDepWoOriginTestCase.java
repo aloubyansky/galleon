@@ -53,6 +53,7 @@ public class FeatureDependsOnPackageFromFpDepWoOriginTestCase extends PmInstallF
                     .addPackageDep("p2")
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .addFeature(
                             new FeatureConfig("specA")
                             .setParam("name", "a"))
@@ -84,6 +85,7 @@ public class FeatureDependsOnPackageFromFpDepWoOriginTestCase extends PmInstallF
                         .addPackage("p1")
                         .build())
                 .addConfig(ProvisionedConfigBuilder.builder()
+                        .setName("main")
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP1_GAV.getProducer(), "specA", "name", "a")).build())
                         .build())
                 .build();

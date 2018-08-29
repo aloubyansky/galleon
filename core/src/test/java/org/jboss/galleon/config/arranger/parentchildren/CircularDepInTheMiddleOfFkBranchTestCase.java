@@ -148,6 +148,7 @@ public class CircularDepInTheMiddleOfFkBranchTestCase extends PmInstallFeaturePa
                     .build())
 
             .addConfig(ConfigModel.builder()
+                    .setName("main")
 
                     .addFeature(new FeatureConfig("specA2").setParam("a", "1").setParam("a2", "1").setParam("a3", "1"))
                     .addFeature(new FeatureConfig("specA2").setParam("a", "2").setParam("a2", "1").setParam("a3", "1"))
@@ -185,6 +186,7 @@ public class CircularDepInTheMiddleOfFkBranchTestCase extends PmInstallFeaturePa
                 .addFeaturePack(ProvisionedFeaturePack.builder(FP1_GAV)
                         .build())
                 .addConfig(ProvisionedConfigBuilder.builder()
+                        .setName("main")
 
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP1_GAV.getProducer(), "specA", "a", "1")))
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.builder(FP1_GAV.getProducer(), "specA4").setParam("a", "1").setParam("a4", "1").build())

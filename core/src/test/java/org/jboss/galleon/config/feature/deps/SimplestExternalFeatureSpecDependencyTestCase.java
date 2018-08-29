@@ -60,6 +60,7 @@ public class SimplestExternalFeatureSpecDependencyTestCase extends PmInstallFeat
                     .addFeatureDep(FeatureDependencySpec.create(FeatureId.create("specA", "id", "a"), "fp1", false))
                     .build())
             .addConfig(ConfigModel.builder()
+                    .setName("main")
                     .addFeature(
                             new FeatureConfig("specB")
                             .setParam("id", "b"))
@@ -83,6 +84,7 @@ public class SimplestExternalFeatureSpecDependencyTestCase extends PmInstallFeat
                 .addFeaturePack(ProvisionedFeaturePack.forFPID(FP1_GAV))
                 .addFeaturePack(ProvisionedFeaturePack.forFPID(FP2_GAV))
                 .addConfig(ProvisionedConfigBuilder.builder()
+                        .setName("main")
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP1_GAV.getProducer(), "specA", "id", "a")).build())
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP2_GAV.getProducer(), "specB", "id", "b")).build())
                         .build())

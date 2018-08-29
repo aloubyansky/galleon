@@ -65,6 +65,7 @@ public class ReferenceIncludeIncludedExternalTestCase extends PmInstallFeaturePa
                             .build())
                     .build())
                 .addConfig(ConfigModel.builder()
+                        .setName("main")
                         .addFeature(
                                 new FeatureConfig("specA")
                                 .setOrigin("fp1")
@@ -91,6 +92,7 @@ public class ReferenceIncludeIncludedExternalTestCase extends PmInstallFeaturePa
                 .addFeaturePack(ProvisionedFeaturePack.forFPID(FP1_GAV))
                 .addFeaturePack(ProvisionedFeaturePack.forFPID(FP2_GAV))
                 .addConfig(ProvisionedConfigBuilder.builder()
+                        .setName("main")
                         .addFeature(ProvisionedFeatureBuilder.builder(ResolvedFeatureId.create(FP1_GAV.getProducer(), "specA", "name", "a"))
                                 .setConfigParam("a", "aConfig")
                                 .setConfigParam("p", "pConfig").build())
