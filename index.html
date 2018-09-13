@@ -432,8 +432,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Galleon Documentation</h1>
 <div class="details">
 <span id="author" class="author">Alexey Loubyansky, Jean-François Denise</span><br>
-<span id="revnumber">version 2.0.0.Final,</span>
-<span id="revdate">2018-08-24</span>
+<span id="revnumber">version 3.0.0.Alpha1-SNAPSHOT,</span>
+<span id="revdate">2018-09-13</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -478,6 +478,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_features">8.1. Features</a></li>
 <li><a href="#_feature_groups">8.2. Feature groups</a></li>
+<li><a href="#_layers">8.3. Layers</a></li>
 </ul>
 </li>
 <li><a href="#_provisioned_installation_configuration">9. Provisioned installation configuration</a>
@@ -510,50 +511,49 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_feature_pack">12.1. Feature-pack</a></li>
 <li><a href="#_universe_feature_pack_location_fpl">12.2. Universe feature-pack location (FPL)</a></li>
 <li><a href="#_universe_feature_pack_id_fpid">12.3. Universe feature-pack id (FPID)</a></li>
-<li><a href="#_installing_a_feature_pack">12.4. Installing a feature-pack</a></li>
-<li><a href="#_un_installing_a_feature_pack">12.5. Un-installing a feature-pack</a></li>
-<li><a href="#_un_doing_the_last_provisioning_command">12.6. Un-doing the last provisioning command</a></li>
-<li><a href="#_patching_an_installation">12.7. Patching an installation</a></li>
-<li><a href="#_un_installing_a_patch">12.8. Un-installing a patch</a></li>
-<li><a href="#_checking_for_updates">12.9. Checking for updates</a></li>
-<li><a href="#_updating_an_installation">12.10. Updating an installation</a></li>
-<li><a href="#_observing_an_installation">12.11. Observing an installation</a></li>
-<li><a href="#_observing_a_feature_pack">12.12. Observing a feature-pack</a></li>
-<li><a href="#_exporting_an_installation_to_xml">12.13. Exporting an installation to xml</a></li>
-<li><a href="#_provisioning_an_installation_from_xml">12.14. Provisioning an installation from xml</a></li>
-<li><a href="#_managing_the_history_of_an_installation">12.15. Managing the history of an installation</a></li>
-<li><a href="#_exploring_an_installation_or_a_feature_pack">12.16. Exploring an installation or a feature-pack.</a></li>
-<li><a href="#_searching_the_current_state">12.17. Searching the current state</a></li>
-<li><a href="#_creating_a_new_state_or_editing_an_existing_state_from_an_installation_or_provisioning_xml_file">12.18. Creating a new state (or editing an existing state from an installation or provisioning XML file)</a></li>
-<li><a href="#_managing_universes">12.19. Managing universes</a></li>
-<li><a href="#_listing_products_of_universes">12.20. Listing products of universes</a></li>
-<li><a href="#_exporting_or_provisioning_the_current_state">12.21. Exporting or provisioning the current state</a></li>
-<li><a href="#_adding_a_feature_pack">12.22. Adding a feature-pack</a></li>
-<li><a href="#_removing_a_feature_pack">12.23. Removing a feature-pack</a></li>
-<li><a href="#_including_a_default_configuration">12.24. Including a default configuration</a></li>
-<li><a href="#_removing_an_included_default_configuration">12.25. Removing an included default configuration</a></li>
-<li><a href="#_excluding_a_default_configuration">12.26. Excluding a default configuration</a></li>
-<li><a href="#_removing_an_excluded_default_configuration">12.27. Removing an excluded default configuration</a></li>
-<li><a href="#_reseting_a_configuration">12.28. Reseting a configuration</a></li>
-<li><a href="#_including_a_default_package">12.29. Including a default package</a></li>
-<li><a href="#_removing_an_included_default_package">12.30. Removing an included default package</a></li>
-<li><a href="#_excluding_a_default_package">12.31. Excluding a default package</a></li>
-<li><a href="#_removing_an_excluded_default_package">12.32. Removing an excluded default package</a></li>
-<li><a href="#_adding_a_new_feature">12.33. Adding a new feature</a></li>
-<li><a href="#_removing_a_feature">12.34. Removing a feature</a></li>
-</ul>
-</li>
-<li><a href="#_cli_tool_maven_configuration">13. CLI tool Maven configuration</a>
-<ul class="sectlevel2">
-<li><a href="#_relying_on_maven_settings">13.1. Relying on maven settings</a></li>
-<li><a href="#_adding_new_remote_repositories">13.2. Adding new remote repositories</a></li>
-<li><a href="#_repository_policies_this_could_be_made_configurable">13.3. Repository policies (this could be made configurable)</a></li>
-<li><a href="#_advanced_maven_configuration">13.4. Advanced maven configuration</a></li>
-<li><a href="#_local_repository">13.5. Local repository</a></li>
-<li><a href="#_display_maven_configuration">13.6. Display maven configuration</a></li>
-<li><a href="#_impact_on_universe">13.7. Impact on Universe</a></li>
-<li><a href="#_fetching_feature_packs">13.8. Fetching feature-packs</a></li>
-<li><a href="#_maven_tracing">13.9. Maven tracing</a></li>
+<li><a href="#_listing_latest_available_feature_packs">12.4. Listing latest available feature-packs</a></li>
+<li><a href="#_searching_for_feature_packs">12.5. Searching for feature-packs</a></li>
+<li><a href="#_installing_a_feature_pack">12.6. Installing a feature-pack</a></li>
+<li><a href="#_un_installing_a_feature_pack">12.7. Un-installing a feature-pack</a></li>
+<li><a href="#_un_doing_the_last_provisioning_command">12.8. Un-doing the last provisioning command</a></li>
+<li><a href="#_patching_an_installation">12.9. Patching an installation</a></li>
+<li><a href="#_un_installing_a_patch">12.10. Un-installing a patch</a></li>
+<li><a href="#_checking_for_updates">12.11. Checking for updates</a></li>
+<li><a href="#_updating_an_installation">12.12. Updating an installation</a></li>
+<li><a href="#_observing_an_installation">12.13. Observing an installation</a></li>
+<li><a href="#_observing_a_feature_pack">12.14. Observing a feature-pack</a></li>
+<li><a href="#_managing_the_local_cache_of_feature_packs">12.15. Managing the local cache of feature-packs</a></li>
+<li><a href="#_exporting_an_installation_to_xml">12.16. Exporting an installation to xml</a></li>
+<li><a href="#_provisioning_an_installation_from_xml">12.17. Provisioning an installation from xml</a></li>
+<li><a href="#_managing_the_history_of_an_installation">12.18. Managing the history of an installation</a></li>
+<li><a href="#_managing_installation_universes">12.19. Managing installation universes</a></li>
+<li><a href="#_exploring_an_installation_or_a_feature_pack">12.20. Exploring an installation or a feature-pack.</a></li>
+<li><a href="#_searching_the_current_state">12.21. Searching the current state</a></li>
+<li><a href="#_creating_a_new_state_or_editing_an_existing_state_from_an_installation_or_provisioning_xml_file">12.22. Creating a new state (or editing an existing state from an installation or provisioning XML file)</a></li>
+<li><a href="#_exporting_or_provisioning_the_current_state">12.23. Exporting or provisioning the current state</a></li>
+<li><a href="#_adding_a_feature_pack">12.24. Adding a feature-pack</a></li>
+<li><a href="#_removing_a_feature_pack">12.25. Removing a feature-pack</a></li>
+<li><a href="#_including_a_default_configuration">12.26. Including a default configuration</a></li>
+<li><a href="#_removing_an_included_default_configuration">12.27. Removing an included default configuration</a></li>
+<li><a href="#_excluding_a_default_configuration">12.28. Excluding a default configuration</a></li>
+<li><a href="#_removing_an_excluded_default_configuration">12.29. Removing an excluded default configuration</a></li>
+<li><a href="#_reseting_a_configuration">12.30. Reseting a configuration</a></li>
+<li><a href="#_including_a_default_package">12.31. Including a default package</a></li>
+<li><a href="#_removing_an_included_default_package">12.32. Removing an included default package</a></li>
+<li><a href="#_excluding_a_default_package">12.33. Excluding a default package</a></li>
+<li><a href="#_removing_an_excluded_default_package">12.34. Removing an excluded default package</a></li>
+<li><a href="#_adding_a_new_feature">12.35. Adding a new feature</a></li>
+<li><a href="#_removing_a_feature">12.36. Removing a feature</a></li>
+<li><a href="#_managing_universes">12.37. Managing universes</a></li>
+<li><a href="#_relying_on_maven_settings">12.38. Relying on maven settings</a></li>
+<li><a href="#_adding_new_remote_repositories">12.39. Adding new remote repositories</a></li>
+<li><a href="#_default_repository_policies">12.40. Default Repository policies</a></li>
+<li><a href="#_advanced_maven_configuration">12.41. Advanced maven configuration</a></li>
+<li><a href="#_local_repository">12.42. Local repository</a></li>
+<li><a href="#_display_maven_configuration">12.43. Display maven configuration</a></li>
+<li><a href="#_impact_on_universe">12.44. Impact on Universe</a></li>
+<li><a href="#_resolving_feature_packs">12.45. Resolving feature-packs</a></li>
+<li><a href="#_maven_tracing">12.46. Maven tracing</a></li>
 </ul>
 </li>
 </ul>
@@ -580,7 +580,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
-<p>their default and custom configurations;</p>
+<p>their default and customized configurations;</p>
 </li>
 </ul>
 </div>
@@ -601,10 +601,20 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>product-specific provisioning plugins;</p>
 </li>
 <li>
-<p>identification of the changes to the provisioned distribution (the FS content and/or the configuration) applied manually or using thirdparty tools;</p>
+<p>detection of the changes in the provisioned distribution (its filesystem content and/or its configuration) applied by the user manually or by means of other management tools</p>
+<div class="ulist">
+<ul>
+<li>
+<p>to be able to preserve them after a version upgrade (having made sure the changes are compatible in the new version)</p>
 </li>
 <li>
-<p>exporting the description of the current state of the distribution with the goal to reproduce it later at another location.</p>
+<p>or create a provisioning configuration that could be used to reproduce the state of the distribution including the user changes;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>exporting the provisioning configuration of the current state of the distribution with the goal to reproduce it later at another location.</p>
 </li>
 </ul>
 </div>
@@ -674,8 +684,10 @@ Feature-pack may declare dependencies on other feature-packs. Before a feature-p
 <div class="literalblock">
 <div class="content">
 <pre class="nowrap">feature-pack.zip
+|- configs/
 |- feature_groups/
 |- features/
+|- layers/
 |- packages/
 |- plugins/
 |- resources/
@@ -688,10 +700,16 @@ Feature-pack may declare dependencies on other feature-packs. Before a feature-p
 <div class="ulist">
 <ul>
 <li>
+<p><strong>configs</strong> - optional directory containing predefined installation configurations;</p>
+</li>
+<li>
 <p><strong>feature_groups</strong> - optional directory containing feature group descriptions;</p>
 </li>
 <li>
 <p><strong>features</strong> - optional directory containing feature specs (units of configuration);</p>
+</li>
+<li>
+<p><strong>layers</strong> - optional directory containing predefined configuration layers that can be used to create custom installation configurations;</p>
 </li>
 <li>
 <p><strong>packages</strong> - optional directory containing packages (units of filesystem content);</p>
@@ -1186,7 +1204,7 @@ Although a package may declare a dependency on a package from another feature-pa
 <div class="sect2">
 <h3 id="_feature_pack_default_packages"><a class="anchor" href="#_feature_pack_default_packages"></a><a class="link" href="#_feature_pack_default_packages">4.4. Feature-pack default packages</a></h3>
 <div class="paragraph">
-<p>Feature pack may define a set of default packages. This set of default packages is installed when the user does not provide explicit instructions about which packages from the feature-pack to install.</p>
+<p>Feature-pack may define a set of default packages. This set of default packages is installed when the user does not provide explicit instructions about which packages from the feature-pack to install.</p>
 </div>
 <div class="paragraph">
 <p>Default packages are explicitly listed in <code>feature-pack.xml</code> file which is a part of the feature-pack archive. For example:</p>
@@ -1367,7 +1385,7 @@ Although a package may declare a dependency on a package from another feature-pa
 <h2 id="_feature_pack_dependencies"><a class="anchor" href="#_feature_pack_dependencies"></a><a class="link" href="#_feature_pack_dependencies">5. Feature-pack dependencies</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Feature pack may depend on one or more other feature-packs. Feature-pack dependencies are expressed in <code>feature-pack.xml</code> file. For example:</p>
+<p>Feature-pack may depend on one or more other feature-packs. Feature-pack dependencies are expressed in <code>feature-pack.xml</code> file. For example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2002,7 +2020,10 @@ Feature-pack versions that appear higher in the feature-pack dependency hierarch
 <p>In addition to provisioning various filesystem content as packages, the mechanism also allows generation of the configuration files for the target installation taking into account the customizations applied by the user to the feature-pack defaults.</p>
 </div>
 <div class="paragraph">
-<p>Feature-pack metadata (<code>feature-pack.xml</code>) may include one or more <code>config</code> elements each of which describes a specific type of configuration supported by the resulting installation. In a simple (and perhaps the most common) case, the configuration described under <code>config</code> element will represent a specific configuration file in the provisioned installation.</p>
+<p>Feature-pack may include predefined configurations for the installation. They are stored in feature-pack&#8217;s <code>configs</code> directory. Every configuration is described in an XML file and in a simple (and perhaps the most common) case, every configuration will represent a specific configuration file in the provisioned installation.</p>
+</div>
+<div class="paragraph">
+<p>Feature-pack metadata (<code>feature-pack.xml</code>) may define which of the predefined configurations should be provisioned by default by referencing them using <code>config</code> elements .</p>
 </div>
 <div class="paragraph">
 <p>Installation configuration is described using a generic configuration model. The generic configuration model is based on an abstract schema that describes configurable units and relationships between them. The model allows a user to manipulate the confguration in a generic way by adding to and/or removing parts from it, and/or overwriting some parameter values. The responsibilities of the core provisioning mechanism with regards to the configuration are:</p>
@@ -2238,7 +2259,7 @@ The order of the ID parameters in the feature ID string is <strong>not</strong> 
 <div class="content">
 <pre class="highlight"><code class="language-xml" data-lang="xml"> &lt;feature-pack xmlns="urn:jboss:galleon:feature-pack:2.0"
                 location="fp1@maven(org.jboss.universe:community-universe):1#1.0.0"&gt;
-   &lt;config&gt;
+   &lt;config name="main"&gt;
      &lt;feature spec="feature1"&gt;
        &lt;param name="a" value="a1"/&gt;
        &lt;param name="b" value="b1"/&gt;
@@ -2586,7 +2607,7 @@ It is expected that in most cases <code>dependency</code> attribute of element <
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-xml" data-lang="xml"> &lt;config&gt;
+<pre class="highlight"><code class="language-xml" data-lang="xml"> &lt;config name="main"&gt;
    &lt;feature spec="featureP"&gt;
      &lt;param name="parentId" value="parent1"/&gt;
    &lt;/feature&gt;
@@ -2602,7 +2623,7 @@ It is expected that in most cases <code>dependency</code> attribute of element <
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-xml" data-lang="xml"> &lt;config&gt;
+<pre class="highlight"><code class="language-xml" data-lang="xml"> &lt;config name="main"&gt;
    &lt;feature spec="featureP"&gt;
      &lt;param name="parentId" value="parent1"/&gt;
      &lt;feature spec="featureC"&gt;
@@ -2648,7 +2669,7 @@ When a feature is nested, the tool will look in the feature spec of the nested f
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-xml" data-lang="xml"> &lt;config&gt;
+<pre class="highlight"><code class="language-xml" data-lang="xml"> &lt;config name="main"&gt;
    &lt;feature spec="featureP"&gt;
      &lt;param name="parentId" value="parent1"/&gt;
      &lt;feature spec="featureC" parent-ref="parent"&gt;
@@ -2956,7 +2977,7 @@ In the examples above the capabilities were configured using constant values. Th
 <div class="content">
 <pre class="highlight"><code class="language-xml" data-lang="xml"> &lt;feature-pack xmlns="urn:jboss:galleon:feature-pack:2.0"
                 location="fp1@maven(org.jboss.universe:community-universe):1#1.0.0"&gt;
-   &lt;config&gt;
+   &lt;config name="main"&gt;
      &lt;feature spec="interface"&gt;
        &lt;param name="name" value="public"/&gt;
      &lt;/feature&gt;
@@ -3085,7 +3106,7 @@ Feature groups allow to group a set of features that represent a certain part of
 <div class="content">
 <pre class="highlight"><code class="language-xml" data-lang="xml"> &lt;feature-pack xmlns="urn:jboss:galleon:feature-pack:2.0"
                 location="fp1@maven(org.jboss.universe:community-universe):1#1.0.0"&gt;
-   &lt;config&gt;
+   &lt;config name="main"&gt;
      &lt;feature-group name="group1"/&gt;
    &lt;/config&gt;
  &lt;/feature-pack&gt;</code></pre>
@@ -3129,7 +3150,7 @@ The name of the group must be unique in the scope of the feature-pack.
 <div class="content">
 <pre class="highlight"><code class="language-xml" data-lang="xml"> &lt;feature-pack xmlns="urn:jboss:galleon:feature-pack:1.0"
                 location="fp1@maven(org.jboss.universe:community-universe):1#1.0.0"&gt;
-   &lt;config&gt;
+   &lt;config name="main"&gt;
      &lt;feature-group name="group2"/&gt;
    &lt;/config&gt;
  &lt;/feature-pack&gt;</code></pre>
@@ -3248,7 +3269,7 @@ When a feature group is included into another feature group or a <code>config</c
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config&gt;
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config name="main"&gt;
   &lt;feature-group name="group1"&gt;
     &lt;include feature-id="feature1:a=a1"&gt;
       &lt;param name="d" value="config"/&gt;
@@ -3336,7 +3357,7 @@ When a feature group is included into another feature group or a <code>config</c
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config&gt;
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config name="main"&gt;
   &lt;feature-group name="group1"&gt;
     &lt;include feature-id="featureC:parent=p1,child=c1"&gt;
       &lt;param name="b" value="config"/&gt;
@@ -3424,7 +3445,7 @@ When a feature group is included into another feature group or a <code>config</c
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config&gt;
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config name="main"&gt;
   &lt;feature-group name="group1"&gt;
     &lt;exclude feature-id="feature1:id=a1"/&gt;
     &lt;exclude feature-id="feature2:id=b1"/&gt;
@@ -3469,7 +3490,7 @@ When a feature group is included into another feature group or a <code>config</c
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config&gt;
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config name="main"&gt;
   &lt;feature-group name="group1"&gt;
     &lt;exclude spec="feature1"/&gt;
   &lt;/feature-group&gt;
@@ -3513,7 +3534,7 @@ When a feature group is included into another feature group or a <code>config</c
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config&gt;
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config name="main"&gt;
   &lt;feature-group name="group1" inherit-features="false"&gt;
     &lt;include feature-id="feature1:id=a1"/&gt;
     &lt;include feature-id="feature2:id=b1"/&gt;
@@ -3553,7 +3574,7 @@ When a feature group is included into another feature group or a <code>config</c
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config&gt;
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config name="main"&gt;
   &lt;feature-group name="group1" inherit-features="true"&gt;
     &lt;exclude spec="feature1"/&gt;
     &lt;exclude spec="feature2"/&gt;
@@ -3597,7 +3618,7 @@ When a feature group is included into another feature group or a <code>config</c
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config&gt;
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config name="main"&gt;
   &lt;feature-group name="group1" inherit-features="false"&gt;
     &lt;include spec="feature1"/&gt;
   &lt;/feature-group&gt;
@@ -3682,7 +3703,7 @@ Let&#8217;s edit the example from the previous paragraph to demonstrate that. Th
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config&gt;
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config name="main"&gt;
   &lt;feature-group name="group1"&gt;
     &lt;include feature-id="featureP:parent=p1"&gt;
       &lt;feature spec="featureC"&gt;
@@ -3865,7 +3886,7 @@ Let&#8217;s edit the example from the previous paragraph to demonstrate that. Th
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config&gt;
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config name="main"&gt;
   &lt;feature spec="featureP"&gt;
     &lt;param name="parent" value="p1"/&gt;
     &lt;feature-group name="group1"/&gt;
@@ -4021,7 +4042,7 @@ In that case the feature configurations will be merged. The features that are in
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config&gt;
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config name="main"&gt;
   &lt;feature-group name="group2"/&gt;
   &lt;feature-group name="group3"/&gt;
 &lt;/config&gt;</code></pre>
@@ -4080,6 +4101,561 @@ In that case the feature configurations will be merged. The features that are in
 </table>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_layers"><a class="anchor" href="#_layers"></a><a class="link" href="#_layers">8.3. Layers</a></h3>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+A layer is meant to represent a certain configuration flavor that can be used on its own or in combination with other layers to produce the final configuration.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The idea behind layers is to predefine certain technology or some other purpose specific complete configurations (that can be used individually or in combination) and expose them as a multichoice to users composing their desired configuration.</p>
+</div>
+<div class="paragraph">
+<p>For example, let&#8217;s suppose we are provisioning an application server that supports multiple technologies such as EJB, Servlet, Messaging, etc. Those technologies could be viewed as components that make up the complete server but also, possibly, as a user&#8217;s choice at installation time, in case the user is actually interested only in a subset of those or perhaps simply one, or something that is not included into the default set.</p>
+</div>
+<div class="paragraph">
+<p>Layers are defined in feature-pack archive&#8217;s <code>layers</code> directory. A layer is associated with a name but also, <a href="#_configuration_model_attributes">as configuration models</a>, can be associated with a configuration model. If a layer is associated with a configuration model, its definition in the feature-pack archive will appear in <code>layers/<em>config_model</em>/<em>layer_name</em>/layer-spec.xml</code> file, otherwise it will end up in <code>layers/<em>layer_name</em>/layer-spec.xml</code>.</p>
+</div>
+<div class="paragraph">
+<p>Layers may depend on other layers. If a configuration includes a layer that depends on another layer, that other layer will be included (unless explicitly excluded by the user) into the configuration as well (prior to the layer declaring the dependency on it).</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+While layers may be associated with both configuration model and a name, <strong>they are always referenced in configuration by simple name</strong>. The reason for that is that a layer can be referenced only from a configuration model or another layer and, ultimately, it still goes down to the configuration model that includes the layers. So it is the configuration model that determines which model to use for the layers it includes.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_layers_vs_feature_groups"><a class="anchor" href="#_layers_vs_feature_groups"></a><a class="link" href="#_layers_vs_feature_groups">8.3.1. Layers vs feature groups</a></h4>
+<div class="paragraph">
+<p>Layers and feature groups have the following in common:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>both are meant to define a certain (specialized) part of the final configuration;</p>
+</li>
+<li>
+<p>both may define package dependencies.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>But they also have quite a few significant differences.</p>
+</div>
+<div class="sect4">
+<h5 id="_origin"><a class="anchor" href="#_origin"></a><a class="link" href="#_origin">Origin</a></h5>
+<div class="paragraph">
+<p>The content of a feature group (including its package dependencies, if any) is fully defined in a single file - the feature group spec XML. And so, a feature group has a specific origin - the feature-pack containing the definition of the feature group.</p>
+</div>
+<div class="paragraph">
+<p>Layers, on the other hand, are a product of merging layer specs with the same identity (configuration model + layer name combination) from all the feature-packs that make up the installation. From this perspective, layers are closer to configuration models than feature groups. And so, a layer might not have a single origin.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_dependencies"><a class="anchor" href="#_dependencies"></a><a class="link" href="#_dependencies">Dependencies</a></h5>
+<div class="paragraph">
+<p>Feature groups don&#8217;t really have the notion of dependencies on other feature groups. A feature group may include other feature groups (their content) into its body.</p>
+</div>
+<div class="paragraph">
+<p>A layer may define dependencies on other layers, which is not the same as including content of those layers into the layer declaring the dependency. The content of layers is merged directly into the configuration model which includes the layers.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_exclusion_from_configuration"><a class="anchor" href="#_exclusion_from_configuration"></a><a class="link" href="#_exclusion_from_configuration">Exclusion from configuration</a></h5>
+<div class="paragraph">
+<p>There is no way to exclude feature groups that have been earlier included into the configuration. When a feature group is added to a configuration, its content (features) is merged immediately into the configuration model. In a way, feature groups dissolve in the configuration and there is no way to identify the set of features previously forming the group with the goal to exclude them altogether from the configuration.</p>
+</div>
+<div class="paragraph">
+<p>Layers, on the other hand, can be excluded from the configuration. When a configuration is resolved, the complete set of layers it includes is determined and then merged into the configuration. A user may provide instructions though to filter certain (or all the) layers out of the configuration.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_nesting"><a class="anchor" href="#_nesting"></a><a class="link" href="#_nesting">Nesting</a></h5>
+<div class="paragraph">
+<p>Feature groups can be nested under a feature which would serve as a parent feature for all the features included into the nested group directly and initialize the corresponding ID parameters of all the features contained in the group.</p>
+</div>
+<div class="paragraph">
+<p>Layers can&#8217;t be nested under a feature. They are meant to define a complete configuration or a part of it starting from the very top of it.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_layer_spec"><a class="anchor" href="#_layer_spec"></a><a class="link" href="#_layer_spec">8.3.2. Layer spec</a></h4>
+<div class="paragraph">
+<p>A layer spec is defined in <code>layer-spec.xml</code> file which, for the most part, content-wise is identical to a feature-group spec except it allows to configure dependencies on other layers. Here is an example</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;layer-spec xmlns="urn:jboss:galleon:layer-spec:1.0" name="layerA"&gt;
+    &lt;dependencies&gt;
+        &lt;layer name="layerB"/&gt; <i class="conum" data-value="1"></i><b>(1)</b>
+        &lt;layer name="layerC" optional="true"/&gt; <i class="conum" data-value="2"></i><b>(2)</b>
+    &lt;/dependencies&gt;
+
+    &lt;!-- various features and feature groups --&gt;
+    &lt;feature spec="specA"&gt;
+        &lt;param name="id" value="1"/&gt;
+        &lt;param name="p1" value="value"/&gt;
+    &lt;/feature&gt;
+    &lt;feature-group name="groupA"/&gt;
+
+    &lt;packages&gt;
+        &lt;package name="packageA"/&gt; <i class="conum" data-value="3"></i><b>(3)</b>
+        &lt;package name="packageB" optional="true"/&gt; <i class="conum" data-value="4"></i><b>(4)</b>
+    &lt;/packages&gt;
+&lt;/layer-spec&gt;</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>required dependency on <code>layerB</code> (<code>layerA</code> can&#8217;t be installed unless <code>layerB</code> has been installed)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>optional dependency on <code>layerC</code> (<code>layerC</code> will be installed when <code>layerA</code> is installed but if <code>layerC</code> has been excluded by the user, <code>layerA</code> will still be installed)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>required dependency on <code>packageA</code> (<code>layerA</code> can&#8217;t be installed unless <code>packageA</code> has been installed)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>optional dependency on <code>packageB</code> (<code>packageB</code> will be installed when <code>layerA</code> is installed but if <code>packageB</code> has been excluded by the user, <code>layerA</code> will still be installed)</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_effective_layer_spec"><a class="anchor" href="#_effective_layer_spec"></a><a class="link" href="#_effective_layer_spec">8.3.3. Effective layer spec</a></h4>
+<div class="paragraph">
+<p>In the simplest case, when only one feature-pack among all of the feature-packs that make up the installation defines a layer with a specific identity in the corresponding <code>layer-spec.xml</code>, whatever is defined in that <code>layer-spec.xml</code> is the effective layer spec in the installation.</p>
+</div>
+<div class="paragraph">
+<p>However, in case an installation includes multiple feature-packs that happen to define a layer with the same identity (model and layer name combination) then the effective layer spec with that identity will be the result of merging all the layer specs from all the  feature-packs that make up the installation into one. Merging happens in the order the feature-packs are installed and follow the same principle used for merging configuration models.</p>
+</div>
+<div class="paragraph">
+<p>For example, let&#8217;s supposed we have three feature-packs: <code>fpA</code>, <code>fpB</code> and <code>fpC</code> and <code>fpB</code> depends on <code>fpA</code>. Every one of those feature-packs defines <code>layer1</code>.</p>
+</div>
+<div class="listingblock">
+<div class="title">fpA layer1</div>
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;layer-spec xmlns="urn:jboss:galleon:layer-spec:1.0" name="layerA"&gt;
+    &lt;feature spec="specA"&gt;
+        &lt;param name="id" value="1"/&gt;
+        &lt;param name="p1" value="fpA"/&gt;
+        &lt;param name="p2" value="fpA"/&gt;
+        &lt;param name="p3" value="fpA"/&gt;
+    &lt;/feature&gt;
+    &lt;packages&gt;
+        &lt;package name="package-fpA"/&gt;
+    &lt;/packages&gt;
+&lt;/layer-spec&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">fpB layer1</div>
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;layer-spec xmlns="urn:jboss:galleon:layer-spec:1.0" name="layerA"&gt;
+    &lt;feature spec="specA"&gt;
+        &lt;param name="id" value="1"/&gt;
+        &lt;param name="p2" value="fpB"/&gt;
+        &lt;param name="p3" value="fpB"/&gt;
+    &lt;/feature&gt;
+    &lt;packages&gt;
+        &lt;package name="package-fpB"/&gt;
+    &lt;/packages&gt;
+&lt;/layer-spec&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">fpC layer1</div>
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;layer-spec xmlns="urn:jboss:galleon:layer-spec:1.0" name="layerA"&gt;
+    &lt;feature spec="specA"&gt;
+        &lt;param name="id" value="1"/&gt;
+        &lt;param name="p3" value="fpC"/&gt;
+    &lt;/feature&gt;
+    &lt;packages&gt;
+        &lt;package name="package-fpC"/&gt;
+    &lt;/packages&gt;
+&lt;/layer-spec&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now if we provision an installation using the feature-packs above as</p>
+</div>
+<div class="listingblock">
+<div class="title">Provisioning configuration</div>
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;installation xmlns="urn:jboss:galleon:provisioning:2.0"&gt;
+    &lt;feature-pack location="fpB@maven(org.jboss.universe:community-universe):1#1.0.0.Final"/&gt; <i class="conum" data-value="1"></i><b>(1)</b>
+    &lt;feature-pack location="fpC@maven(org.jboss.universe:community-universe):1#1.0.0.Final"/&gt;
+&lt;/installation&gt;</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>fpB</code> installs <code>fpA</code> as its transitive dependency</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The effective layer spec of <code>layerA</code> will be resolved as</p>
+</div>
+<div class="listingblock">
+<div class="title">Effective <code>layer1</code> spec</div>
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;layer-spec xmlns="urn:jboss:galleon:layer-spec:1.0" name="layerA"&gt;
+    &lt;feature spec="specA"&gt;
+        &lt;param name="id" value="1"/&gt;
+        &lt;param name="p1" value="fpA"/&gt;
+        &lt;param name="p2" value="fpB"/&gt;
+        &lt;param name="p3" value="fpC"/&gt;
+    &lt;/feature&gt;
+    &lt;packages&gt;
+        &lt;package name="package-fpA"/&gt;
+        &lt;package name="package-fpB"/&gt;
+        &lt;package name="package-fpC"/&gt;
+    &lt;/packages&gt;
+&lt;/layer-spec&gt;</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+There won&#8217;t actually be an XML file generated for the effective layer spec. The XML above is used only for illustration of the effective layer content and its dependencies.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>As in case of configuration model merging, feature-packs that appear higher in the feature-pack dependency hierarchy are allowed to use <code>include</code> and/or <code>exclude</code> elements in their layer specs to include and/or exclude features from the corresponding layers inherited from their feature-pack dependencies. In our example above, <code>include</code> and/or <code>exclude</code> elements could be used in <code>layer1</code> of <code>fpB</code> to manipulate the content of <code>layer1</code> inherited from <code>fpA</code>. E.g.</p>
+</div>
+<div class="listingblock">
+<div class="title">fpB layer1</div>
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;layer-spec xmlns="urn:jboss:galleon:layer-spec:1.0" name="layerA"&gt;
+    &lt;exclude spec="specA"/&gt;
+    &lt;feature spec="specA"&gt;
+        &lt;param name="id" value="1"/&gt;
+        &lt;param name="p2" value="fpB"/&gt;
+        &lt;param name="p3" value="fpB"/&gt;
+    &lt;/feature&gt;
+    &lt;packages&gt;
+        &lt;package name="package-fpB"/&gt;
+    &lt;/packages&gt;
+&lt;/layer-spec&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>With the rest of the configs unchanged the effective <code>layer1</code> spec will become</p>
+</div>
+<div class="listingblock">
+<div class="title">Effective <code>layer1</code> spec</div>
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;layer-spec xmlns="urn:jboss:galleon:layer-spec:1.0" name="layerA"&gt;
+    &lt;feature spec="specA"&gt;
+        &lt;param name="id" value="1"/&gt;
+        &lt;param name="p2" value="fpB"/&gt;
+        &lt;param name="p3" value="fpC"/&gt;
+    &lt;/feature&gt;
+    &lt;packages&gt;
+        &lt;package name="package-fpA"/&gt;
+        &lt;package name="package-fpB"/&gt;
+        &lt;package name="package-fpC"/&gt;
+    &lt;/packages&gt;
+&lt;/layer-spec&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In case of <code>fpC</code> which doesn&#8217;t declare any dependency on neither <code>fpA</code> nor <code>fpB</code>, using <code>include</code> and/or <code>exclude</code> in its <code>layer1</code> spec won&#8217;t make any sense because other <code>layer1</code> specs are not 'visible' from <code>fpC</code>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_including_layers_into_configuration_models"><a class="anchor" href="#_including_layers_into_configuration_models"></a><a class="link" href="#_including_layers_into_configuration_models">8.3.4. Including layers into configuration models</a></h4>
+<div class="paragraph">
+<p>Layers are included into configuration defined using <code>config</code> element under element <code>layers</code>, e.g.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config xmlns="urn:jboss:galleon:config:1.0" model="model1" name="name1"&gt;
+    &lt;layers&gt;
+        &lt;include name="layer1"/&gt;
+        &lt;include name="layer2"/&gt;
+    &lt;/layers&gt;
+    &lt;!-- the rest of the configuration --&gt;
+&lt;/config&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s suppose the configuration above belongs to a feature-pack <code>prod1</code>. And <code>prod1</code> also predefined another layer - <code>layer3</code>, which is not included into the default configuration <code>model1:name1</code>. Here is how <code>layer3</code> can be added to the final configuration by a user:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;installation xmlns="urn:jboss:galleon:provisioning:2.0"&gt;
+    &lt;feature-pack location="prod1@maven(org.jboss.universe:community-universe):1#1.0.0.Final"/&gt;
+    &lt;config xmlns="urn:jboss:galleon:config:1.0" model="model1" name="name1"&gt;
+        &lt;layers&gt;
+            &lt;include name="layer3"/&gt;
+        &lt;/layers&gt;
+        &lt;!-- the rest of the configuration --&gt;
+    &lt;/config&gt;
+&lt;/installation&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The resulting <code>model1:name1</code> configuration now will include <code>layer1</code>, <code>layer2</code> and <code>layer3</code> and they will be included into the configuration in exactly that order.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+The statement above is valid only if the mentioned layers don&#8217;t depend on each other and/or other layers.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_excluding_layers_from_configuration_models"><a class="anchor" href="#_excluding_layers_from_configuration_models"></a><a class="link" href="#_excluding_layers_from_configuration_models">8.3.5. Excluding layers from configuration models</a></h4>
+<div class="paragraph">
+<p>Layers that have been included into the configuration can later be excluded from it. The example above demonstrated how to include a layer into the configuration, here is an example of how a layer can be excluded:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;installation xmlns="urn:jboss:galleon:provisioning:2.0"&gt;
+    &lt;feature-pack location="prod1@maven(org.jboss.universe:community-universe):1#1.0.0.Final"/&gt;
+    &lt;config xmlns="urn:jboss:galleon:config:1.0" model="model1" name="name1"&gt;
+        &lt;layers&gt;
+            &lt;exclude name="layer2"/&gt;
+            &lt;include name="layer3"/&gt;
+        &lt;/layers&gt;
+        &lt;!-- the rest of the configuration --&gt;
+    &lt;/config&gt;
+&lt;/installation&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Assuming feature-pack <code>prod1</code> included <code>layer1</code> and <code>layer2</code> into its <code>model1:name1</code> configuration (as in the previous example), the resulting <code>model1:name1</code> configuration will include only <code>layer1</code> and <code>layer3</code> (and their dependencies if any).</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_disabling_inheritance_of_layers"><a class="anchor" href="#_disabling_inheritance_of_layers"></a><a class="link" href="#_disabling_inheritance_of_layers">8.3.6. Disabling inheritance of layers</a></h4>
+<div class="paragraph">
+<p>If at some point it is necessary to reset the configuration in terms of layers it consists of and possibly re-define the configuration explicitly, it can be done like this</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;installation xmlns="urn:jboss:galleon:provisioning:2.0"&gt;
+    &lt;feature-pack location="prod1@maven(org.jboss.universe:community-universe):1#1.0.0.Final"/&gt;
+    &lt;config xmlns="urn:jboss:galleon:config:1.0" model="model1" name="name1"&gt;
+        &lt;layers inherit="false"&gt;
+            &lt;include name="layer3"/&gt;
+        &lt;/layers&gt;
+        &lt;!-- the rest of the configuration --&gt;
+    &lt;/config&gt;
+&lt;/installation&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>inherit="false"</code> attribute indicates to the provisioning mechanism to not inherit any layers for the configuration from any of the feature-packs included up to that point. The resulting <code>model1:name1</code> configuration will include only <code>layer3</code> (plus its dependencies) even if <code>prod1</code> included more layers into <code>model1:name1</code>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_adjusting_layer_configuration"><a class="anchor" href="#_adjusting_layer_configuration"></a><a class="link" href="#_adjusting_layer_configuration">8.3.7. Adjusting layer configuration</a></h4>
+<div class="paragraph">
+<p>Once layers have been included into the configuration, the set of features, as well as packages, they brought in can be manipulated, i.e. configuration of some or all of those features can be modified or completely excluded.</p>
+</div>
+<div class="paragraph">
+<p>Here is an example. Let&#8217;s suppose <code>prod1</code> feature-pack defines <code>layer1</code> as</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;layer-spec xmlns="urn:jboss:galleon:layer-spec:1.0" name="layer1"&gt;
+    &lt;feature spec="specA"&gt;
+        &lt;param name="id" value="1"/&gt;
+    &lt;/feature&gt;
+    &lt;feature spec="specA"&gt;
+        &lt;param name="id" value="2"/&gt;
+    &lt;/feature&gt;
+    &lt;feature spec="specB"&gt;
+        &lt;param name="id" value="1"/&gt;
+    &lt;/feature&gt;
+    &lt;feature spec="specB"&gt;
+        &lt;param name="id" value="2"/&gt;
+    &lt;/feature&gt;
+    &lt;packages&gt;
+        &lt;package name="package1"/&gt;
+        &lt;package name="package2" optional="true"/&gt;
+        &lt;package name="package3"/&gt;
+    &lt;/packages&gt;
+&lt;/layer-spec&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The user wants to include this layer into its installation but also adjust its configuration. It could look like this</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;installation xmlns="urn:jboss:galleon:provisioning:2.0"&gt;
+    &lt;feature-pack location="prod1@maven(org.jboss.universe:community-universe):1#1.0.0.Final"&gt;
+        &lt;packages&gt;
+            &lt;exclude name="package2"/&gt; <i class="conum" data-value="1"></i><b>(1)</b>
+        &lt;/packages&gt;
+    &lt;/feature-pack&gt;
+    &lt;config xmlns="urn:jboss:galleon:config:1.0" model="model1" name="name1"&gt;
+        &lt;layers&gt;
+            &lt;include name="layer1"/&gt;
+        &lt;/layers&gt;
+        &lt;exclude feature-id="specA:id=2"/&gt; <i class="conum" data-value="2"></i><b>(2)</b>
+        &lt;exclude spec="specB"/&gt; <i class="conum" data-value="3"></i><b>(3)</b>
+        &lt;feature spec="specB"&gt;
+            &lt;param name="id" value="3"/&gt;
+        &lt;/feature&gt;
+    &lt;/config&gt;
+&lt;/installation&gt;</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>package2</code> <code>layer1</code> depends on is excluded from the installation</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>specA:id=2</code> inherited from <code>layer1</code> is excluded from the configuration</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>All the features of <code>specB</code> inherited from <code>layer1</code> are excluded from the configuration</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The resulting installation will consist of:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>model1:name1</code> configuration including features:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>specA:id=1</code></p>
+</li>
+<li>
+<p><code>specB:id=3</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>package1</code> plus its dependencies, if any;</p>
+</li>
+<li>
+<p><code>package3</code> plus its dependencies, if any.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_merging_configurations_with_layers"><a class="anchor" href="#_merging_configurations_with_layers"></a><a class="link" href="#_merging_configurations_with_layers">8.3.8. Merging configurations with layers</a></h4>
+<div class="paragraph">
+<p>Layers are merged into configuration at the point where they are included into it with <code>include</code> element. It is important to keep that in mind.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s consider the following example. Suppose <code>prod1</code> feature-pack defines this configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config xmlns="urn:jboss:galleon:config:1.0" model="model1" name="name1"&gt;
+    &lt;layers&gt;
+        &lt;include name="layer1"/&gt;
+        &lt;include name="layer2"/&gt;
+    &lt;/layers&gt;
+    &lt;!-- the rest of the configuration --&gt;
+&lt;/config&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>prod2</code> feature-pack depends on <code>prod1</code> and defines this configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config xmlns="urn:jboss:galleon:config:1.0" model="model1" name="name1"&gt;
+    &lt;layers&gt;
+        &lt;include name="layer2"/&gt;
+        &lt;include name="layer3"/&gt;
+    &lt;/layers&gt;
+    &lt;!-- the rest of the configuration --&gt;
+&lt;/config&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When <code>prod2</code> is installed, <code>layer2</code> will be included into <code>model1:name1</code> twice. Which may or may not create a confusion. First of all, in the given example, all the features added to <code>model1:name</code> in <code>prod1</code> are inherited by <code>model1:name1</code> in <code>prod2</code>, meaning <code>model1:name1</code> in <code>prod2</code> does not start empty. <code>layer1</code> and <code>layer2</code> have already been added to <code>model1:name1</code> in <code>prod1</code>. Including <code>layer2</code> into <code>model1:name1</code> in <code>prod2</code> does not make sense any more unless <code>model1:name1</code> in <code>prod1</code> has excluded and/or modified some feature configurations inherited from <code>layer2</code> and in <code>prod2</code> we want the original version of <code>layer2</code> configuration.</p>
+</div>
+<div class="paragraph">
+<p>Whether including the same layer more than once into the same configuration creates a problem or not depends on the case. It&#8217;s important to keep in mind that every include means another merge of the layer.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+If the content of the layer has not been adjusted in the configuration, the subsequent merge of the same layer will not result in any visible difference <strong>unless the layer includes features that have no identity</strong>. If a layer includes features that have no identity, there will be as many copies of those features in the configuration as the number of times the layer has been included into the configuration.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>While the example above can easily be adjusted in case the inclusion of <code>layer2</code> actually is redundant by simply removing it from the list of layers in <code>prod2</code>, there could be situations where it&#8217;s more difficult to avoid multiple inclusions of the same layer. For example building up the example above, let&#8217;s assume that every one of <code>layer1</code>, <code>layer2</code> and <code>layer3</code> depends on layer called <code>base</code>.</p>
+</div>
+<div class="paragraph">
+<p>In that case, <code>base</code> will be included once into <code>model1:name1</code> in <code>prod1</code> (despite the fact that both <code>layer1</code> and <code>layer2</code> depend on <code>base</code>, the provisioning mechanism will recognize that <code>base</code> is a common dependency of those layers and include it only once into <code>model1:name1</code> in <code>prod1</code>). But later, processing <code>model1:name</code> in <code>prod2</code>, it will include <code>base</code> again as a dependency of <code>layer3</code>.</p>
+</div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-caution" title="Caution"></i>
+</td>
+<td class="content">
+THIS CAN CHANGE. The mechanism can recognize that <code>base</code> has already been included and avoid including it again. The only possible issue is that if <code>layer3</code> really expects the original <code>base</code> configuration and the already included <code>base</code> has been somehow modified in between.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -4088,67 +4664,127 @@ In that case the feature configurations will be merged. The features that are in
 <div class="sect2">
 <h3 id="_configuration_model_attributes"><a class="anchor" href="#_configuration_model_attributes"></a><a class="link" href="#_configuration_model_attributes">9.1. Configuration model attributes</a></h3>
 <div class="paragraph">
-<p>Configuration models are described in <code>feature-pack.xml</code> file using <code>config</code> elements. <code>feature-pack.xml</code> file may contain zero, one or more <code>config</code> elements. Each configuration may include the following <strong>optional</strong> attributes:</p>
+<p>Every configuration must be associated with at least one of the following attributes:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><code>name</code> - the name of the configuration;</p>
+<p><code>name</code> - name of the configuration;</p>
 </li>
 <li>
-<p><code>model</code> - the name of the configuration model.</p>
+<p><code>model</code> - name of the configuration model.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>In XML it could look like this (the content of the <code>config</code> elements has been left out as not important in this example):</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;feature-pack xmlns="urn:jboss:galleon:feature-pack:2.0"
-              location="fp1@maven(org.jboss.universe:community-universe):1#1.0.0"&gt;
-  &lt;config&gt;
-    &lt;!-- anonymous config --&gt;
-  &lt;/config&gt;
-
-  &lt;config name="config1"&gt;
-    &lt;!-- named config --&gt;
-  &lt;/config&gt;
-
-  &lt;config model="model1"&gt;
-    &lt;!-- model1 model-only config --&gt;
-  &lt;/config&gt;
-
-  &lt;config model="model1" name="config1"&gt;
-    &lt;!-- named model1 config --&gt;
-  &lt;/config&gt;
-
-&lt;/feature-pack&gt;</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><code>name</code> and <code>model</code> attributes are optional, which means it is well possible to define a configuration w/o those attributes. This kind of configuration is called <strong>anonymous</strong>. A feature pack may define zero, one or more anonymous configs.</p>
-</div>
-<div class="paragraph">
-<p><code>name</code> and <code>model</code> attributes serve as an identity of the configuration. They are essential when customizing and merging configurations.</p>
+<p><code>name</code> and <code>model</code> attributes serve as the identity of the configuration. They are essential when customizing and merging configurations.</p>
 </div>
 <div class="paragraph">
 <p>If a configuration is associated only with a name (and no model) then only the name will be used as the identity of the configuration.</p>
 </div>
 <div class="paragraph">
-<p>If a configuration is associated with a name and a model then a combination of the name and the model will be used as the identity of the configuration.</p>
+<p>If a configuration is associated with a name and a model then the combination of the name and the model will be used as the identity of the configuration.</p>
 </div>
 <div class="paragraph">
-<p>In the example above configuration named <code>config1</code> and configuration <code>model1:config1</code> are two unrelated configurations.</p>
+<p>Feature-pack may include predefined configurations in its <code>configs</code> directory whose structure can be described as</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre class="nowrap">configs/
+|- model1/
+| |- name1/
+| |  `- config.xml
+| | ...
+| |- nameN/
+| |  `- config.xml
+| `- model.xml
+| ...
+|- modelM/
+| |- name1/
+| |  `- config.xml
+| | ...
+| |- nameN/
+| |  `- config.xml
+| `- model.xml
+|- name1/
+|  `-config.xml
+| ...
+`- nameN/
+   `-config.xml</pre>
+</div>
 </div>
 <div class="paragraph">
-<p>When a feature-pack is installed, by default all the configurations defined in its <code>feature-pack.xml</code> are installed. Users may explicitly specify though which configurations should the final distribution include and customize those and/or provide their own custom configurations.</p>
+<p>If a configuration is associated with a name but not a model then its definition will be located in <code>configs/<em>config_name</em>/config.xml</code> and start with the following root element:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config xmlns="urn:jboss:galleon:config:1.0" name="config_name"&gt;
+    &lt;!-- skipped content --&gt;
+&lt;/config&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If a configuration is associated only with a model then its definition will located in <code>configs/<em>config_model</em>/model.xml</code> and start with the following root element:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config xmlns="urn:jboss:galleon:config:1.0" model="config_model"&gt;
+    &lt;!-- skipped content --&gt;
+&lt;/config&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If a configuration is associated with both model and a name its definition will be located in <code>configs/<em>model_name</em>/<em>config_name</em>/config.xml</code> and start with the following root element:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config xmlns="urn:jboss:galleon:config:1.0" model="model_name" name="config_name"&gt;
+    &lt;!-- skipped content --&gt;
+&lt;/config&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Predefined configuration models can be referenced from <code>feature-pack.xml</code> file and customized (manipulated) in the provisioning configuration of the installation (which is also an XML file) using <code>config</code> elements. Every <code>config</code> element will include the corresponding <code>name</code> and possibly <code>model</code> attributes to specify the identity of the configuration it is targeting.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Every <code>config</code> element in <code>feature-pack.xml</code> or installation provisioning configuration triggers installation of the configuration it is targeting.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>That means, when a feature-pack is installed, by default all the configurations referenced from its <code>feature-pack.xml</code> are installed. Users may explicitly specify though which configurations should the final distribution include and customize those and/or provide their own custom configurations in the provisioning configuration of the installation.</p>
+</div>
+<div class="paragraph">
+<p>Here is an example of <code>feature-pack.xml</code> with <code>config</code> elements:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;feature-pack xmlns="urn:jboss:galleon:feature-pack:2.0"
+              location="prod1@maven(org.jboss.universe:community-universe):1#1.0.0"&gt;
+
+  &lt;config name="config1"&gt;
+    &lt;!-- named configuration --&gt;
+  &lt;/config&gt;
+
+  &lt;config model="model1" name="config1"&gt;
+    &lt;!-- named configuration of model1 --&gt;
+  &lt;/config&gt;
+
+&lt;/feature-pack&gt;</code></pre>
+</div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_excluding_default_configs_from_the_installation"><a class="anchor" href="#_excluding_default_configs_from_the_installation"></a><a class="link" href="#_excluding_default_configs_from_the_installation">9.2. Excluding default configs from the installation</a></h3>
 <div class="paragraph">
-<p>To be able to exclude a configuration, it needs to be identifiable. I.e. it must have an identity in the form of a <em>name</em> or a <em>model:name</em> combination. If a config doesn&#8217;t have a name it still can be excluded but only altogether with the other configs like this</p>
+<p>The simplest way to exclude configs from the installation is</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4177,7 +4813,7 @@ In that case the feature configurations will be merged. The features that are in
 </table>
 </div>
 <div class="paragraph">
-<p>If a configuration was given a name but not any model then it can be excluded by specifying its name, e.g.</p>
+<p>The example above excludes all the configs, if the goal however is to exclude onyl a specific one, it can be done by providing the identity of the config using <code>exclude</code> element. For example, if a configuration was associated with a name but not any model then it would look like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4189,7 +4825,7 @@ In that case the feature configurations will be merged. The features that are in
 </div>
 </div>
 <div class="paragraph">
-<p>If a configuration was associated with a name and a model, both of them have to be specified, e.g.</p>
+<p>And if the configuration was associated with a name and a model, both of them will have to be specified, e.g.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4365,38 +5001,7 @@ When the provisioning mechanism analysing the installation being provisioned dis
 </table>
 </div>
 <div class="sect3">
-<h4 id="_anonymous_configurations"><a class="anchor" href="#_anonymous_configurations"></a><a class="link" href="#_anonymous_configurations">9.4.1. Anonymous configurations</a></h4>
-<div class="paragraph">
-<p>Anonymous configurations are associated with neither name nor model. E.g.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;feature-pack xmlns="urn:jboss:galleon:feature-pack:2.0"
-              location="fp1@maven(org.jboss.universe:community-universe):1#1.0.0"&gt;
-  &lt;config&gt;
-    &lt;!-- config body --&gt;
-  &lt;/config&gt;
-&lt;/feature-pack&gt;</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Which means anonymous configurations have no identity. They cannot be customized and they are not merged.</p>
-</div>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-Each anonymous configuration is a standalone configuration.
-</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_named_name_only_configurations"><a class="anchor" href="#_named_name_only_configurations"></a><a class="link" href="#_named_name_only_configurations">9.4.2. Named (name-only) configurations</a></h4>
+<h4 id="_named_name_only_configurations"><a class="anchor" href="#_named_name_only_configurations"></a><a class="link" href="#_named_name_only_configurations">9.4.1. Named (name-only) configurations</a></h4>
 <div class="paragraph">
 <p>The simplest way to provide an identity for a configuration is to give it a name. E.g.</p>
 </div>
@@ -4437,7 +5042,7 @@ Each anonymous configuration is a standalone configuration.
 </div>
 </div>
 <div class="paragraph">
-<p>And we include both of these feature packs into the same installation</p>
+<p>And we include both of these feature-packs into the same installation</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4666,7 +5271,7 @@ The features of <code>feature1</code> spec are not merged although they appear t
 </table>
 </div>
 <div class="sect3">
-<h4 id="_named_model_configurations"><a class="anchor" href="#_named_model_configurations"></a><a class="link" href="#_named_model_configurations">9.4.3. Named model configurations</a></h4>
+<h4 id="_named_model_configurations"><a class="anchor" href="#_named_model_configurations"></a><a class="link" href="#_named_model_configurations">9.4.2. Named model configurations</a></h4>
 <div class="paragraph">
 <p>There are a couple of reasons for adding <code>model</code> attribute to the configuration identity. One of them is to define the scope for values of attribute <code>name</code>. In this sense, a <code>model</code> could be thought of as a namespace. E.g.</p>
 </div>
@@ -4784,9 +5389,9 @@ The features of <code>feature1</code> spec are not merged although they appear t
 </table>
 </div>
 <div class="sect3">
-<h4 id="_model_only_configurations"><a class="anchor" href="#_model_only_configurations"></a><a class="link" href="#_model_only_configurations">9.4.4. Model-only configurations</a></h4>
+<h4 id="_model_only_configurations"><a class="anchor" href="#_model_only_configurations"></a><a class="link" href="#_model_only_configurations">9.4.3. Model-only configurations</a></h4>
 <div class="paragraph">
-<p>Model-only configurations are the ones associated with a specific model using <code>model</code> attribute of <code>config</code> element but are not associated with any name.</p>
+<p>Model-only configurations are associated with a specific model using <code>model</code> attribute of <code>config</code> element but are not associated with any name.</p>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -4795,7 +5400,7 @@ The features of <code>feature1</code> spec are not merged although they appear t
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-Model-only configurations are meant to be merged into other configurations. The provisioned installation will contain only anonymous or named configs but not the model-only ones.
+Model-only configurations are meant to be merged into named configurations. The provisioned installation will contain only named configurations but not the model-only ones.
 </td>
 </tr>
 </table>
@@ -5326,7 +5931,7 @@ Configuration model designers are encouraged to design configurations in a way t
 </table>
 </div>
 <div class="paragraph">
-<p>Here is an example that disables the inheritance of all the anonymous, named and model-only configs:</p>
+<p>Here is an example that disables the inheritance of all the named and model-only configs:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5518,7 +6123,7 @@ When a <code>config</code> element appears in a <code>feature-pack.xml</code> fi
 <div class="sect2">
 <h3 id="_configuration_package_dependencies"><a class="anchor" href="#_configuration_package_dependencies"></a><a class="link" href="#_configuration_package_dependencies">9.6. Configuration package dependencies</a></h3>
 <div class="paragraph">
-<p><code>config</code> elements may include feature-pack package dependencies. So that when a configuration is included into the installation, the relevant packages required by the configuration are automatically included as well. Package dependencies are configured using the same elements described in <a href="#_feature_package_dependencies">the feature package dependencies</a>. E.g.</p>
+<p><code>config</code> elements may include feature-pack package dependencies. So that when a configuration is included into the installation, the relevant packages required by the configuration are automatically included as well. Package dependencies are configured using the same elements described in <a href="#_feature_package_dependencies">the feature-package dependencies</a>. E.g.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5925,7 +6530,7 @@ Like any other feature-pack, patches may declare dependencies on other patches. 
 <pre class="highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
     &lt;groupId&gt;org.jboss.galleon&lt;/groupId&gt;
     &lt;artifactId&gt;galleon-maven-plugin&lt;/artifactId&gt;
-    &lt;version&gt;2.0.0.Final&lt;/version&gt;
+    &lt;version&gt;3.0.0.Alpha1-SNAPSHOT&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -5952,7 +6557,7 @@ Like any other feature-pack, patches may declare dependencies on other patches. 
 <h4 id="_galleon_install_feature_pack"><a class="anchor" href="#_galleon_install_feature_pack"></a><a class="link" href="#_galleon_install_feature_pack">11.1.1. galleon:install-feature-pack</a></h4>
 <div class="paragraph">
 <p><strong>Full name:</strong>
-org.jboss.galleon:galleon-maven-plugin:2.0.0.Final:install-feature-pack</p>
+org.jboss.galleon:galleon-maven-plugin:3.0.0.Alpha1-SNAPSHOT:install-feature-pack</p>
 </div>
 </div>
 <div class="sect3">
@@ -6278,7 +6883,7 @@ feature-pack being installed.</p>
 <h4 id="_galleon_provision"><a class="anchor" href="#_galleon_provision"></a><a class="link" href="#_galleon_provision">11.2.1. galleon:provision</a></h4>
 <div class="paragraph">
 <p><strong>Full name:</strong>
-org.jboss.galleon:galleon-maven-plugin:2.0.0.Final:provision</p>
+org.jboss.galleon:galleon-maven-plugin:3.0.0.Alpha1-SNAPSHOT:provision</p>
 </div>
 </div>
 <div class="sect3">
@@ -6627,6 +7232,12 @@ universe-based feature-pack resolver at provisioning time.</p>
 Although being a generic tool, a builtin support is offered for products available from maven jboss community universe (eg: wildfly).<br>
 Possible actions that you can operate from the tool: install, uninstall, check for updates, patch, update, undo last provisioning command.</p>
 </div>
+<div class="paragraph">
+<p>Launching the tool without any argument starts an interactive shell. Type <em>exit</em> to exit the tool.<br>
+Launching the tool with a command as argument will execute the command and exit, eg: <em>galleon.sh install wildfly-core:current --dir=myinstallation</em><br>
+Launching the tool with <em>--file=&lt;path to script file&gt;</em> will execute the set of commands and exit.<br>
+Launching the tool with <em>--help</em> will display the descriptions of all available options and commands.</p>
+</div>
 <div class="sect2">
 <h3 id="_feature_pack"><a class="anchor" href="#_feature_pack"></a><a class="link" href="#_feature_pack">12.1. Feature-pack</a></h3>
 <div class="paragraph">
@@ -6698,7 +7309,7 @@ If a final release is available then it will be installed when upgrading.</p>
 only require the product part (<em>&lt;product&gt;[@universe]</em>) of an FPL. For example:</p>
 </div>
 <div class="paragraph">
-<p><em>state update --products=wildfly</em></p>
+<p><em>update --feature-packs=wildfly</em></p>
 </div>
 </div>
 <div class="sect2">
@@ -6741,11 +7352,57 @@ Some examples of FPID to identify wildfly products:</p>
 <p>For example, to retrieve the informations of alpha1 build:</p>
 </div>
 <div class="paragraph">
-<p><em>feature-pack info wildfly:current#1.0.0-Alpha1</em></p>
+<p><em>feature-pack get-info wildfly:current#1.0.0-Alpha1</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_installing_a_feature_pack"><a class="anchor" href="#_installing_a_feature_pack"></a><a class="link" href="#_installing_a_feature_pack">12.4. Installing a feature-pack</a></h3>
+<h3 id="_listing_latest_available_feature_packs"><a class="anchor" href="#_listing_latest_available_feature_packs"></a><a class="link" href="#_listing_latest_available_feature_packs">12.4. Listing latest available feature-packs</a></h3>
+<div class="paragraph">
+<p><em>[/]$ list-feature-packs [--all-frequencies] [--universe=&lt;universe id&gt;]</em><br></p>
+</div>
+<div class="paragraph">
+<p>This command lists all the final feature packs present in all the installed universes.<br>
+If <em>--all-frequencies</em> option is set, then the latest build of all frequencies are displayed.<br>
+If <em>--universe</em> option is set, the command lists the feature packs of this universe.<br></p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+The information displayed by this command can be re-used when installing, updating features-packs.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_searching_for_feature_packs"><a class="anchor" href="#_searching_for_feature_packs"></a><a class="link" href="#_searching_for_feature_packs">12.5. Searching for feature-packs</a></h3>
+<div class="paragraph">
+<p><em>[/]$ find &lt;pattern&gt; [--universe=&lt;universe id&gt;]</em><br></p>
+</div>
+<div class="paragraph">
+<p>This command searches for all the feature pack builds present in all the installed
+universes that match the provided pattern.<br>
+If <em>--universe</em> option is set, the command searches for feature packs inside this universe.<br></p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+The information displayed by this command can be re-used when installing, updating features-packs.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_installing_a_feature_pack"><a class="anchor" href="#_installing_a_feature_pack"></a><a class="link" href="#_installing_a_feature_pack">12.6. Installing a feature-pack</a></h3>
 <div class="paragraph">
 <p><em>install &lt;[FPL|FPID] | [--file=&lt;path to fp zip file&gt;]&gt; [--dir=&lt;installation dir&gt;] [--verbose] [feature-pack specific options]</em></p>
 </div>
@@ -6760,12 +7417,12 @@ if the feature-pack needs to be downloaded from a remote location).</p>
 </div>
 <div class="paragraph">
 <p>You can retrieve the set of feature-pack specific options without relying on completion, to do so call:<br>
-<em>feature-pack info &lt;[FPL|FPID] | [--file=&lt;path to fp zip file&gt;]&gt; --type=options</em><br>
+<em>feature-pack get-info &lt;[FPL|FPID] | [--file=&lt;path to fp zip file&gt;]&gt; --type=options</em><br>
 You can then use the listed options (if any) to customize your install command.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_un_installing_a_feature_pack"><a class="anchor" href="#_un_installing_a_feature_pack"></a><a class="link" href="#_un_installing_a_feature_pack">12.5. Un-installing a feature-pack</a></h3>
+<h3 id="_un_installing_a_feature_pack"><a class="anchor" href="#_un_installing_a_feature_pack"></a><a class="link" href="#_un_installing_a_feature_pack">12.7. Un-installing a feature-pack</a></h3>
 <div class="paragraph">
 <p><em>uninstall [FPID] [--dir=&lt;installation dir&gt;] [--verbose] [feature-pack specific options]</em></p>
 </div>
@@ -6779,16 +7436,16 @@ of feature-pack specific options are handled the same way as in the install comm
 </div>
 </div>
 <div class="sect2">
-<h3 id="_un_doing_the_last_provisioning_command"><a class="anchor" href="#_un_doing_the_last_provisioning_command"></a><a class="link" href="#_un_doing_the_last_provisioning_command">12.6. Un-doing the last provisioning command</a></h3>
+<h3 id="_un_doing_the_last_provisioning_command"><a class="anchor" href="#_un_doing_the_last_provisioning_command"></a><a class="link" href="#_un_doing_the_last_provisioning_command">12.8. Un-doing the last provisioning command</a></h3>
 <div class="paragraph">
-<p><em>state undo [--dir=&lt;installation dir&gt;] [--verbose]</em></p>
+<p><em>undo [--dir=&lt;installation dir&gt;] [--verbose]</em></p>
 </div>
 <div class="paragraph">
 <p>This will revert the installation to the previous installed state.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_patching_an_installation"><a class="anchor" href="#_patching_an_installation"></a><a class="link" href="#_patching_an_installation">12.7. Patching an installation</a></h3>
+<h3 id="_patching_an_installation"><a class="anchor" href="#_patching_an_installation"></a><a class="link" href="#_patching_an_installation">12.9. Patching an installation</a></h3>
 <div class="paragraph">
 <p>Use the <em>install</em> command to patch an existing installation.</p>
 </div>
@@ -6797,24 +7454,24 @@ of feature-pack specific options are handled the same way as in the install comm
 </div>
 </div>
 <div class="sect2">
-<h3 id="_un_installing_a_patch"><a class="anchor" href="#_un_installing_a_patch"></a><a class="link" href="#_un_installing_a_patch">12.8. Un-installing a patch</a></h3>
+<h3 id="_un_installing_a_patch"><a class="anchor" href="#_un_installing_a_patch"></a><a class="link" href="#_un_installing_a_patch">12.10. Un-installing a patch</a></h3>
 <div class="paragraph">
 <p>Use the <em>uninstall</em> command to remove a given patch or use <em>state undo</em> if the last provisioning command has been a patch installation.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_checking_for_updates"><a class="anchor" href="#_checking_for_updates"></a><a class="link" href="#_checking_for_updates">12.9. Checking for updates</a></h3>
+<h3 id="_checking_for_updates"><a class="anchor" href="#_checking_for_updates"></a><a class="link" href="#_checking_for_updates">12.11. Checking for updates</a></h3>
 <div class="paragraph">
-<p><em>state check-updates [--dir=&lt;installation dir&gt;] [--include-all-dependencies] [--products=&lt;list of products&gt;]</em></p>
+<p><em>check-updates [--dir=&lt;installation dir&gt;] [--include-all-dependencies] [--products=&lt;list of products&gt;]</em></p>
 </div>
 <div class="paragraph">
 <p>If no directory is provided, the current directory is used. If no products are provided, all installed products are checked for updates.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_updating_an_installation"><a class="anchor" href="#_updating_an_installation"></a><a class="link" href="#_updating_an_installation">12.10. Updating an installation</a></h3>
+<h3 id="_updating_an_installation"><a class="anchor" href="#_updating_an_installation"></a><a class="link" href="#_updating_an_installation">12.12. Updating an installation</a></h3>
 <div class="paragraph">
-<p><em>state update [--dir=&lt;installation dir&gt;] [--include-all-dependencies] [--yes] [--products=&lt;list of products&gt;] [feature-pack specific options]</em></p>
+<p><em>update [--dir=&lt;installation dir&gt;] [--include-all-dependencies] [--yes] [--products=&lt;list of products&gt;] [feature-pack specific options]</em></p>
 </div>
 <div class="paragraph">
 <p>Display the list of available updates/patches then update. If no directory is provided, the current directory is used.
@@ -6828,14 +7485,14 @@ needs to be downloaded from a remote location).</p>
 </div>
 <div class="paragraph">
 <p>You can retrieve the set of feature-pack specific options without relying on completion, to do so call:<br>
-<em>state info [--dir=&lt;installation dir&gt;] --type=options</em><br>
+<em>installation get-info [--dir=&lt;installation dir&gt;] --type=options</em><br>
 You can then use the listed options (if any) to customize your update command.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_observing_an_installation"><a class="anchor" href="#_observing_an_installation"></a><a class="link" href="#_observing_an_installation">12.11. Observing an installation</a></h3>
+<h3 id="_observing_an_installation"><a class="anchor" href="#_observing_an_installation"></a><a class="link" href="#_observing_an_installation">12.13. Observing an installation</a></h3>
 <div class="paragraph">
-<p><em>[my-dir]$ state info [--dir=installation] --type=[all|configs|dependencies|patches]</em></p>
+<p><em>[my-dir]$ installation get-info [--dir=installation] --type=[all|configs|dependencies|patches]</em></p>
 </div>
 <div class="paragraph">
 <p>Display the set of installed feature-packs FPID. In addition can display configurations, dependencies and patches.<br>
@@ -6843,9 +7500,9 @@ NB: If some patches are applied, the applied patches information is displayed.</
 </div>
 </div>
 <div class="sect2">
-<h3 id="_observing_a_feature_pack"><a class="anchor" href="#_observing_a_feature_pack"></a><a class="link" href="#_observing_a_feature_pack">12.12. Observing a feature-pack</a></h3>
+<h3 id="_observing_a_feature_pack"><a class="anchor" href="#_observing_a_feature_pack"></a><a class="link" href="#_observing_a_feature_pack">12.14. Observing a feature-pack</a></h3>
 <div class="paragraph">
-<p><em>[my-dir]$ feature-pack info &lt;[FPL|FPID] | [--file=&lt;path to fp zip file&gt;]&gt; --type=[all|configs|dependencies|options]</em></p>
+<p><em>[my-dir]$ feature-pack get-info &lt;[FPL|FPID] | [--file=&lt;path to fp zip file&gt;]&gt; --type=[all|configs|dependencies|options]</em></p>
 </div>
 <div class="paragraph">
 <p>Display the FPID of a feature-pack. In addition can display dependencies, configurations
@@ -6853,15 +7510,36 @@ and options usable when installing/provisioning/upgrading.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_exporting_an_installation_to_xml"><a class="anchor" href="#_exporting_an_installation_to_xml"></a><a class="link" href="#_exporting_an_installation_to_xml">12.13. Exporting an installation to xml</a></h3>
+<h3 id="_managing_the_local_cache_of_feature_packs"><a class="anchor" href="#_managing_the_local_cache_of_feature_packs"></a><a class="link" href="#_managing_the_local_cache_of_feature_packs">12.15. Managing the local cache of feature-packs</a></h3>
 <div class="paragraph">
-<p><em>[my-dir]$ state export &lt;new generated xml file&gt; --dir=&lt;installation&gt;</em></p>
+<p>When a feature-pack is internally resolved (at install time, to expose information,
+to retrieve plugin options, &#8230;&#8203;). The feature-pack is added to a local cache.
+This cache is re-used to speed-up future resolutions. The CLI cleanup un-used feature-pack from the cache
+that are older than one month.</p>
+</div>
+<div class="paragraph">
+<p>You can import (and optionally install in the universe for later resolution) a feature-pack zip file in the cache.</p>
+</div>
+<div class="paragraph">
+<p><em>[my-dir]$ feature-pack import &lt;path to fp zip file&gt; [--install-in-universe=&lt;true|false&gt;]</em></p>
+</div>
+<div class="paragraph">
+<p>You can clear the cache fully (NB: this will have a performance impact for future resolution).</p>
+</div>
+<div class="paragraph">
+<p><em>[my-dir]$ feature-pack clear-cache</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_provisioning_an_installation_from_xml"><a class="anchor" href="#_provisioning_an_installation_from_xml"></a><a class="link" href="#_provisioning_an_installation_from_xml">12.14. Provisioning an installation from xml</a></h3>
+<h3 id="_exporting_an_installation_to_xml"><a class="anchor" href="#_exporting_an_installation_to_xml"></a><a class="link" href="#_exporting_an_installation_to_xml">12.16. Exporting an installation to xml</a></h3>
 <div class="paragraph">
-<p><em>[my-dir]$ state provision &lt;xml file&gt; --dir=&lt;target installation directory&gt; [feature-pack specific options]</em></p>
+<p><em>[my-dir]$ installation export &lt;new generated xml file&gt; --dir=&lt;installation&gt;</em></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_provisioning_an_installation_from_xml"><a class="anchor" href="#_provisioning_an_installation_from_xml"></a><a class="link" href="#_provisioning_an_installation_from_xml">12.17. Provisioning an installation from xml</a></h3>
+<div class="paragraph">
+<p><em>[my-dir]$ provision &lt;xml file&gt; --dir=&lt;target installation directory&gt; [feature-pack specific options]</em></p>
 </div>
 <div class="paragraph">
 <p>NB: Using completion, when an installation directory has been identified, the options that
@@ -6871,39 +7549,76 @@ When provisioning an installation for the first time this can take some time
 </div>
 </div>
 <div class="sect2">
-<h3 id="_managing_the_history_of_an_installation"><a class="anchor" href="#_managing_the_history_of_an_installation"></a><a class="link" href="#_managing_the_history_of_an_installation">12.15. Managing the history of an installation</a></h3>
+<h3 id="_managing_the_history_of_an_installation"><a class="anchor" href="#_managing_the_history_of_an_installation"></a><a class="link" href="#_managing_the_history_of_an_installation">12.18. Managing the history of an installation</a></h3>
 <div class="paragraph">
 <p>By default the history keeps the state of the last 100 provisioning operations. This should be enough to cover
 simple undo of provisioned state. Nevertheless you can increase/decrease this
-value by using the following command:
-<em>state set-history-limit &lt;history size limit&gt; [--dir=&lt;installation dir&gt;]</em></p>
+value by using the following command:<br></p>
+</div>
+<div class="paragraph">
+<p><em>installation set-history-limit &lt;history size limit&gt; [--dir=&lt;installation dir&gt;]</em></p>
 </div>
 <div class="paragraph">
 <p>To retrieve the history size limit do:</p>
 </div>
 <div class="paragraph">
-<p><em>state get-history-limit [--dir=&lt;installation dir&gt;]</em><br></p>
+<p><em>installation get-history-limit [--dir=&lt;installation dir&gt;]</em><br></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_exploring_an_installation_or_a_feature_pack"><a class="anchor" href="#_exploring_an_installation_or_a_feature_pack"></a><a class="link" href="#_exploring_an_installation_or_a_feature_pack">12.16. Exploring an installation or a feature-pack.</a></h3>
+<h3 id="_managing_installation_universes"><a class="anchor" href="#_managing_installation_universes"></a><a class="link" href="#_managing_installation_universes">12.19. Managing installation universes</a></h3>
+<div class="paragraph">
+<p>A universe can be added/removed to/from an existing installation.<br></p>
+</div>
+<div class="paragraph">
+<p>Add a named or default (without using the --name option) universe to an installation.<br>
+<em>[/]$ installation add-universe [--dir=&lt;installation dir&gt;] [--name=&lt;universe name&gt;] --factory=&lt;universe factory&gt; --location=&lt;universe location&gt;</em></p>
+</div>
+<div class="paragraph">
+<p>Remove a named or default (without using the --name option) universe from an installation.<br>
+<em>[/]$ installation remove-universe [--dir=&lt;installation dir&gt;] [--name=&lt;universe name&gt;]</em></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_exploring_an_installation_or_a_feature_pack"><a class="anchor" href="#_exploring_an_installation_or_a_feature_pack"></a><a class="link" href="#_exploring_an_installation_or_a_feature_pack">12.20. Exploring an installation or a feature-pack.</a></h3>
+<div class="paragraph">
+<p>The tool allows you to switch to a state edit mode in which you can observe and
+edit a provisioning state in memory (without actually impacting the installation files).</p>
+</div>
 <div class="paragraph">
 <p>To explore an installation:<br>
-<em>[my-dir]$ state explore --dir=installation</em><br></p>
+<em>[my-dir]$ state edit [&lt;installation dir&gt;]</em><br>
+<em>[!edit!my-dir!/]$</em><br>
+After this point, the tool switched to edit mode with a set of new commands available.<br></p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Type <em>help</em> to list the set of available commands in this mode.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>To explore a feature-pack:<br>
-<em>[my-dir]$ feature-pack explore &lt;[FPL|FPID] | [--file=&lt;path to fp zip file&gt;]</em><br></p>
+<em>[my-dir]$ state new</em><br>
+<em>[!edit!/]$ add-dependency &lt;[FPL|FPID] --default-configs-inherit --packages-inherit</em><br></p>
 </div>
 <div class="paragraph">
-<p>Once exploring, prompt, ls, cd and pwd commands are bound to the feature-pack (or installation) exposed file-system.<br></p>
+<p>Once exploring, prompt, ls, cd and pwd commands are bound to the feature-pack (or installation) exposed file-system.<br>
+Use <em>leave-state</em> to switch the tool back to its nominal mode.</p>
 </div>
 <div class="paragraph">
-<p><em>[/]$ ls<br>
+<p><em>[!edit!/]$ ls<br>
 configs<br>
+dependencies<br>
 feature-specs<br>
 packages<br>
-[/]$ state leave<br>
+[!edit!/]$ leave-state<br>
 [my-dir]$</em><br></p>
 </div>
 <div class="paragraph">
@@ -6911,9 +7626,7 @@ packages<br>
 /configs/final/&lt;model&gt;/&lt;name&gt;/&lt;features&gt;<br>
 /feature-specs/&lt;origin&gt;/&lt;feature-specs&gt;<br>
 /packages/&lt;origin&gt;/&lt;packages&gt;<br>
-Features and feature-specs are organized as a file system with containment.<br>
-The set of available commands is limited when in “navigation mode”.
-Only “cd, ls, pwd and state info|leave” are available. Use state leave to exit this mode.</p>
+Features and feature-specs are organized as a file system with containment.<br></p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -6929,12 +7642,12 @@ Use ‘ls’ to visualize any item. Use ‘cd’ to navigate to a given node.
 </div>
 </div>
 <div class="sect2">
-<h3 id="_searching_the_current_state"><a class="anchor" href="#_searching_the_current_state"></a><a class="link" href="#_searching_the_current_state">12.17. Searching the current state</a></h3>
+<h3 id="_searching_the_current_state"><a class="anchor" href="#_searching_the_current_state"></a><a class="link" href="#_searching_the_current_state">12.21. Searching the current state</a></h3>
 <div class="paragraph">
-<p>When exploring, editing or composing a new state, one can search the packages and features.</p>
+<p>When in edit mode, one can search for packages and features.</p>
 </div>
 <div class="paragraph">
-<p><em>[/]$search [--query=&lt;some text&gt; | --package=&lt;package name&gt;]</em></p>
+<p><em>[!edit!/]$ search [--query=&lt;some text&gt; | --package=&lt;package name&gt;]</em></p>
 </div>
 <div class="paragraph">
 <p>When searching with <em>--query</em> all packages and features are looked-up for a match. If packages are matched, the features
@@ -6946,69 +7659,39 @@ indirectly on this package will be shown in the result.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_creating_a_new_state_or_editing_an_existing_state_from_an_installation_or_provisioning_xml_file"><a class="anchor" href="#_creating_a_new_state_or_editing_an_existing_state_from_an_installation_or_provisioning_xml_file"></a><a class="link" href="#_creating_a_new_state_or_editing_an_existing_state_from_an_installation_or_provisioning_xml_file">12.18. Creating a new state (or editing an existing state from an installation or provisioning XML file)</a></h3>
+<h3 id="_creating_a_new_state_or_editing_an_existing_state_from_an_installation_or_provisioning_xml_file"><a class="anchor" href="#_creating_a_new_state_or_editing_an_existing_state_from_an_installation_or_provisioning_xml_file"></a><a class="link" href="#_creating_a_new_state_or_editing_an_existing_state_from_an_installation_or_provisioning_xml_file">12.22. Creating a new state (or editing an existing state from an installation or provisioning XML file)</a></h3>
 <div class="paragraph">
 <p>This allow to start from an empty installation or re-use an installation and iteratively add/suppress content.<br></p>
 </div>
 <div class="paragraph">
-<p><em>[my-dir]$ state new  | state edit &lt;path to installation | path to provisioning XML file&gt;<br>
-[/]$ &lt;TAB&gt;<br>
-cd feature-pack ls pwd state<br>
-[/]$ ls<br>
+<p><em>[my-dir]$ state new  | state edit &lt;path to installation dir | path to provisioning XML file&gt;<br>
+[!edit!/]$ ls<br>
 configs<br>
 dependencies<br>
 feature-specs<br>
 packages</em></p>
 </div>
 <div class="paragraph">
-<p>The filesystem is similar to explore, with the addition of dependencies that contains full content of all added feature-packs.</p>
-</div>
-<div class="paragraph">
 <p>NB: Each action as the effect to build a runtime with the current state. The filesystem reflects the current state.</p>
 </div>
 <div class="paragraph">
-<p>NB: Each action applied to a state in edition can be undone: <em>state undo</em>. Use <em>state leave</em> to exit the composition mode.</p>
+<p>NB: Each action applied to a state in edition can be undone: <em>undo</em>.</p>
 </div>
 <div class="paragraph">
-<p>NB: The set of exposed commands by completer is dynamic and is adjusted according to the current state.</p>
+<p>NB: Use <em>leave-state</em> to leave the edit mode.</p>
+</div>
+<div class="paragraph">
+<p>NB: The set of completer exposed commands is dynamic and is adjusted according to the current state.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_managing_universes"><a class="anchor" href="#_managing_universes"></a><a class="link" href="#_managing_universes">12.19. Managing universes</a></h3>
+<h3 id="_exporting_or_provisioning_the_current_state"><a class="anchor" href="#_exporting_or_provisioning_the_current_state"></a><a class="link" href="#_exporting_or_provisioning_the_current_state">12.23. Exporting or provisioning the current state</a></h3>
 <div class="paragraph">
-<p>A universe can be added/removed to/from an existing installation or to a new/edited state.<br>
-NB: In order to add/remove a universe to/from an installation you must first <em>cd</em> in the directory of the installation.<br></p>
-</div>
-<div class="paragraph">
-<p>Add a named or default (without using the --name option) universe to the current provisioning state or installation.<br>
-<em>[/]$ universe add [--name=&lt;universe name&gt;] --factory=&lt;universe factory&gt; --location=&lt;universe location&gt;</em></p>
+<p>In edit mode, one can export the provisioning XML file or directly provision from the current state:</p>
 </div>
 <div class="paragraph">
-<p>Remove a named or default (without using the --name option) universe from the current provisioning state or installation.<br>
-<em>[/]$ universe remove [--name=&lt;universe name&gt;]</em></p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_listing_products_of_universes"><a class="anchor" href="#_listing_products_of_universes"></a><a class="link" href="#_listing_products_of_universes">12.20. Listing products of universes</a></h3>
-<div class="paragraph">
-<p><em>[/]$ universe list</em><br></p>
-</div>
-<div class="paragraph">
-<p>This command lists all the products and available builds present in all the installed universes.</p>
-</div>
-<div class="paragraph">
-<p>You can search for products that match a given pattern using <em>--product=&lt;pattern&gt;</em>.<br>
-For example:<br>
-<em>[/]$ universe list --product=wildfly*</em></p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_exporting_or_provisioning_the_current_state"><a class="anchor" href="#_exporting_or_provisioning_the_current_state"></a><a class="link" href="#_exporting_or_provisioning_the_current_state">12.21. Exporting or provisioning the current state</a></h3>
-<div class="paragraph">
-<p>At any time, one can export the provisioning XML file or directly provision from the current state:</p>
-</div>
-<div class="paragraph">
-<p><em>[/]$ state export &lt;path to generated xml file&gt; | state provision &lt;dir of new installation&gt;</em></p>
+<p><em>[!edit!/]$ export [&lt;path to generated xml file&gt;]</em><br>
+<em>[!edit!/]$ provision &lt;dir of new installation&gt;</em></p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -7017,7 +7700,7 @@ For example:<br>
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-Use state export to validate that what you get in the XML is in sync with the expose state. In case you find something wrong, shout to me ;-)!
+Use <em>export</em> to validate that what you get in the XML is in sync with the expose state.
 </td>
 </tr>
 </table>
@@ -7041,72 +7724,69 @@ Exporting a state without any XML target file will display the XML content in th
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-The command state info can be used to get high level information.
+The command 'get-info' can be used to get high level information.
 </td>
 </tr>
 </table>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_adding_a_feature_pack"><a class="anchor" href="#_adding_a_feature_pack"></a><a class="link" href="#_adding_a_feature_pack">12.22. Adding a feature-pack</a></h3>
+<h3 id="_adding_a_feature_pack"><a class="anchor" href="#_adding_a_feature_pack"></a><a class="link" href="#_adding_a_feature_pack">12.24. Adding a feature-pack</a></h3>
 <div class="paragraph">
-<p><em>[/]$ fp add &lt;FPL|FPID&gt; [--default-configs-inherit] [--packages-inherit]</em><br></p>
+<p><em>[!edit!/]$ add-dependency &lt;FPL|FPID&gt; [--default-configs-inherit] [--packages-inherit]</em><br></p>
 </div>
 <div class="paragraph">
 <p>By default nothing is inherited. Once at least one feature-pack has been added, configurations or packages can be handled.</p>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_removing_a_feature_pack"><a class="anchor" href="#_removing_a_feature_pack"></a><a class="link" href="#_removing_a_feature_pack">12.25. Removing a feature-pack</a></h3>
 <div class="paragraph">
-<p>NB: A runtime based on the added full feature-pack is built in order to retrieve dependencies content and some completion content. This structure is cached for re-use.</p>
+<p><em>[!edit!/]$ remove-dependency &lt;FPL|FPID&gt;</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_removing_a_feature_pack"><a class="anchor" href="#_removing_a_feature_pack"></a><a class="link" href="#_removing_a_feature_pack">12.23. Removing a feature-pack</a></h3>
+<h3 id="_including_a_default_configuration"><a class="anchor" href="#_including_a_default_configuration"></a><a class="link" href="#_including_a_default_configuration">12.26. Including a default configuration</a></h3>
 <div class="paragraph">
-<p><em>[/]$ fp remove &lt;FPL|FPID&gt;</em></p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_including_a_default_configuration"><a class="anchor" href="#_including_a_default_configuration"></a><a class="link" href="#_including_a_default_configuration">12.24. Including a default configuration</a></h3>
-<div class="paragraph">
-<p><em>[/]$ config include &lt;model&gt;/&lt;name&gt; [--origin=&lt;fp origin&gt;]</em></p>
+<p><em>[!edit!/]$ include-config &lt;model&gt;/&lt;name&gt; [--origin=&lt;fp origin&gt;]</em></p>
 </div>
 <div class="paragraph">
 <p>Origin is optional, by default will be included from all fp that expose it.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_removing_an_included_default_configuration"><a class="anchor" href="#_removing_an_included_default_configuration"></a><a class="link" href="#_removing_an_included_default_configuration">12.25. Removing an included default configuration</a></h3>
+<h3 id="_removing_an_included_default_configuration"><a class="anchor" href="#_removing_an_included_default_configuration"></a><a class="link" href="#_removing_an_included_default_configuration">12.27. Removing an included default configuration</a></h3>
 <div class="paragraph">
-<p><em>[/]$ config remove-included &lt;model&gt;/&lt;name&gt; [--origin=&lt;fp origin&gt;]</em></p>
+<p><em>[!edit!/]$ remove-included-config &lt;model&gt;/&lt;name&gt; [--origin=&lt;fp origin&gt;]</em></p>
 </div>
 <div class="paragraph">
-<p>The completer only proposes the set of configurations that have been previously included. Same for fp.
+<p>The completer only proposes the set of configurations that have been previously included.
 Origin is optional, by default will be remove from all fp that include it.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_excluding_a_default_configuration"><a class="anchor" href="#_excluding_a_default_configuration"></a><a class="link" href="#_excluding_a_default_configuration">12.26. Excluding a default configuration</a></h3>
+<h3 id="_excluding_a_default_configuration"><a class="anchor" href="#_excluding_a_default_configuration"></a><a class="link" href="#_excluding_a_default_configuration">12.28. Excluding a default configuration</a></h3>
 <div class="paragraph">
-<p><em>[/]$ config exclude &lt;model&gt;/&lt;name&gt; [--origin=&lt;fp origin&gt;]</em></p>
+<p><em>[!edit!/]$ exclude-config &lt;model&gt;/&lt;name&gt; [--origin=&lt;fp origin&gt;]</em></p>
 </div>
 <div class="paragraph">
-<p>Origin is optional, by default will be excluded from all fp that expose it.</p>
+<p>Origin is optional, by default will be excluded from all feature-packs that expose it.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_removing_an_excluded_default_configuration"><a class="anchor" href="#_removing_an_excluded_default_configuration"></a><a class="link" href="#_removing_an_excluded_default_configuration">12.27. Removing an excluded default configuration</a></h3>
+<h3 id="_removing_an_excluded_default_configuration"><a class="anchor" href="#_removing_an_excluded_default_configuration"></a><a class="link" href="#_removing_an_excluded_default_configuration">12.29. Removing an excluded default configuration</a></h3>
 <div class="paragraph">
-<p><em>[/]$ config remove-excluded &lt;model&gt;/&lt;name&gt; [--origin=&lt;fp origin&gt;]</em></p>
+<p><em>[!edit!/]$ remove-excluded-config &lt;model&gt;/&lt;name&gt; [--origin=&lt;fp origin&gt;]</em></p>
 </div>
 <div class="paragraph">
-<p>The completer only proposes the set of configurations that have been previously excluded. Same for fp.
-Origin is optional, by default will be remove from all fp that exclude it.</p>
+<p>The completer only proposes the set of configurations that have been previously excluded.
+Origin is optional, by default will be removed from all feature-packs that exclude it.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_reseting_a_configuration"><a class="anchor" href="#_reseting_a_configuration"></a><a class="link" href="#_reseting_a_configuration">12.28. Reseting a configuration</a></h3>
+<h3 id="_reseting_a_configuration"><a class="anchor" href="#_reseting_a_configuration"></a><a class="link" href="#_reseting_a_configuration">12.30. Reseting a configuration</a></h3>
 <div class="paragraph">
-<p><em>[/]$ config reset &lt;model&gt;/&lt;name&gt;</em></p>
+<p><em>[!edit!/]$ reset-config &lt;model&gt;/&lt;name&gt;</em></p>
 </div>
 <div class="paragraph">
 <p>The custom content of this configuration is removed.</p>
@@ -7116,45 +7796,45 @@ Origin is optional, by default will be remove from all fp that exclude it.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_including_a_default_package"><a class="anchor" href="#_including_a_default_package"></a><a class="link" href="#_including_a_default_package">12.29. Including a default package</a></h3>
+<h3 id="_including_a_default_package"><a class="anchor" href="#_including_a_default_package"></a><a class="link" href="#_including_a_default_package">12.31. Including a default package</a></h3>
 <div class="paragraph">
-<p><em>[/]$ packages include &lt;fp origin&gt;/&lt;package name&gt;</em></p>
+<p><em>[!edit!/]$ include-package &lt;fp origin&gt;/&lt;package name&gt;</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_removing_an_included_default_package"><a class="anchor" href="#_removing_an_included_default_package"></a><a class="link" href="#_removing_an_included_default_package">12.30. Removing an included default package</a></h3>
+<h3 id="_removing_an_included_default_package"><a class="anchor" href="#_removing_an_included_default_package"></a><a class="link" href="#_removing_an_included_default_package">12.32. Removing an included default package</a></h3>
 <div class="paragraph">
-<p><em>[/]$ packages remove-included &lt;package name&gt; [--origin=&lt;fp origin&gt;]</em></p>
+<p><em>[!edit!/]$ remove-included-package &lt;package name&gt; [--origin=&lt;fp origin&gt;]</em></p>
 </div>
 <div class="paragraph">
 <p>The completer only proposes the set of packages that have been previously included.
-The origin is optional, the package will be removed from all fp that exclude it.</p>
+The origin is optional, the package will be removed from all feature-packs that exclude it.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_excluding_a_default_package"><a class="anchor" href="#_excluding_a_default_package"></a><a class="link" href="#_excluding_a_default_package">12.31. Excluding a default package</a></h3>
+<h3 id="_excluding_a_default_package"><a class="anchor" href="#_excluding_a_default_package"></a><a class="link" href="#_excluding_a_default_package">12.33. Excluding a default package</a></h3>
 <div class="paragraph">
-<p><em>[/]$ packages exclude &lt;fp origin&gt;/&lt;package name&gt;</em></p>
+<p><em>[!edit!/]$ exclude-package &lt;fp origin&gt;/&lt;package name&gt;</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_removing_an_excluded_default_package"><a class="anchor" href="#_removing_an_excluded_default_package"></a><a class="link" href="#_removing_an_excluded_default_package">12.32. Removing an excluded default package</a></h3>
+<h3 id="_removing_an_excluded_default_package"><a class="anchor" href="#_removing_an_excluded_default_package"></a><a class="link" href="#_removing_an_excluded_default_package">12.34. Removing an excluded default package</a></h3>
 <div class="paragraph">
-<p><em>[/]$ packages remove-excluded &lt;package name&gt; [--origin=&lt;fp origin&gt;]</em></p>
+<p><em>[!edit!/]$ remove-excluded-package &lt;package name&gt; [--origin=&lt;fp origin&gt;]</em></p>
 </div>
 <div class="paragraph">
 <p>The completer only proposes the set of packages that have been previously excluded.
-The origin is optional, the package will be removed from all fp that exclude it.</p>
+The origin is optional, the package will be removed from all feature-packs that exclude it.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_adding_a_new_feature"><a class="anchor" href="#_adding_a_new_feature"></a><a class="link" href="#_adding_a_new_feature">12.33. Adding a new feature</a></h3>
+<h3 id="_adding_a_new_feature"><a class="anchor" href="#_adding_a_new_feature"></a><a class="link" href="#_adding_a_new_feature">12.35. Adding a new feature</a></h3>
 <div class="paragraph">
-<p><em>[/]$ feature add &lt;config model/name&gt; &lt;path to feature-spec&gt;  &lt;dynamic set of feature param=&lt;value&gt;&gt;</em></p>
+<p><em>[!edit!/]$ add-feature &lt;config model/name&gt; &lt;path to feature-spec&gt;  &lt;dynamic set of feature param=&lt;value&gt;&gt;</em></p>
 </div>
 <div class="paragraph">
 <p>For example:<br>
-<em>feature add standalone/standalone.xml org.wildfly.core:wildfly-core-galleon-pack/interface --interface=toto --inet-address=127.0.0.1</em></p>
+<em>add-feature standalone/standalone.xml org.wildfly.core:wildfly-core-galleon-pack/interface --interface=toto --inet-address=127.0.0.1</em></p>
 </div>
 <div class="paragraph">
 <p>NB: All parameters are exposed as command option.</p>
@@ -7173,22 +7853,29 @@ The origin is optional, the package will be removed from all fp that exclude it.
 </div>
 </div>
 <div class="sect2">
-<h3 id="_removing_a_feature"><a class="anchor" href="#_removing_a_feature"></a><a class="link" href="#_removing_a_feature">12.34. Removing a feature</a></h3>
+<h3 id="_removing_a_feature"><a class="anchor" href="#_removing_a_feature"></a><a class="link" href="#_removing_a_feature">12.36. Removing a feature</a></h3>
 <div class="paragraph">
-<p><em>[/]$ feature remove &lt;full path to feature inside a configuration&gt;</em></p>
+<p><em>[!edit!/]$ remove-feature &lt;full path to feature inside a configuration&gt;</em></p>
 </div>
 <div class="paragraph">
 <p>For example:<br>
-<em>feature remove standalone/standalone.xml/interface/toto</em></p>
+<em>remove-feature standalone/standalone.xml/interface/toto</em></p>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_cli_tool_maven_configuration"><a class="anchor" href="#_cli_tool_maven_configuration"></a><a class="link" href="#_cli_tool_maven_configuration">13. CLI tool Maven configuration</a></h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_managing_universes"><a class="anchor" href="#_managing_universes"></a><a class="link" href="#_managing_universes">12.37. Managing universes</a></h3>
 <div class="paragraph">
-<p>By default the following maven repositories are used to retrieve FP.</p>
+<p>A universe can be added/removed to/from a state.<br></p>
+</div>
+<div class="paragraph">
+<p>Add a named or default (without using the --name option) universe to the state.<br>
+<em>[!edit!/]$ add-universe [--name=&lt;universe name&gt;] --factory=&lt;universe factory&gt; --location=&lt;universe location&gt;</em></p>
+</div>
+<div class="paragraph">
+<p>Remove a named or default (without using the --name option) universe from the state.<br>
+<em>[!edit!/]$ remove-universe [--name=&lt;universe name&gt;]</em>
+## CLI tool Maven configuration
+By default the following maven repositories are used to retrieve FP.</p>
 </div>
 <div class="ulist">
 <ul>
@@ -7204,11 +7891,12 @@ The origin is optional, the package will be removed from all fp that exclude it.
 <p>The cli allows you to
 change the path to the local repository and add/remove remote maven repositories.</p>
 </div>
+</div>
 <div class="sect2">
-<h3 id="_relying_on_maven_settings"><a class="anchor" href="#_relying_on_maven_settings"></a><a class="link" href="#_relying_on_maven_settings">13.1. Relying on maven settings</a></h3>
+<h3 id="_relying_on_maven_settings"><a class="anchor" href="#_relying_on_maven_settings"></a><a class="link" href="#_relying_on_maven_settings">12.38. Relying on maven settings</a></h3>
 <div class="paragraph">
-<p>In order to makes the cli to use a maven settings file call: <em>mvn set-settings-file &lt;path to settings xml file&gt;</em>
-In order to remove the reference to the settings file call: <em>mvn set-settings-file</em><br></p>
+<p>In order to makes the cli to use a maven settings file call: <em>maven set-settings-file &lt;path to settings xml file&gt;</em>
+In order to remove the reference to the settings file call: <em>maven set-settings-file</em><br></p>
 </div>
 <div class="paragraph">
 <p>NB: Advanced mirroring (eg: <em>external:*</em>) is not supported.<br>
@@ -7217,56 +7905,77 @@ NB: If no local repository is set in settings file, the local repository (defaul
 </div>
 </div>
 <div class="sect2">
-<h3 id="_adding_new_remote_repositories"><a class="anchor" href="#_adding_new_remote_repositories"></a><a class="link" href="#_adding_new_remote_repositories">13.2. Adding new remote repositories</a></h3>
+<h3 id="_adding_new_remote_repositories"><a class="anchor" href="#_adding_new_remote_repositories"></a><a class="link" href="#_adding_new_remote_repositories">12.39. Adding new remote repositories</a></h3>
 <div class="paragraph">
-<p>Type the following commands:<br>
-<em>mvn add-repository --name=myrepo --url=http://foorepo</em><br></p>
+<p>Use the following command to add new remote repositories:<br>
+<em>maven add-repository --name=myrepo --url=http://foorepo [--release-update-policy=&lt;policy&gt;]
+[--snapshot-update-policy=&lt;policy&gt;] [--type=&lt;type&gt;] [--enable-release=[true|false] [--enable-snapshot=[true|false]</em><br></p>
+</div>
+<div class="paragraph">
+<p>NB: The type, release update policy, snapshot update policy and enable/disable of snapshot/release are optional and have default values.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_repository_policies_this_could_be_made_configurable"><a class="anchor" href="#_repository_policies_this_could_be_made_configurable"></a><a class="link" href="#_repository_policies_this_could_be_made_configurable">13.3. Repository policies (this could be made configurable)</a></h3>
+<h3 id="_default_repository_policies"><a class="anchor" href="#_default_repository_policies"></a><a class="link" href="#_default_repository_policies">12.40. Default Repository policies</a></h3>
 <div class="paragraph">
-<p>Daily update.<br>
+<p>Daily update for releases, never update for snapshots.<br>
 Warn if checksum differs.</p>
 </div>
+<div class="paragraph">
+<p>Snapshots are not resolved from remote repositories.<br>
+Releases are resolved from remote repositories.</p>
+</div>
+<div class="paragraph">
+<p>Update polices can be changed by calling:<br>
+<em>maven set-release-update-policy [&lt;always|daily|interval:|never&gt;]</em><br>
+<em>maven set-snapshot-update-policy [&lt;always|daily|interval:|never&gt;]</em></p>
+</div>
+<div class="paragraph">
+<p>Activation of snapshot/release resolution can be changed by calling:<br>
+<em>maven enable-snapshot [&lt;true|false&gt;]</em><br>
+<em>maven enable-release [&lt;true|false&gt;]</em></p>
+</div>
+<div class="paragraph">
+<p>NB: Calling one of these commands without any argument will reset to the default value.</p>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_advanced_maven_configuration"><a class="anchor" href="#_advanced_maven_configuration"></a><a class="link" href="#_advanced_maven_configuration">13.4. Advanced maven configuration</a></h3>
+<h3 id="_advanced_maven_configuration"><a class="anchor" href="#_advanced_maven_configuration"></a><a class="link" href="#_advanced_maven_configuration">12.41. Advanced maven configuration</a></h3>
 <div class="paragraph">
 <p>Proxy, authentication, mirroring and offline are only supported when setting a maven xml settings file.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_local_repository"><a class="anchor" href="#_local_repository"></a><a class="link" href="#_local_repository">13.5. Local repository</a></h3>
+<h3 id="_local_repository"><a class="anchor" href="#_local_repository"></a><a class="link" href="#_local_repository">12.42. Local repository</a></h3>
 <div class="paragraph">
 <p>By default the local maven repository is located in <em>&lt;user.home&gt;/.m2/repository</em>.
-You can change this directory by using the command: <em>mvn set-local-repository &lt;path to your local repository directory&gt;</em><br>
-In order to reset to the default local maven repository call: <em>mvn set-local-repository</em></p>
+You can change this directory by using the command: <em>maven set-local-repository &lt;path to your local repository directory&gt;</em><br>
+In order to reset to the default local maven repository call: <em>maven set-local-repository</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_display_maven_configuration"><a class="anchor" href="#_display_maven_configuration"></a><a class="link" href="#_display_maven_configuration">13.6. Display maven configuration</a></h3>
+<h3 id="_display_maven_configuration"><a class="anchor" href="#_display_maven_configuration"></a><a class="link" href="#_display_maven_configuration">12.43. Display maven configuration</a></h3>
 <div class="paragraph">
-<p>Call command: <em>mvn info</em></p>
+<p>Call command: <em>maven get-info</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_impact_on_universe"><a class="anchor" href="#_impact_on_universe"></a><a class="link" href="#_impact_on_universe">13.7. Impact on Universe</a></h3>
+<h3 id="_impact_on_universe"><a class="anchor" href="#_impact_on_universe"></a><a class="link" href="#_impact_on_universe">12.44. Impact on Universe</a></h3>
 <div class="paragraph">
 <p>Any change made to the maven configuration makes the CLI to re-resolve universe(s).
 This means that stream resolution stays in sync with maven configuration.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_fetching_feature_packs"><a class="anchor" href="#_fetching_feature_packs"></a><a class="link" href="#_fetching_feature_packs">13.8. Fetching feature-packs</a></h3>
+<h3 id="_resolving_feature_packs"><a class="anchor" href="#_resolving_feature_packs"></a><a class="link" href="#_resolving_feature_packs">12.45. Resolving feature-packs</a></h3>
 <div class="paragraph">
 <p>When remote repositories are set, feature-packs are automatically downloaded at install time.
 You can download feature-pack explicitly to the local repository by using the
-command: <em>mvn fetch-feature-pack &lt;stream name&gt; [--verbose]</em></p>
+command: <em>maven resolve-feature-pack &lt;feature-pack location&gt; [--verbose]</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_maven_tracing"><a class="anchor" href="#_maven_tracing"></a><a class="link" href="#_maven_tracing">13.9. Maven tracing</a></h3>
+<h3 id="_maven_tracing"><a class="anchor" href="#_maven_tracing"></a><a class="link" href="#_maven_tracing">12.46. Maven tracing</a></h3>
 <div class="paragraph">
 <p>When enabling "verbose" at installation and provisioning time, any artifact retrieved
 from a remote repository is advertised in the console. This also
@@ -7278,7 +7987,7 @@ applies when fetching explicitly feature-packs.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 2.0.0.Final<br>
+Version 3.0.0.Alpha1-SNAPSHOT<br>
 Last updated 2018-08-23 13:40:42 CEST
 </div>
 </div>
