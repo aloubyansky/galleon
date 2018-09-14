@@ -433,7 +433,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Alexey Loubyansky, Jean-François Denise</span><br>
 <span id="revnumber">version 3.0.0.Alpha1-SNAPSHOT,</span>
-<span id="revdate">2018-09-13</span>
+<span id="revdate">2018-09-14</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -4122,7 +4122,7 @@ A layer is meant to represent a certain configuration flavor that can be used on
 <p>For example, let&#8217;s suppose we are provisioning an application server that supports multiple technologies such as EJB, Servlet, Messaging, etc. Those technologies could be viewed as components that make up the complete server but also, possibly, as a user&#8217;s choice at installation time, in case the user is actually interested only in a subset of those or perhaps simply one, or something that is not included into the default set.</p>
 </div>
 <div class="paragraph">
-<p>Layers are defined in feature-pack archive&#8217;s <code>layers</code> directory. A layer is associated with a name but also, <a href="#_configuration_model_attributes">as configuration models</a>, can be associated with a configuration model. If a layer is associated with a configuration model, its definition in the feature-pack archive will appear in <code>layers/<em>config_model</em>/<em>layer_name</em>/layer-spec.xml</code> file, otherwise it will end up in <code>layers/<em>layer_name</em>/layer-spec.xml</code>.</p>
+<p>Layers are defined in feature-pack archive&#8217;s <code>layers</code> directory. A layer is associated with a name but also, <a href="#_configuration_model_attributes">as configuration models</a>, can be associated with a model. If a layer is associated with a model, its definition in the feature-pack archive will appear in <code>layers/<em>config_model</em>/<em>layer_name</em>/layer-spec.xml</code> file, otherwise it will end up in <code>layers/<em>layer_name</em>/layer-spec.xml</code>.</p>
 </div>
 <div class="paragraph">
 <p>Layers may depend on other layers. If a configuration includes a layer that depends on another layer, that other layer will be included (unless explicitly excluded by the user) into the configuration as well (prior to the layer declaring the dependency on it).</p>
@@ -5006,45 +5006,60 @@ When the provisioning mechanism analysing the installation being provisioned dis
 <p>The simplest way to provide an identity for a configuration is to give it a name. E.g.</p>
 </div>
 <div class="listingblock">
+<div class="title">fp1: feature-pack.xml</div>
 <div class="content">
 <pre class="highlight"><code class="language-xml" data-lang="xml">&lt;feature-pack xmlns="urn:jboss:galleon:feature-pack:2.0"
               location="fp1@maven(org.jboss.universe:community-universe):1#1.0.0.Final"&gt;
-  &lt;config name="config1"&gt;
-    &lt;feature spec="feature1"&gt;
-      &lt;param name="id" value="1"/&gt;
-      &lt;param name="a" value="fp1"/&gt;
-      &lt;param name="b" value="fp1"/&gt;
-    &lt;/feature&gt;
-    &lt;feature spec="feature2"&gt;
-      &lt;param name="id" value="1"/&gt;
-    &lt;/feature&gt;
-  &lt;/config&gt;
+  &lt;config name="config1"/&gt;
 &lt;/feature-pack&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">fp1: configs/config1/config.xml</div>
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config xmlns="urn:jboss:galleon:config:1.0" name="config1"&gt;
+  &lt;feature spec="feature1"&gt;
+    &lt;param name="id" value="1"/&gt;
+    &lt;param name="a" value="fp1"/&gt;
+    &lt;param name="b" value="fp1"/&gt;
+  &lt;/feature&gt;
+  &lt;feature spec="feature2"&gt;
+    &lt;param name="id" value="1"/&gt;
+  &lt;/feature&gt;
+&lt;/config&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>Now if another feature-pack provides a configuration with the same name, e.g.</p>
 </div>
 <div class="listingblock">
+<div class="title">fp2: feature-pack.xml</div>
 <div class="content">
 <pre class="highlight"><code class="language-xml" data-lang="xml">&lt;feature-pack xmlns="urn:jboss:galleon:feature-pack:2.0"
               location="fp2@maven(org.jboss.universe:community-universe):1#1.0.0.Final"&gt;
-  &lt;config name="config1"&gt;
-    &lt;feature spec="feature1"&gt;
-      &lt;param name="id" value="1"/&gt;
-      &lt;param name="b" value="fp2"/&gt;
-    &lt;/feature&gt;
-    &lt;feature spec="feature3"&gt;
-      &lt;param name="id" value="1"/&gt;
-    &lt;/feature&gt;
-  &lt;/config&gt;
+  &lt;config name="config1"/&gt;
 &lt;/feature-pack&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">fp2: configs/config1/config.xml</div>
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config xmlns="urn:jboss:galleon:config:1.0" name="config1"&gt;
+  &lt;feature spec="feature1"&gt;
+    &lt;param name="id" value="1"/&gt;
+    &lt;param name="b" value="fp2"/&gt;
+  &lt;/feature&gt;
+  &lt;feature spec="feature3"&gt;
+    &lt;param name="id" value="1"/&gt;
+  &lt;/feature&gt;
+&lt;/config&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>And we include both of these feature-packs into the same installation</p>
 </div>
 <div class="listingblock">
+<div class="title">Installation provisioning configuration</div>
 <div class="content">
 <pre class="highlight"><code class="language-xml" data-lang="xml">&lt;installation xmlns="urn:jboss:galleon:provisioning:1.0"&gt;
   &lt;feature-pack location="fp1@maven(org.jboss.universe:community-universe):1#1.0.0.Final"/&gt;
@@ -5170,30 +5185,23 @@ Which config overwrites which (assuming they contain common parts) depends on th
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-The features of <code>feature1</code> spec are not merged although they appear to have the same ID. The reason is that <code>fp2</code> does not declare the dependency on <code>fp1</code> and its feature specs are not available in <code>fp2</code> configs. So this example assumes that both <code>fp1</code> and <code>fp2</code> include feature spec <code>feature1</code>.
+The features of <code>feature1</code> spec are not merged although they appear to have the same ID. The reason is that <code>fp2</code> does not declare the dependency on <code>fp1</code> and its feature specs are not available in <code>fp2</code> configurations. So this example assumes that both <code>fp1</code> and <code>fp2</code> include feature spec <code>feature1</code>.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Here is how <code>feature-pack.xml</code> of <code>fp2</code> had to be written so that <code>feature1</code> spec could be re-used in <code>fp2</code> config:</p>
+<p>Here is how <code>feature-pack.xml</code> of <code>fp2</code> had to be written so that <code>feature1</code> spec could be re-used in <code>fp2</code> configuration:</p>
 </div>
 <div class="listingblock">
+<div class="title">fp2: feature-pack.xml</div>
 <div class="content">
 <pre class="highlight"><code class="language-xml" data-lang="xml">&lt;feature-pack xmlns="urn:jboss:galleon:feature-pack:2.0"
               location="fp2@maven(org.jboss.universe:community-universe)1#1.0.0.Final"&gt;
   &lt;dependencies&gt;
     &lt;dependency location="fp1@maven(org.jboss.universe:community-universe)1#1.0.0.Final"/&gt;
   &lt;/dependencies&gt;
-  &lt;config name="config1"&gt;
-    &lt;feature spec="feature1"&gt;
-      &lt;param name="id" value="1"/&gt;
-      &lt;param name="b" value="fp2"/&gt;
-    &lt;/feature&gt;
-    &lt;feature spec="feature3"&gt;
-      &lt;param name="id" value="1"/&gt;
-    &lt;/feature&gt;
-  &lt;/config&gt;
+  &lt;config name="config1"/&gt;
 &lt;/feature-pack&gt;</code></pre>
 </div>
 </div>
@@ -5276,55 +5284,80 @@ The features of <code>feature1</code> spec are not merged although they appear t
 <p>There are a couple of reasons for adding <code>model</code> attribute to the configuration identity. One of them is to define the scope for values of attribute <code>name</code>. In this sense, a <code>model</code> could be thought of as a namespace. E.g.</p>
 </div>
 <div class="listingblock">
+<div class="title">fp1: feature-pack.xml</div>
 <div class="content">
 <pre class="highlight"><code class="language-xml" data-lang="xml">&lt;feature-pack xmlns="urn:jboss:galleon:feature-pack:2.0"
               location="fp1@maven(org.jboss.universe:community-universe):1#1.0.0.Final"&gt;
-  &lt;config name="main" model="modelA"&gt;
-    &lt;feature spec="feature1"&gt;
-        &lt;param name="id" value="1"/&gt;
-        &lt;param name="a" value="fp1-modelA"/&gt;
-        &lt;param name="b" value="fp1-modelA"/&gt;
-    &lt;/feature&gt;
-  &lt;/config&gt;
-  &lt;config name="main" model="modelB"&gt;
-    &lt;feature spec="feature1"&gt;
-        &lt;param name="id" value="1"/&gt;
-        &lt;param name="a" value="fp1-modelB"/&gt;
-        &lt;param name="b" value="fp1-modelB"/&gt;
-    &lt;/feature&gt;
-  &lt;/config&gt;
+  &lt;config name="main" model="modelA"/&gt;
+  &lt;config name="main" model="modelB"/&gt;
 &lt;/feature-pack&gt;</code></pre>
 </div>
 </div>
 <div class="listingblock">
+<div class="title">fp1: configs/modelA/main/config.xml</div>
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config xmlns="urn:jboss:galleon:config:1.0" name="main" model="modelA"&gt;
+  &lt;feature spec="feature1"&gt;
+    &lt;param name="id" value="1"/&gt;
+    &lt;param name="a" value="fp1-modelA"/&gt;
+     &lt;param name="b" value="fp1-modelA"/&gt;
+  &lt;/feature&gt;
+&lt;/config&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">fp1: configs/modelB/main/config.xml</div>
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config xmlns="urn:jboss:galleon:config:1.0" name="main" model="modelB"&gt;
+  &lt;feature spec="feature1"&gt;
+    &lt;param name="id" value="1"/&gt;
+    &lt;param name="a" value="fp1-modelB"/&gt;
+    &lt;param name="b" value="fp1-modelB"/&gt;
+  &lt;/feature&gt;
+&lt;/config&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">fp2: feature-pack.xml</div>
 <div class="content">
 <pre class="highlight"><code class="language-xml" data-lang="xml">&lt;feature-pack xmlns="urn:jboss:galleon:feature-pack:2.0"
               location="fp2@maven(org.jboss.universe:community-universe):1#1.0.0.Final"&gt;
   &lt;dependencies&gt;
     &lt;dependency location="fp1@maven(org.jboss.universe:community-universe):1#1.0.0.Final"/&gt;
   &lt;/dependencies&gt;
-  &lt;config name="main" model="modelA"&gt;
-    &lt;feature spec="feature1"&gt;
-      &lt;param name="id" value="1"/&gt;
-      &lt;param name="b" value="fp2-modelA"/&gt;
-    &lt;/feature&gt;
-  &lt;/config&gt;
-  &lt;config name="main" model="modelB"&gt;
-    &lt;feature spec="feature1"&gt;
-      &lt;param name="id" value="1"/&gt;
-      &lt;param name="b" value="fp2-modelB"/&gt;
-    &lt;/feature&gt;
-  &lt;/config&gt;
+  &lt;config name="main" model="modelA"/&gt;
+  &lt;config name="main" model="modelB"/&gt;
 &lt;/feature-pack&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">fp2: configs/modelA/main/config.xml</div>
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config xmlns="urn:jboss:galleon:config:1.0" name="main" model="modelA"&gt;
+  &lt;feature spec="feature1"&gt;
+    &lt;param name="id" value="1"/&gt;
+    &lt;param name="b" value="fp2-modelA"/&gt;
+  &lt;/feature&gt;
+&lt;/config&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">fp2: configs/modelB/main/config.xml</div>
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config xmlns="urn:jboss:galleon:config:1.0" name="main" model="modelB"&gt;
+  &lt;feature spec="feature1"&gt;
+    &lt;param name="id" value="1"/&gt;
+    &lt;param name="b" value="fp2-modelB"/&gt;
+  &lt;/feature&gt;
+&lt;/config&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>Installing these two feature-packs (<code>fp2</code> following <code>fp1</code>) will result in the following two configurations:</p>
 </div>
 <table class="tableblock frame-all grid-all">
+<caption class="title">Table 2. modelA:main</caption>
 <colgroup>
-<col>
-<col>
 <col>
 <col>
 <col>
@@ -5333,8 +5366,6 @@ The features of <code>feature1</code> spec are not merged although they appear t
 </colgroup>
 <thead>
 <tr>
-<th class="tableblock halign-left valign-top">Config model</th>
-<th class="tableblock halign-left valign-top">Config name</th>
 <th class="tableblock halign-left valign-top">Feature spec origin</th>
 <th class="tableblock halign-left valign-top">Feature spec</th>
 <th class="tableblock halign-left valign-top">id</th>
@@ -5344,8 +5375,6 @@ The features of <code>feature1</code> spec are not merged although they appear t
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">modelA</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">main</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">fp1@maven(org.jboss.universe:community-universe):1#1.0.0.Final</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">feature1</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
@@ -5355,9 +5384,8 @@ The features of <code>feature1</code> spec are not merged although they appear t
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all">
+<caption class="title">Table 3. modelB:main</caption>
 <colgroup>
-<col>
-<col>
 <col>
 <col>
 <col>
@@ -5366,8 +5394,6 @@ The features of <code>feature1</code> spec are not merged although they appear t
 </colgroup>
 <thead>
 <tr>
-<th class="tableblock halign-left valign-top">Config model</th>
-<th class="tableblock halign-left valign-top">Config name</th>
 <th class="tableblock halign-left valign-top">Feature spec origin</th>
 <th class="tableblock halign-left valign-top">Feature spec</th>
 <th class="tableblock halign-left valign-top">id</th>
@@ -5377,8 +5403,6 @@ The features of <code>feature1</code> spec are not merged although they appear t
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">modelB</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">main</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">fp1@maven(org.jboss.universe:community-universe):1#1.0.0.Final</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">feature1</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
@@ -5391,7 +5415,10 @@ The features of <code>feature1</code> spec are not merged although they appear t
 <div class="sect3">
 <h4 id="_model_only_configurations"><a class="anchor" href="#_model_only_configurations"></a><a class="link" href="#_model_only_configurations">9.4.3. Model-only configurations</a></h4>
 <div class="paragraph">
-<p>Model-only configurations are associated with a specific model using <code>model</code> attribute of <code>config</code> element but are not associated with any name.</p>
+<p>Model-only configurations are associated only with a model by means of <code>model</code> attribute of <code>config</code> element but are not associated with any name specific name.</p>
+</div>
+<div class="paragraph">
+<p>The idea behind the model-only configurations is to be able to define the base for a configuration of a specific model that every final configuration of that model should include. Model-only configurations are always added into the configuration before the named configurations, i.e. named configurations will be added on top of the model-only ones and will overwrite them.</p>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -5400,7 +5427,7 @@ The features of <code>feature1</code> spec are not merged although they appear t
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-Model-only configurations are meant to be merged into named configurations. The provisioned installation will contain only named configurations but not the model-only ones.
+At the end, a provisioned installation will only contain the named configurations but not the model-only ones. Model-only configurations are always merged into the named configurations.
 </td>
 </tr>
 </table>
@@ -5417,88 +5444,120 @@ A model-only configuration is merged into <strong>all</strong> the named configu
 </tr>
 </table>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-A model-only configuration will simply be ignored if the installation does not include any named configuration with the same model as the model-only configuration.
-</td>
-</tr>
-</table>
+<div class="paragraph">
+<p>Let&#8217;s look at an example. Suppose we have two feature-packs: <code>fp1</code> and <code>fp2</code>.</p>
 </div>
 <div class="paragraph">
-<p>The idea behind the model-only configurations is to be able to define the base for a configuration of a specific model that every final configuration of that model should include. Model-only configs are always added into the configuration before the named model configs, i.e. the named configs will be added on top of the model-only ones and will overwrite them.</p>
-</div>
-<div class="paragraph">
-<p>Here is an example:</p>
+<p><code>fp1</code> is defined as</p>
 </div>
 <div class="listingblock">
+<div class="title">fp1: feature-pack.xml</div>
 <div class="content">
 <pre class="highlight"><code class="language-xml" data-lang="xml">&lt;feature-pack xmlns="urn:jboss:galleon:feature-pack:2.0"
               location="fp1@maven(org.jboss.universe:community-universe):1#1.0.0.Final"&gt;
-  &lt;config model="modelA"&gt;
-    &lt;feature spec="feature1"&gt;
-      &lt;param name="id" value="1"/&gt;
-      &lt;param name="a" value="fp1-modelA"/&gt;
-      &lt;param name="b" value="fp1-modelA"/&gt;
-    &lt;/feature&gt;
-  &lt;/config&gt;
-  &lt;config name="main" model="modelB"&gt;
-    &lt;feature spec="feature1"&gt;
-      &lt;param name="id" value="1"/&gt;
-      &lt;param name="b" value="fp1-modelB"/&gt;
-    &lt;/feature&gt;
-  &lt;/config&gt;
+  &lt;config name="main" model="modelB"/&gt;
 &lt;/feature-pack&gt;</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>And includes the following configurations</p>
+</div>
 <div class="listingblock">
+<div class="title">fp1: configs/modelA/model.xml</div>
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config xmlns="urn:jboss:galleon:config:1.0" model="modelA"&gt;
+  &lt;feature spec="feature1"&gt;
+    &lt;param name="id" value="1"/&gt;
+    &lt;param name="a" value="fp1-modelA"/&gt;
+    &lt;param name="b" value="fp1-modelA"/&gt;
+  &lt;/feature&gt;
+&lt;/config&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">fp1: configs/modelB/main/config.xml</div>
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config xmlns="urn:jboss:galleon:config:1.0" name="main" model="modelB"&gt;
+  &lt;feature spec="feature1"&gt;
+    &lt;param name="id" value="1"/&gt;
+    &lt;param name="b" value="fp1-modelB"/&gt;
+  &lt;/feature&gt;
+&lt;/config&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>fp2</code> is defined as</p>
+</div>
+<div class="listingblock">
+<div class="title">fp2: feature-pack.xml</div>
 <div class="content">
 <pre class="highlight"><code class="language-xml" data-lang="xml">&lt;feature-pack xmlns="urn:jboss:galleon:feature-pack:2.0"
               location="fp2@maven(org.jboss.universe:community-universe):1#1.0.0.Final"&gt;
   &lt;dependencies&gt;
     &lt;dependency location="fp1@maven(org.jboss.universe:community-universe):1#1.0.0.Final"/&gt;
   &lt;/dependencies&gt;
-  &lt;config name="main" model="modelA"&gt;
-    &lt;feature spec="feature1"&gt;
-      &lt;param name="id" value="1"/&gt;
-      &lt;param name="b" value="fp2-modelA"/&gt;
-    &lt;/feature&gt;
-  &lt;/config&gt;
-  &lt;config name="test" model="modelA"&gt;
-    &lt;feature spec="feature2"&gt;
-      &lt;param name="id" value="1"/&gt;
-      &lt;param name="a" value="fp2-modelA"/&gt;
-      &lt;param name="b" value="fp2-modelA"/&gt;
-    &lt;/feature&gt;
-  &lt;/config&gt;
-  &lt;config model="modelB"&gt;
-    &lt;feature spec="feature1"&gt;
-      &lt;param name="id" value="1"/&gt;
-      &lt;param name="a" value="fp2-modelB"/&gt;
-      &lt;param name="b" value="fp2-modelB"/&gt;
-    &lt;/feature&gt;
-  &lt;/config&gt;
-  &lt;config name="test" model="modelB"&gt;
-    &lt;feature spec="feature2"&gt;
-      &lt;param name="id" value="1"/&gt;
-      &lt;param name="a" value="fp2-modelB"/&gt;
-      &lt;param name="b" value="fp2-modelB"/&gt;
-    &lt;/feature&gt;
-  &lt;/config&gt;
+  &lt;config name="main" model="modelA"/&gt;
+  &lt;config name="test" model="modelA"/&gt;
+  &lt;config name="test" model="modelB"/&gt;
 &lt;/feature-pack&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And includes the following configurations</p>
+</div>
+<div class="listingblock">
+<div class="title">fp2: configs/modelA/main/config.xml</div>
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config xmlns="urn:jboss:galleon:config:1.0" name="main" model="modelA"&gt;
+  &lt;feature spec="feature1"&gt;
+    &lt;param name="id" value="1"/&gt;
+    &lt;param name="b" value="fp2-modelA"/&gt;
+  &lt;/feature&gt;
+&lt;/config&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">fp2: configs/modelA/test/config.xml</div>
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config xmlns="urn:jboss:galleon:config:1.0" name="test" model="modelA"&gt;
+  &lt;feature spec="feature2"&gt;
+    &lt;param name="id" value="1"/&gt;
+    &lt;param name="a" value="fp2-modelA"/&gt;
+    &lt;param name="b" value="fp2-modelA"/&gt;
+  &lt;/feature&gt;
+&lt;/config&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">fp2: configs/modelB/model.xml</div>
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config xmlns="urn:jboss:galleon:config:1.0" model="modelB"&gt;
+  &lt;feature spec="feature1"&gt;
+    &lt;param name="id" value="1"/&gt;
+    &lt;param name="a" value="fp2-modelB"/&gt;
+    &lt;param name="b" value="fp2-modelB"/&gt;
+  &lt;/feature&gt;
+&lt;/config&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">fp2: configs/modelB/test/config.xml</div>
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config xmlns="urn:jboss:galleon:config:1.0" name="test" model="modelB"&gt;
+  &lt;feature spec="feature2"&gt;
+    &lt;param name="id" value="1"/&gt;
+    &lt;param name="a" value="fp2-modelB"/&gt;
+    &lt;param name="b" value="fp2-modelB"/&gt;
+  &lt;/feature&gt;
+&lt;/config&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>Installing these two feature-packs will result in the following configurations:</p>
 </div>
 <table class="tableblock frame-all grid-all">
+<caption class="title">Table 4. modelA:main</caption>
 <colgroup>
-<col>
-<col>
 <col>
 <col>
 <col>
@@ -5507,8 +5566,6 @@ A model-only configuration will simply be ignored if the installation does not i
 </colgroup>
 <thead>
 <tr>
-<th class="tableblock halign-left valign-top">Config model</th>
-<th class="tableblock halign-left valign-top">Config name</th>
 <th class="tableblock halign-left valign-top">Feature spec origin</th>
 <th class="tableblock halign-left valign-top">Feature spec</th>
 <th class="tableblock halign-left valign-top">id</th>
@@ -5518,8 +5575,6 @@ A model-only configuration will simply be ignored if the installation does not i
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">modelA</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">main</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">fp1@maven(org.jboss.universe:community-universe):1#1.0.0.Final</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">feature1</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
@@ -5529,9 +5584,8 @@ A model-only configuration will simply be ignored if the installation does not i
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all">
+<caption class="title">Table 5. modelA:test</caption>
 <colgroup>
-<col>
-<col>
 <col>
 <col>
 <col>
@@ -5540,8 +5594,6 @@ A model-only configuration will simply be ignored if the installation does not i
 </colgroup>
 <thead>
 <tr>
-<th class="tableblock halign-left valign-top">Config model</th>
-<th class="tableblock halign-left valign-top">Config name</th>
 <th class="tableblock halign-left valign-top">Feature spec origin</th>
 <th class="tableblock halign-left valign-top">Feature spec</th>
 <th class="tableblock halign-left valign-top">id</th>
@@ -5551,8 +5603,6 @@ A model-only configuration will simply be ignored if the installation does not i
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">modelA</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">test</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">fp1@maven(org.jboss.universe:community-universe):1#1.0.0.Final</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">feature1</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
@@ -5560,8 +5610,6 @@ A model-only configuration will simply be ignored if the installation does not i
 <td class="tableblock halign-left valign-top"><p class="tableblock">fp1-modelA</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">modelA</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">test</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">fp2@maven(org.jboss.universe:community-universe):1#1.0.0.Final</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">feature2</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
@@ -5571,9 +5619,8 @@ A model-only configuration will simply be ignored if the installation does not i
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all">
+<caption class="title">Table 6. modelB:main</caption>
 <colgroup>
-<col>
-<col>
 <col>
 <col>
 <col>
@@ -5582,8 +5629,6 @@ A model-only configuration will simply be ignored if the installation does not i
 </colgroup>
 <thead>
 <tr>
-<th class="tableblock halign-left valign-top">Config model</th>
-<th class="tableblock halign-left valign-top">Config name</th>
 <th class="tableblock halign-left valign-top">Feature spec origin</th>
 <th class="tableblock halign-left valign-top">Feature spec</th>
 <th class="tableblock halign-left valign-top">id</th>
@@ -5593,8 +5638,6 @@ A model-only configuration will simply be ignored if the installation does not i
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">modelB</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">main</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">fp1@maven(org.jboss.universe:community-universe):1#1.0.0.Final</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">feature1</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
@@ -5604,9 +5647,8 @@ A model-only configuration will simply be ignored if the installation does not i
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all">
+<caption class="title">Table 7. modelB:test</caption>
 <colgroup>
-<col>
-<col>
 <col>
 <col>
 <col>
@@ -5615,8 +5657,6 @@ A model-only configuration will simply be ignored if the installation does not i
 </colgroup>
 <thead>
 <tr>
-<th class="tableblock halign-left valign-top">Config model</th>
-<th class="tableblock halign-left valign-top">Config name</th>
 <th class="tableblock halign-left valign-top">Feature spec origin</th>
 <th class="tableblock halign-left valign-top">Feature spec</th>
 <th class="tableblock halign-left valign-top">id</th>
@@ -5626,8 +5666,6 @@ A model-only configuration will simply be ignored if the installation does not i
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">modelB</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">test</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">fp1@maven(org.jboss.universe:community-universe):1#1.0.0.Final</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">feature1</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
@@ -5635,8 +5673,6 @@ A model-only configuration will simply be ignored if the installation does not i
 <td class="tableblock halign-left valign-top"><p class="tableblock">fp2-modelB</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">modelB</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">test</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">fp2@maven(org.jboss.universe:community-universe):1#1.0.0.Final</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">feature2</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
@@ -5646,9 +5682,9 @@ A model-only configuration will simply be ignored if the installation does not i
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_excluding_model_only_configurations_with_the_exclude_element"><a class="anchor" href="#_excluding_model_only_configurations_with_the_exclude_element"></a><a class="link" href="#_excluding_model_only_configurations_with_the_exclude_element">Excluding model-only configurations with the exclude element</a></h5>
+<h5 id="_excluding_model_only_configurations_with_exclude_element"><a class="anchor" href="#_excluding_model_only_configurations_with_exclude_element"></a><a class="link" href="#_excluding_model_only_configurations_with_exclude_element">Excluding model-only configurations with exclude element</a></h5>
 <div class="paragraph">
-<p>Normally, model-only configurations are not supposed to be explicitly excluded. If a user excludes all the named configs of a specific model, the model-only configs of that model will implicitly be ignored by the provisioning mechanism.</p>
+<p>Normally, model-only configurations are not supposed to be explicitly excluded. If a user excludes all the named configs of a specific model, the model-only configs of that model will simply be ignored by the provisioning mechanism.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -5657,13 +5693,13 @@ A model-only configuration will simply be ignored if the installation does not i
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Configuration model designers are encouraged to design configurations in a way that model-only configurations represent essential configuration and don&#8217;t need to be excluded explicitly by users or should be excluded in exceptional cases.
+Configuration model designers are encouraged to model configurations in a way that model-only configurations represent an essential part of any configuration of that model and its runtime dependencies and don&#8217;t need to be excluded explicitly by users or should be excluded in exceptional cases.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>In a previous chapter it was described how the default configurations could be excluded from the provisioned installation by <a href="#excl-configs-by-model">specifying their model name</a>. Here is an example once again</p>
+<p>In a previous chapter it was described how the default configurations could be excluded from the provisioned installation by <a href="#excl-configs-by-model">specifying their model name</a>. Here is the relevant part of the configuration:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5677,49 +5713,81 @@ Configuration model designers are encouraged to design configurations in a way t
 </div>
 </div>
 <div class="paragraph">
-<p><code>exclude</code> element above <strong>does not</strong> affect the model-only configurations. It affects <strong>only</strong> the named configs. And in this specific example this fact will not make any difference on the result which is why, users shouldn&#8217;t care about it, since if the named configurations are excluded, the model-only configurations will automatically be ignored by the provisioning mechanism. Let&#8217;s look at an example where it makes a real difference.</p>
+<p><code>exclude</code> element above <strong>does not</strong> affect the model-only configurations. It affects <strong>only the named</strong> configurations associated with the specified model.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s imagine we have the following feature-pack <code>fp1</code></p>
 </div>
 <div class="listingblock">
+<div class="title">fp1: feature-pack.xml</div>
 <div class="content">
 <pre class="highlight"><code class="language-xml" data-lang="xml">&lt;feature-pack xmlns="urn:jboss:galleon:feature-pack:2.0"
               location="fp1@maven(org.jboss.universe:community-universe):1#1.0.0.Final"&gt;
-  &lt;config model="modelA"&gt;
-    &lt;feature spec="feature1"&gt;
-      &lt;param name="id" value="1"/&gt;
-      &lt;param name="a" value="fp1-modelA"/&gt;
-      &lt;param name="b" value="fp1-modelA"/&gt;
-      &lt;param name="c" value="fp1-modelA"/&gt;
-    &lt;/feature&gt;
-  &lt;/config&gt;
-  &lt;config name="main" model="modelA"&gt;
-    &lt;feature spec="feature1"&gt;
-      &lt;param name="id" value="1"/&gt;
-      &lt;param name="b" value="fp1-modelA-main"/&gt;
-    &lt;/feature&gt;
-  &lt;/config&gt;
+  &lt;config name="main" model="modelA"/&gt;
 &lt;/feature-pack&gt;</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>with the following configurations</p>
+</div>
 <div class="listingblock">
+<div class="title">fp1: configs/modelA/model.xml</div>
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config xmlns="urn:jboss:galleon:config:1.0" model="modelA"&gt;
+  &lt;feature spec="feature1"&gt;
+    &lt;param name="id" value="1"/&gt;
+    &lt;param name="a" value="fp1-modelA"/&gt;
+    &lt;param name="b" value="fp1-modelA"/&gt;
+    &lt;param name="c" value="fp1-modelA"/&gt;
+  &lt;/feature&gt;
+&lt;/config&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">fp1: configs/modelA/main/config.xml</div>
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config xmlns="urn:jboss:galleon:config:1.0" name="main" model="modelA"&gt;
+  &lt;feature spec="feature1"&gt;
+    &lt;param name="id" value="1"/&gt;
+    &lt;param name="b" value="fp1-modelA-main"/&gt;
+  &lt;/feature&gt;
+&lt;/config&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And feature-pack <code>fp2</code></p>
+</div>
+<div class="listingblock">
+<div class="title">fp2: feature-pack.xml</div>
 <div class="content">
 <pre class="highlight"><code class="language-xml" data-lang="xml">&lt;feature-pack xmlns="urn:jboss:galleon:feature-pack:1.0"
               location="fp2@maven(org.jboss.universe:community-universe):1#1.0.0.Final"&gt;
   &lt;dependencies&gt;
     &lt;dependency location="fp1@maven(org.jboss.universe:community-universe):1#1.0.0.Final"/&gt;
   &lt;/dependencies&gt;
-  &lt;config name="main" model="modelA"&gt;
-    &lt;feature spec="feature1"&gt;
-      &lt;param name="id" value="1"/&gt;
-      &lt;param name="c" value="fp2-modelA-main"/&gt;
-    &lt;/feature&gt;
-  &lt;/config&gt;
+  &lt;config name="main" model="modelA"/&gt;
 &lt;/feature-pack&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If we install these feature-packs the resulting config will contain</p>
+<p>With the following configuration</p>
+</div>
+<div class="listingblock">
+<div class="title">fp2: configs/modelA/main/config.xml</div>
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config xmlns="urn:jboss:galleon:config:1.0" name="main" model="modelA"&gt;
+  &lt;feature spec="feature1"&gt;
+    &lt;param name="id" value="1"/&gt;
+    &lt;param name="c" value="fp2-modelA-main"/&gt;
+  &lt;/feature&gt;
+&lt;/config&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If we install these feature-packs the resulting configuration will contain</p>
 </div>
 <table class="tableblock frame-all grid-all">
+<caption class="title">Table 8. modelA:main</caption>
 <colgroup>
 <col>
 <col>
@@ -5753,6 +5821,7 @@ Configuration model designers are encouraged to design configurations in a way t
 <p>If we exclude <code>modelA</code> like it was shown in the previous example <strong>in the declaration of the dependency</strong> on <code>fp1</code>, i.e.</p>
 </div>
 <div class="listingblock">
+<div class="title">fp2: feature-pack.xml</div>
 <div class="content">
 <pre class="highlight"><code class="language-xml" data-lang="xml">&lt;feature-pack xmlns="urn:jboss:galleon:feature-pack:2.0"
               location="fp2@maven(org.jboss.universe:community-universe):1#1.0.0.Final"&gt;
@@ -5763,19 +5832,15 @@ Configuration model designers are encouraged to design configurations in a way t
       &lt;/default-configs&gt;
     &lt;/dependency&gt;
   &lt;/dependencies&gt;
-  &lt;config name="main" model="modelA"&gt;
-    &lt;feature spec="feature1"&gt;
-      &lt;param name="id" value="1"/&gt;
-      &lt;param name="c" value="fp2-modelA-main"/&gt;
-    &lt;/feature&gt;
-  &lt;/config&gt;
+  &lt;config name="main" model="modelA"/&gt;
 &lt;/feature-pack&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If we install <strong>fp2</strong>, the provisioned configuration will contain</p>
+<p>If we install <code>fp2</code> now, the provisioned configuration will contain</p>
 </div>
 <table class="tableblock frame-all grid-all">
+<caption class="title">Table 9. modelA:main</caption>
 <colgroup>
 <col>
 <col>
@@ -5806,9 +5871,10 @@ Configuration model designers are encouraged to design configurations in a way t
 </tbody>
 </table>
 <div class="paragraph">
-<p>The model-only configuration from <code>fp1</code> is still effective because it is considered being essential for any named configuration of <code>modelA</code>. In case it still has to be excluded from the provisioned configuration you can add <code>named-only-models="false"</code> attribute to <code>exclude</code> element, e.g.</p>
+<p>The model-only configuration from <code>fp1</code> is still effective because <code>fp1</code> is installed as a dependency of <code>fp2</code> and its <code>modelA</code> configuration is considered being essential for any named configuration of the model. In case it still has to be excluded from the provisioned configuration it can be done by adding <code>named-only-models="false"</code> attribute to <code>exclude</code> element, e.g.</p>
 </div>
 <div class="listingblock">
+<div class="title">fp2: feature-pack.xml</div>
 <div class="content">
 <pre class="highlight"><code class="language-xml" data-lang="xml">&lt;feature-pack xmlns="urn:jboss:galleon:feature-pack:2.0"
               location="fp2@maven(org.jboss.universe:community-universe):1#1.0.0.Final"&gt;
@@ -5819,12 +5885,7 @@ Configuration model designers are encouraged to design configurations in a way t
       &lt;/default-configs&gt;
     &lt;/dependency&gt;
   &lt;/dependencies&gt;
-  &lt;config name="main" model="modelA"&gt;
-    &lt;feature spec="feature1"&gt;
-      &lt;param name="id" value="1"/&gt;
-      &lt;param name="c" value="fp2-modelA-main"/&gt;
-    &lt;/feature&gt;
-  &lt;/config&gt;
+  &lt;config name="main" model="modelA"/&gt;
 &lt;/feature-pack&gt;</code></pre>
 </div>
 </div>
@@ -5847,6 +5908,7 @@ Configuration model designers are encouraged to design configurations in a way t
 <p>The provisioned configuration of <code>fp2</code> will now contain</p>
 </div>
 <table class="tableblock frame-all grid-all">
+<caption class="title">Table 10. modelA:main</caption>
 <colgroup>
 <col>
 <col>
@@ -5872,51 +5934,78 @@ Configuration model designers are encouraged to design configurations in a way t
 </table>
 </div>
 <div class="sect4">
-<h5 id="_disabling_inheritance_of_the_model_only_configurations"><a class="anchor" href="#_disabling_inheritance_of_the_model_only_configurations"></a><a class="link" href="#_disabling_inheritance_of_the_model_only_configurations">Disabling inheritance of the model-only configurations</a></h5>
+<h5 id="_disabling_inheritance_of_model_only_configurations"><a class="anchor" href="#_disabling_inheritance_of_model_only_configurations"></a><a class="link" href="#_disabling_inheritance_of_model_only_configurations">Disabling inheritance of model-only configurations</a></h5>
 <div class="paragraph">
 <p>In an earlier chapter it was shown <a href="#disable-def-configs">how the default configurations of a feature-pack could be suppressed</a>. Let&#8217;s now include a model-only configuration in the example.</p>
 </div>
 <div class="listingblock">
+<div class="title">fp1: feature-pack.xml</div>
 <div class="content">
 <pre class="highlight"><code class="language-xml" data-lang="xml">&lt;feature-pack xmlns="urn:jboss:galleon:feature-pack:2.0"
               location="fp1@maven(org.jboss.universe:community-universe):1#1.0.0.Final"&gt;
-  &lt;config model="modelA"&gt;
-    &lt;feature spec="feature1"&gt;
-      &lt;param name="id" value="1"/&gt;
-      &lt;param name="a" value="fp1-modelA"/&gt;
-      &lt;param name="b" value="fp1-modelA"/&gt;
-      &lt;param name="c" value="fp1-modelA"/&gt;
-    &lt;/feature&gt;
-  &lt;/config&gt;
-  &lt;config name="main" model="modelA"&gt;
-    &lt;feature spec="feature1"&gt;
-      &lt;param name="id" value="1"/&gt;
-      &lt;param name="b" value="fp1-modelA-main"/&gt;
-    &lt;/feature&gt;
-  &lt;/config&gt;
+  &lt;config name="main" model="modelA"/&gt;
 &lt;/feature-pack&gt;</code></pre>
 </div>
 </div>
 <div class="listingblock">
+<div class="title">fp1: configs/modelA/model.xml</div>
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config xmlns="urn:jboss:galleon:config:1.0" model="modelA"&gt;
+  &lt;feature spec="feature1"&gt;
+    &lt;param name="id" value="1"/&gt;
+    &lt;param name="a" value="fp1-modelA"/&gt;
+    &lt;param name="b" value="fp1-modelA"/&gt;
+    &lt;param name="c" value="fp1-modelA"/&gt;
+  &lt;/feature&gt;
+&lt;/config&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">fp1: configs/modelA/main/config.xml</div>
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config xmlns="urn:jboss:galleon:config:1.0" name="main" model="modelA"&gt;
+  &lt;feature spec="feature1"&gt;
+    &lt;param name="id" value="1"/&gt;
+    &lt;param name="b" value="fp1-modelA-main"/&gt;
+  &lt;/feature&gt;
+&lt;/config&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">fp2: feature-pack.xml</div>
 <div class="content">
 <pre class="highlight"><code class="language-xml" data-lang="xml">&lt;feature-pack xmlns="urn:jboss:galleon:feature-pack:2.0"
               location="fp2@maven(org.jboss.universe:community-universe):1#1.0.0.Final"&gt;
   &lt;dependencies&gt;
     &lt;dependency location="fp1@maven(org.jboss.universe:community-universe):1#1.0.0.Final"&gt;
-      &lt;default-configs inherit="false"/&gt;
+      &lt;default-configs inherit="false"/&gt; <i class="conum" data-value="1"></i><b>(1)</b>
     &lt;/dependency&gt;
   &lt;/dependencies&gt;
-  &lt;config name="main" model="modelA"&gt;
-    &lt;feature spec="feature1"&gt;
-      &lt;param name="id" value="1"/&gt;
-      &lt;param name="c" value="fp2-modelA-main"/&gt;
-    &lt;/feature&gt;
-  &lt;/config&gt;
+  &lt;config name="main" model="modelA"/&gt;
 &lt;/feature-pack&gt;</code></pre>
 </div>
 </div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the default configurations from <code>fp1</code> are going to be ignored</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">fp2: configs/modelA/main/config.xml</div>
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;config xmlns="urn:jboss:galleon:config:1.0" name="main" model="modelA"&gt;
+  &lt;feature spec="feature1"&gt;
+    &lt;param name="id" value="1"/&gt;
+    &lt;param name="c" value="fp2-modelA-main"/&gt;
+  &lt;/feature&gt;
+&lt;/config&gt;</code></pre>
+</div>
+</div>
 <div class="paragraph">
-<p>With <code>inherit="false"</code> attribute of <code>default-configs</code> element we indicated that the default configs of <code>fp1</code> should not be included into the distribution provisioned from <code>fp2</code>. But it does not affect the model-only configs. So the model-only <code>modelA</code> configuration will still be effective in <code>fp2</code>.</p>
+<p>With <code>inherit="false"</code> attribute of <code>default-configs</code> element we indicated that the default configurations of <code>fp1</code> should not be included into the distribution provisioned from <code>fp2</code>. But it does not affect the model-only configs. So the model-only <code>modelA</code> configuration will still be effective in <code>fp2</code>.</p>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -5931,9 +6020,10 @@ Configuration model designers are encouraged to design configurations in a way t
 </table>
 </div>
 <div class="paragraph">
-<p>Here is an example that disables the inheritance of all the named and model-only configs:</p>
+<p>Here is an example that disables the inheritance of all the named and model-only configurations:</p>
 </div>
 <div class="listingblock">
+<div class="title">fp2: feature-pack.xml</div>
 <div class="content">
 <pre class="highlight"><code class="language-xml" data-lang="xml">&lt;feature-pack xmlns="urn:jboss:galleon:feature-pack:2.0"
               location="fp2@maven(org.jboss.universe:community-universe):1#1.0.0.Final"&gt;
@@ -5942,19 +6032,15 @@ Configuration model designers are encouraged to design configurations in a way t
       &lt;default-configs inherit="false" inherit-unnamed-models="false"/&gt;
     &lt;/dependency&gt;
   &lt;/dependencies&gt;
-  &lt;config name="main" model="modelA"&gt;
-    &lt;feature spec="feature1"&gt;
-      &lt;param name="id" value="1"/&gt;
-      &lt;param name="c" value="fp2-modelA-main"/&gt;
-    &lt;/feature&gt;
-  &lt;/config&gt;
+  &lt;config name="main" model="modelA"/&gt;
 &lt;/feature-pack&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The provisioned configuration of <code>fp2</code> will now contain</p>
+<p>The installation provisioned from <code>fp2</code> will include the following configuration</p>
 </div>
 <table class="tableblock frame-all grid-all">
+<caption class="title">Table 11. modelA:main</caption>
 <colgroup>
 <col>
 <col>
@@ -5983,6 +6069,18 @@ Configuration model designers are encouraged to design configurations in a way t
 </div>
 <div class="sect2">
 <h3 id="_content_of_code_config_code_element"><a class="anchor" href="#_content_of_code_config_code_element"></a><a class="link" href="#_content_of_code_config_code_element">9.5. Content of <code>config</code> element</a></h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Although this chapter is describing <code>config</code> element as a child of <code>feature-pack</code> element, the same applies to the root <code>config</code> element from <code>config.xml</code> and <code>model.xml</code> files.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p><code>config</code> element is basically an extended version of <a href="#_feature_groups"><code>feature-group</code> element</a>. Meaning that everything that is allowed in the body of <code>feature-group</code> (which is <code>feature</code>, <code>feature-group</code> and <code>origin</code> elements for explicit dependency origins) is allowed in <code>config</code> element.</p>
 </div>
@@ -6535,7 +6633,7 @@ Like any other feature-pack, patches may declare dependencies on other patches. 
 </div>
 </div>
 <table class="tableblock frame-all grid-all">
-<caption class="title">Table 2. Goals</caption>
+<caption class="title">Table 12. Goals</caption>
 <colgroup>
 <col>
 <col>
@@ -6585,7 +6683,7 @@ existing installation.</p>
 </ul>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 3. Required Parameters</caption>
+<caption class="title">Table 13. Required Parameters</caption>
 <colgroup>
 <col>
 <col>
@@ -6609,7 +6707,7 @@ existing installation.</p>
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 4. Optional Parameters</caption>
+<caption class="title">Table 14. Optional Parameters</caption>
 <colgroup>
 <col>
 <col>
@@ -6913,7 +7011,7 @@ describes the state of the final installation.&lt;/p&gt;</p>
 </ul>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 5. Required Parameters</caption>
+<caption class="title">Table 15. Required Parameters</caption>
 <colgroup>
 <col>
 <col>
@@ -6944,7 +7042,7 @@ describes the state of the final installation.&lt;/p&gt;</p>
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 6. Optional Parameters</caption>
+<caption class="title">Table 16. Optional Parameters</caption>
 <colgroup>
 <col>
 <col>
@@ -7106,7 +7204,7 @@ universe-based feature-pack resolver at provisioning time.</p>
 </ul>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 7. Feature-pack parameters</caption>
+<caption class="title">Table 17. Feature-pack parameters</caption>
 <colgroup>
 <col>
 <col>
