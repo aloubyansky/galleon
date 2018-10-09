@@ -75,8 +75,16 @@ public class FeaturePackRuntimeBuilder extends FeaturePackLayout {
         this.spec = spec;
     }
 
-    boolean resolvePackage(String pkgName, ProvisioningRuntimeBuilder rt) throws ProvisioningException {
-        if(pkgBuilders.containsKey(pkgName)) {
+    boolean resolvePackage(String pkgName, ProvisioningRuntimeBuilder rt, PackageRuntime.Builder parent, boolean optional) throws ProvisioningException {
+        PackageRuntime.Builder pkgBuilder = pkgBuilders.get(pkgName);
+        if(pkgBuilder != null) {
+            if(parent == null) {
+                if (pkgBuilder.status == PackageRuntime.PKG_REFERENCED) {
+                    pkgBuilder.include();
+                }
+            } else {
+                parent.addPackageRef(pkgBuilder, optional);
+            }
             return true;
         }
 
@@ -89,9 +97,8 @@ public class FeaturePackRuntimeBuilder extends FeaturePackLayout {
             throw new ProvisioningDescriptionException(Errors.pathDoesNotExist(pkgXml));
         }
 
-        final PackageRuntime.Builder pkgBuilder;
         try(BufferedReader reader = Files.newBufferedReader(pkgXml)) {
-            pkgBuilder = PackageRuntime.builder(PackageXmlParser.getInstance().parse(reader), pkgDir);
+            pkgBuilder = PackageRuntime.builder(PackageXmlParser.getInstance().parse(reader), pkgDir, ++rt.pkgCount);
         } catch (IOException | XMLStreamException e) {
             throw new ProvisioningException(Errors.parseXml(pkgXml), e);
         }
@@ -99,11 +106,17 @@ public class FeaturePackRuntimeBuilder extends FeaturePackLayout {
             throw new ProvisioningDescriptionException("Feature-pack " + getFPID() + " package spec name " + pkgBuilder.spec.getName() + " does not match the requested package name " + pkgName);
         }
         pkgBuilders = CollectionUtils.put(pkgBuilders, pkgName, pkgBuilder);
+        if(parent == null) {
+            pkgBuilder.status = PackageRuntime.PKG_REQUIRED;
+            System.out.println("REQUIRED " + pkgBuilder.spec.getName());
+        } else {
+            parent.addPackageRef(pkgBuilder, optional);
+        }
 
         if(pkgBuilder.spec.hasPackageDeps()) {
             final FeaturePackRuntimeBuilder currentOrigin = rt.setOrigin(this);
             try {
-                rt.processPackageDeps(pkgBuilder.spec);
+                rt.processPackageDeps(pkgBuilder.spec, pkgBuilder);
             } catch(ProvisioningException e) {
                 throw new ProvisioningDescriptionException(Errors.resolvePackage(producer.getLocation().getFPID(), pkgName), e);
             } finally {

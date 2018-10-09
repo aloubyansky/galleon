@@ -16,9 +16,12 @@
  */
 package org.jboss.galleon.runtime;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -42,11 +45,103 @@ public class FeaturePackRuntime extends FeaturePackLayout implements FeaturePack
         this.spec = builder.getSpec();
         this.featureSpecs = builder.featureSpecs;
 
-        Map<String, PackageRuntime> tmpPackages = new LinkedHashMap<>();
-        for(String pkgName : builder.pkgOrder) {
-            final PackageRuntime.Builder pkgRtBuilder = builder.pkgBuilders.get(pkgName);
-            tmpPackages.put(pkgName, pkgRtBuilder.build(this));
+        final Map<String, PackageRuntime> tmpPackages = new LinkedHashMap<>(builder.pkgOrder.size());
+        int requiredTotal = 0;
+        int referencedExcludedTotal = 0;
+        int referencedIncludedTotal = 0;
+        int includedTotal = 0;
+        Set<Integer> visited = null;
+
+        int i = builder.pkgOrder.size();
+        List<PackageRuntime> pkgs = new ArrayList<>(i);
+        while(--i >= 0) {
+            final String pkgName = builder.pkgOrder.get(i);
+            final PackageRuntime.Builder pkgBuilder = builder.pkgBuilders.get(pkgName);
+            System.out.println(" - " + pkgName + " ");
+            boolean include = true;
+            switch(pkgBuilder.status) {
+                case PackageRuntime.PKG_REFERENCED:
+                    if(visited == null) {
+                        visited = new HashSet<>();
+                    }
+                    final boolean required = pkgBuilder.isIncluded(visited);
+                    visited.clear();
+                    if(required) {
+                        System.out.println("    INCLUDED");
+                        pkgBuilder.include();
+                        ++referencedIncludedTotal;
+                    } else {
+                        ++referencedExcludedTotal;
+                        include = false;
+                        System.out.println("    EXCLUDED");
+                    }
+                    break;
+                case PackageRuntime.PKG_REQUIRED:
+                    System.out.println("    required");
+                    ++requiredTotal;
+                    break;
+                case PackageRuntime.PKG_INCLUDED:
+                    System.out.println("    included");
+                    ++includedTotal;
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected status " + pkgBuilder.status);
+            }
+            if(include) {
+                pkgs.add(pkgBuilder.build(this));
+                //tmpPackages.put(pkgName, pkgBuilder.build(this));
+            }
         }
+        /*
+        for(String pkgName : builder.pkgOrder) {
+            final PackageRuntime.Builder pkgBuilder = builder.pkgBuilders.get(pkgName);
+            System.out.println(" - " + pkgName + " ");
+            boolean include = true;
+            switch(pkgBuilder.status) {
+                case PackageRuntime.PKG_REFERENCED:
+                    //System.out.println("REFERENCED");
+                    if(visited == null) {
+                        visited = new LinkedHashSet<>();
+                    }
+                    final boolean required = pkgBuilder.isIncluded(visited);
+                    visited.clear();
+                    if(required) {
+                        System.out.println("    INCLUDED");
+                        pkgBuilder.include();
+                        ++referencedIncludedTotal;
+                    } else {
+                        ++referencedExcludedTotal;
+                        include = false;
+                        System.out.println("    EXCLUDED");
+                    }
+                    break;
+                case PackageRuntime.PKG_REQUIRED:
+                    System.out.println("    required");
+                    ++requiredTotal;
+                    break;
+                case PackageRuntime.PKG_INCLUDED:
+                    System.out.println("    included");
+                    ++includedTotal;
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected status " + pkgBuilder.status);
+            }
+            if(include) {
+                tmpPackages.put(pkgName, pkgBuilder.build(this));
+            }
+        }
+        */
+        i = pkgs.size();
+        while(--i >= 0) {
+            final PackageRuntime pkg = pkgs.get(i);
+            tmpPackages.put(pkg.getName(), pkg);
+        }
+
+        System.out.println(getFPID() + " packages total: " + builder.pkgOrder.size());
+        System.out.println("  required " + requiredTotal);
+        System.out.println("  included " + includedTotal);
+        System.out.println("  referenced included " + referencedIncludedTotal);
+        System.out.println("  referenced excluded " + referencedExcludedTotal);
 
         packages = Collections.unmodifiableMap(tmpPackages);
     }
