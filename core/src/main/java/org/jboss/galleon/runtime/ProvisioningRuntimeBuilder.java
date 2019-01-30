@@ -88,6 +88,7 @@ public class ProvisioningRuntimeBuilder {
     ProvisioningConfig config;
     ProvisioningLayout<FeaturePackRuntimeBuilder> layout;
     Path stagedDir;
+    boolean recordState;
     FsDiff fsDiff;
     private final MessageWriter messageWriter;
 
@@ -113,7 +114,7 @@ public class ProvisioningRuntimeBuilder {
     int includedPkgDeps;
 
     private ProvisioningRuntimeBuilder(final MessageWriter messageWriter) {
-        startTime = System.currentTimeMillis();
+        startTime = System.nanoTime();
         this.messageWriter = messageWriter;
     }
 
@@ -144,6 +145,11 @@ public class ProvisioningRuntimeBuilder {
 
     public ProvisioningRuntimeBuilder setStagedDir(Path p) {
         this.stagedDir = p;
+        return this;
+    }
+
+    public ProvisioningRuntimeBuilder setRecordState(boolean recordState) {
+        this.recordState = recordState;
         return this;
     }
 

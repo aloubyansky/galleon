@@ -71,6 +71,7 @@ public class ProvisioningManager implements AutoCloseable {
         private ProvisioningLayoutFactory layoutFactory;
         private MessageWriter messageWriter;
         private UniverseResolver resolver;
+        private boolean recordState = true;
 
         private Builder() {
         }
@@ -123,6 +124,11 @@ public class ProvisioningManager implements AutoCloseable {
             return this;
         }
 
+        public Builder setRecordState(boolean recordState) {
+            this.recordState = recordState;
+            return this;
+        }
+
         public ProvisioningManager build() throws ProvisioningException {
             return new ProvisioningManager(this);
         }
@@ -144,6 +150,7 @@ public class ProvisioningManager implements AutoCloseable {
     private ProvisioningLayoutFactory layoutFactory;
     private boolean closeLayoutFactory;
     private ProvisioningConfig provisioningConfig;
+    private boolean recordState;
 
     private ProvisioningManager(Builder builder) throws ProvisioningException {
         PathsUtils.assertInstallationDir(builder.installationHome);
@@ -157,6 +164,7 @@ public class ProvisioningManager implements AutoCloseable {
         } else {
             universeResolver = builder.getUniverseResolver();
         }
+        this.recordState = false;//builder.recordState;
     }
 
     /**
@@ -179,6 +187,20 @@ public class ProvisioningManager implements AutoCloseable {
      */
     public Path getInstallationHome() {
         return home;
+    }
+
+    /**
+     * Whether provisioning state will be recorded after (re-)provisioning.
+     *
+     * @return  true if the provisioning state is recorded after provisioning,
+     * otherwise false
+     */
+    public boolean isRecordState() {
+        return recordState;
+    }
+
+    public void setRecordState(boolean recordState) {
+        this.recordState = recordState;
     }
 
     /**
@@ -592,7 +614,8 @@ public class ProvisioningManager implements AutoCloseable {
         final ProvisioningRuntimeBuilder rtBuilder = ProvisioningRuntimeBuilder.newInstance(log)
                 .initRtLayout(layout)
                 .setEncoding(encoding)
-                .setFsDiff(fsDiff);
+                .setFsDiff(fsDiff)
+                .setRecordState(recordState);
         if(setStagedDir) {
             rtBuilder.setStagedDir(home);
         }
@@ -603,26 +626,28 @@ public class ProvisioningManager implements AutoCloseable {
         final boolean freshInstall = PathsUtils.isNewLocation(home);
         try (ProvisioningRuntime runtime = getRuntimeInternal(layout, fsDiff, freshInstall)) {
             runtime.provision();
-            if (runtime.getProvisioningConfig().hasFeaturePackDeps()) {
-                persistHashes(runtime);
-            }
-            if (undo) {
-                final Map<String, Boolean> undoTasks = StateHistoryUtils.readUndoTasks(home, log);
-                if (!undoTasks.isEmpty()) {
-                    final Path staged = runtime.getStagedDir();
-                    for (Map.Entry<String, Boolean> entry : undoTasks.entrySet()) {
-                        final Path stagedPath = staged.resolve(entry.getKey());
-                        if (entry.getValue()) {
-                            final Path homePath = home.resolve(entry.getKey());
-                            if (Files.exists(homePath)) {
-                                try {
-                                    IoUtils.copy(homePath, stagedPath);
-                                } catch (IOException e) {
-                                    throw new ProvisioningException(Errors.copyFile(homePath, stagedPath), e);
+            if(recordState) {
+                if (runtime.getProvisioningConfig().hasFeaturePackDeps()) {
+                    persistHashes(runtime);
+                }
+                if (undo) {
+                    final Map<String, Boolean> undoTasks = StateHistoryUtils.readUndoTasks(home, log);
+                    if (!undoTasks.isEmpty()) {
+                        final Path staged = runtime.getStagedDir();
+                        for (Map.Entry<String, Boolean> entry : undoTasks.entrySet()) {
+                            final Path stagedPath = staged.resolve(entry.getKey());
+                            if (entry.getValue()) {
+                                final Path homePath = home.resolve(entry.getKey());
+                                if (Files.exists(homePath)) {
+                                    try {
+                                        IoUtils.copy(homePath, stagedPath);
+                                    } catch (IOException e) {
+                                        throw new ProvisioningException(Errors.copyFile(homePath, stagedPath), e);
+                                    }
                                 }
+                            } else {
+                                IoUtils.recursiveDelete(stagedPath);
                             }
-                        } else {
-                            IoUtils.recursiveDelete(stagedPath);
                         }
                     }
                 }
@@ -632,7 +657,7 @@ public class ProvisioningManager implements AutoCloseable {
                 undoTasks = FsDiff.replay(fsDiff, runtime.getStagedDir(), log);
             }
             if(!freshInstall) {
-                PathsUtils.replaceDist(runtime.getStagedDir(), home, undo, undoTasks, log);
+                PathsUtils.replaceDist(runtime.getStagedDir(), home, recordState ? undo : null, undoTasks, log);
             }
         } finally {
             this.provisioningConfig = null;

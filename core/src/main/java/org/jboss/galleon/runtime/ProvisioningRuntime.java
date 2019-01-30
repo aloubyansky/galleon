@@ -62,6 +62,7 @@ public class ProvisioningRuntime implements FeaturePackSet<FeaturePackRuntime>, 
     private final Path stagedDir;
     private final ProvisioningLayout<FeaturePackRuntime> layout;
     private final MessageWriter messageWriter;
+    private final boolean recordState;
     private Boolean emptyStagedDir;
     private List<ProvisionedConfig> configs = Collections.emptyList();
 
@@ -97,6 +98,7 @@ public class ProvisioningRuntime implements FeaturePackSet<FeaturePackRuntime>, 
             throw e;
         }
 
+        this.recordState = builder.recordState;
         this.messageWriter = messageWriter;
     }
 
@@ -300,18 +302,20 @@ public class ProvisioningRuntime implements FeaturePackSet<FeaturePackRuntime>, 
             }
         }, InstallPlugin.class);
 
-        // save the config
-        try {
-            ProvisioningXmlWriter.getInstance().write(config, PathsUtils.getProvisioningXml(stagedDir));
-        } catch (XMLStreamException | IOException e) {
-            throw new FeaturePackInstallException(Errors.writeFile(PathsUtils.getProvisioningXml(stagedDir)), e);
-        }
+        if(recordState) {
+            // save the config
+            try {
+                ProvisioningXmlWriter.getInstance().write(config, PathsUtils.getProvisioningXml(stagedDir));
+            } catch (XMLStreamException | IOException e) {
+                throw new FeaturePackInstallException(Errors.writeFile(PathsUtils.getProvisioningXml(stagedDir)), e);
+            }
 
-        // save the provisioned state
-        try {
-            ProvisionedStateXmlWriter.getInstance().write(this, PathsUtils.getProvisionedStateXml(stagedDir));
-        } catch (XMLStreamException | IOException e) {
-            throw new FeaturePackInstallException(Errors.writeFile(PathsUtils.getProvisionedStateXml(stagedDir)), e);
+            // save the provisioned state
+            try {
+                ProvisionedStateXmlWriter.getInstance().write(this, PathsUtils.getProvisionedStateXml(stagedDir));
+            } catch (XMLStreamException | IOException e) {
+                throw new FeaturePackInstallException(Errors.writeFile(PathsUtils.getProvisionedStateXml(stagedDir)), e);
+            }
         }
 
         emptyStagedDir = null;
@@ -328,11 +332,11 @@ public class ProvisioningRuntime implements FeaturePackSet<FeaturePackRuntime>, 
             }
         }
         if (messageWriter.isVerboseEnabled()) {
-            final long time = System.currentTimeMillis() - startTime;
+            final long time = (System.nanoTime() - startTime) / 1000000;
             final long seconds = time / 1000;
             messageWriter.verbose("Done in %d.%d seconds", seconds, (time - seconds * 1000));
         }
-        final long time = System.currentTimeMillis() - startTime;
+        final long time = (System.nanoTime() - startTime) / 1000000;
         final long seconds = time / 1000;
         messageWriter.print("Done in %d.%d seconds", seconds, (time - seconds * 1000));
     }

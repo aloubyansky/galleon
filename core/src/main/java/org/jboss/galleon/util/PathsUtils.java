@@ -102,16 +102,18 @@ public class PathsUtils {
         return path.replace(File.separatorChar, '/');
     }
 
-    public static void replaceDist(Path stagedDir, Path home, boolean asUndo, Map<String, Boolean> undoTasks, MessageWriter log) throws ProvisioningException {
-        final long startTime = System.currentTimeMillis();
+    public static void replaceDist(Path stagedDir, Path home, Boolean asUndo, Map<String, Boolean> undoTasks, MessageWriter log) throws ProvisioningException {
+        final long startTime = System.nanoTime();
         log.verbose("Moving the provisioned installation from the staged directory to %s", home);
 
         // copy from the staged to the target installation directory
         if (Files.exists(home)) {
-            if(asUndo) {
-                StateHistoryUtils.removeLastUndoConfig(home, stagedDir, log);
-            } else {
-                StateHistoryUtils.addNewUndoConfig(home, stagedDir, undoTasks, log);
+            if(asUndo != null) {
+                if (asUndo) {
+                    StateHistoryUtils.removeLastUndoConfig(home, stagedDir, log);
+                } else {
+                    StateHistoryUtils.addNewUndoConfig(home, stagedDir, undoTasks, log);
+                }
             }
             IoUtils.recursiveDelete(home);
         }
@@ -120,6 +122,7 @@ public class PathsUtils {
         } catch (IOException e) {
             throw new ProvisioningException(Errors.copyFile(stagedDir, home));
         }
-        System.out.println("MOVED DIST IN " + (System.currentTimeMillis() - startTime));
+
+        System.out.println("MOVED DIST IN " + ((System.nanoTime() - startTime) / 1000000));
     }
 }
