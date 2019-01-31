@@ -164,7 +164,7 @@ public class ProvisioningManager implements AutoCloseable {
         } else {
             universeResolver = builder.getUniverseResolver();
         }
-        this.recordState = false;//builder.recordState;
+        this.recordState = builder.recordState;
     }
 
     /**
