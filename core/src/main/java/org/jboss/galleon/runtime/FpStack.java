@@ -64,38 +64,17 @@ class FpStack {
             return fpConfigs.get(++currentFp);
         }
 
-        ProducerSpec getCurrentFpProducer() {
-            return fpConfigs.get(currentFp).getLocation().getProducer();
+        FeaturePackConfig getCurrentConfig() {
+            return fpConfigs.get(currentFp);
         }
 
-        Boolean isFilteredOutFromTransient(ProducerSpec producer, ConfigId configId) {
-            final FeaturePackConfig fpConfig = transitive.get(producer);
-            if(fpConfig != null) {
-                final Boolean filteredOut = FpStack.isFilteredOut(fpConfig, configId);
-                if(filteredOut != null) {
-                    return filteredOut;
-                }
-            }
-            return null;
-        }
-
-        Boolean isFilteredOut(ProducerSpec producer, ConfigId configId) {
-            return FpStack.isFilteredOut(fpConfigs.get(currentFp), configId);
+        Boolean isExcluded(ProducerSpec producer, ConfigId configId) {
+            return FpStack.isExcluded(fpConfigs.get(currentFp), configId);
         }
 
         Boolean isIncludedInTransient(ProducerSpec producer, ConfigId configId) {
             final FeaturePackConfig fpConfig = transitive.get(producer);
-            if(fpConfig != null) {
-                final Boolean included = FpStack.isIncluded(fpConfig, configId);
-                if(included != null) {
-                    return included;
-                }
-            }
-            return null;
-        }
-
-        Boolean isIncluded(ProducerSpec producer, ConfigId configId) {
-            return FpStack.isIncluded(fpConfigs.get(currentFp), configId);
+            return fpConfig == null ? null : FpStack.isIncluded(fpConfig, configId);
         }
 
         boolean isInheritConfigs() {
@@ -220,18 +199,85 @@ class FpStack {
     }
 
     boolean isFilteredOutFromDeps(ProducerSpec producer, ConfigId configId, boolean fromPrevLevel) {
-        for(int i = levels.size() - (fromPrevLevel ? 2 : 1); i >= 0; --i) {
+        final int last = levels.size() - (fromPrevLevel ? 1 : 0);
+        int i = 0;
+        int notInheritingLevel = Integer.MAX_VALUE;
+        Boolean notInherited = null;
+        stackIterator: while(i < last) {
             final Level level = levels.get(i);
-            final ProducerSpec levelProducer = level.getCurrentFpProducer();
-            for(int j = 0; j <= i; ++j) {
-                final Boolean filteredOut = levels.get(j).isFilteredOutFromTransient(levelProducer, configId);
-                if(filteredOut != null) {
-                    return filteredOut;
+            final FeaturePackConfig levelFpConfig = level.getCurrentConfig();
+            final ProducerSpec levelProducer = levelFpConfig.getLocation().getProducer();
+            for(int j = 0; j <= Math.min(i, notInheritingLevel); ++j) {
+                final FeaturePackConfig transitiveFpConfig = levels.get(j).transitive.get(levelProducer);
+                if(transitiveFpConfig == null) {
+                    continue;
+                }
+                final Boolean excluded = isFilteredOut(transitiveFpConfig, configId);
+                if (excluded != null) {
+                    return excluded;
+                }
+                if (transitiveFpConfig.getInheritConfigs() != null) {
+                    if(j <= notInheritingLevel) {
+                        notInheritingLevel = j;
+                        notInherited = !transitiveFpConfig.getInheritConfigs();
+                    }
+                    ++i;
+                    continue stackIterator;
                 }
             }
-            final Boolean filteredOut = level.isFilteredOut(producer, configId);
-            if(filteredOut != null) {
-                return filteredOut;
+
+            final FeaturePackConfig transitiveFpConfig = level.transitive.get(producer);
+            if(transitiveFpConfig != null) {
+                final Boolean included = isIncluded(transitiveFpConfig, configId);
+                if (included != null && included) {
+                    return false;
+                }
+                if(transitiveFpConfig.getInheritConfigs() != null) {
+                    ++i;
+                    continue;
+                }
+            }
+            if (notInherited == null) {
+                notInherited = isExcluded(levelFpConfig, configId);
+                notInheritingLevel = i;
+            }
+            ++i;
+        }
+
+        if(notInherited != null && notInherited) {
+            return true;
+        }
+
+        stackIterator: while(i > 0) {
+            final Level level = levels.get(--i);
+            final ProducerSpec levelProducer = level.getCurrentConfig().getLocation().getProducer();
+            for(int j = 0; j <= i; ++j) {
+                final FeaturePackConfig fpConfig = levels.get(j).transitive.get(levelProducer);
+                if(fpConfig == null) {
+                    continue;
+                }
+                final Boolean included = isIncluded(fpConfig, configId);
+                if (included != null && included) {
+                    return false;
+                }
+                if (fpConfig.getInheritConfigs() != null) {
+                    continue stackIterator;
+                }
+            }
+            final FeaturePackConfig transitiveFpConfig = level.transitive.get(producer);
+            if(transitiveFpConfig != null) {
+                final Boolean included = isIncluded(transitiveFpConfig, configId);
+                if (included != null && included) {
+                    return false;
+                }
+                if(transitiveFpConfig.getInheritConfigs() != null) {
+                    continue;
+                }
+            }
+
+            final Boolean excluded = level.isExcluded(producer, configId);
+            if(excluded != null) {
+                return excluded;
             }
         }
         return false;
@@ -260,27 +306,21 @@ class FpStack {
             }
             return false;
         }
-
         final Boolean inheritConfigs = configCustoms.getInheritConfigs();
-        return inheritConfigs == null ? null : !inheritConfigs;
+        return inheritConfigs == null || inheritConfigs ? null : true;
     }
 
-    boolean isIncludedInDeps(ProducerSpec producer, ConfigId configId) {
+    boolean isIncludedInTransitiveDeps(ProducerSpec producer, ConfigId configId) {
         final int end = levels.size() - 1;
         int i = 0;
         while(i < end) {
             final Level level = levels.get(i++);
-            final ProducerSpec levelProducer = level.getCurrentFpProducer();
+            final ProducerSpec levelProducer = level.getCurrentConfig().getLocation().getProducer();
             for(int j = 0; j <= i; ++j) {
                 final Boolean included = levels.get(j).isIncludedInTransient(levelProducer, configId);
                 if(included != null) {
                     return included;
                 }
-            }
-
-            final Boolean included = level.isIncluded(producer, configId);
-            if(included != null) {
-                return included;
             }
         }
         return false;
@@ -300,7 +340,7 @@ class FpStack {
             if(configCustoms.isConfigExcluded(configId)) {
                 return false;
             }
-            return false;
+            return true;
         }
         if (configCustoms.isConfigModelExcluded(configId)) {
             if (configCustoms.isConfigIncluded(configId)) {
@@ -310,6 +350,32 @@ class FpStack {
         }
         final Boolean inheritConfigs = configCustoms.getInheritConfigs();
         return inheritConfigs == null || inheritConfigs ? null : false;
+    }
+
+    private static Boolean isExcluded(ConfigCustomizations configCustoms, ConfigId configId) {
+        if(configId.isModelOnly()) {
+            return configCustoms.isConfigModelExcluded(configId) || !configCustoms.isInheritModelOnlyConfigs();
+        }
+        if(configCustoms.isConfigIncluded(configId)) {
+            return false;
+        }
+        if (configCustoms.isConfigExcluded(configId)) {
+            return true;
+        }
+        if(configCustoms.isConfigModelIncluded(configId)) {
+            if(configCustoms.isConfigExcluded(configId)) {
+                return true;
+            }
+            return false;
+        }
+        if (configCustoms.isConfigModelExcluded(configId)) {
+            if (configCustoms.isConfigIncluded(configId)) {
+                return false;
+            }
+            return true;
+        }
+        final Boolean inheritConfigs = configCustoms.getInheritConfigs();
+        return inheritConfigs == null || inheritConfigs ? null : true;
     }
 
     private boolean isRelevant(FeaturePackConfig fpConfig) {
@@ -412,25 +478,23 @@ class FpStack {
             return false;
         }
         Boolean inheritPackages = level.getInheritPackages();
-        for(int i = 1; i < levelsTotal; ++i) {
+        stackIterator: for(int i = 1; i < levelsTotal; ++i) {
             level = levels.get(i);
-            final ProducerSpec currentFpProducer = level.getCurrentFpProducer();
+            final ProducerSpec currentFpProducer = level.getCurrentConfig().getLocation().getProducer();
 
-            FeaturePackConfig transitiveFpConfig = null;
             for(int j = 0; j < i; ++j) {
-                transitiveFpConfig = levels.get(j).transitive.get(currentFpProducer);
-                if(transitiveFpConfig != null) {
-                    break;
+                final FeaturePackConfig transitiveFpConfig = levels.get(j).transitive.get(currentFpProducer);
+                if(transitiveFpConfig == null) {
+                    continue;
                 }
-            }
-            if(transitiveFpConfig != null) {
                 final Boolean transitiveInheritPackages = transitiveFpConfig.getInheritPackages();
                 if (transitiveInheritPackages != null) {
                     if (!transitiveInheritPackages) {
                         return true;
                     }
-                    continue;
+                    continue stackIterator;
                 }
+                break;
             }
 
             if(inheritPackages != null && !inheritPackages) {

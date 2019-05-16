@@ -347,8 +347,8 @@ public class ProvisioningRuntimeBuilder {
                     continue;
                 }
 
-                if(fpConfigStack.isIncludedInDeps(producer, configId)
-                        || (thisOrigin.getSpec().hasDefinedConfig(configId) || configStack.size() > 1/*fpConfigStack.hasDefinedConfig(configId)*/)
+                if(fpConfigStack.isIncludedInTransitiveDeps(producer, configId)
+                        || (thisOrigin.getSpec().hasDefinedConfig(configId) || configStack.size() > 1)
                         && !fpConfigStack.isFilteredOutFromDeps(producer, configId, false)) {
                     specConfigStacks = pushFpConfig(specConfigStacks, configId);
                 }
