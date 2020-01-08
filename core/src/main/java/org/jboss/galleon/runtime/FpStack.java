@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2019 Red Hat, Inc. and/or its affiliates
+ * Copyright 2016-2020 Red Hat, Inc. and/or its affiliates
  * and other contributors as indicated by the @author tags.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,10 +22,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import org.jboss.galleon.ProvisioningException;
 import org.jboss.galleon.config.ConfigCustomizations;
 import org.jboss.galleon.config.ConfigId;
 import org.jboss.galleon.config.FeaturePackConfig;
 import org.jboss.galleon.config.ProvisioningConfig;
+import org.jboss.galleon.layout.ProvisioningLayout;
 import org.jboss.galleon.universe.FeaturePackLocation.ProducerSpec;
 import org.jboss.galleon.util.CollectionUtils;
 
@@ -46,10 +48,10 @@ class FpStack {
         private Map<ProducerSpec, FeaturePackConfig> transitive = Collections.emptyMap();
         private int currentFp = -1;
 
-        void addFpConfig(FeaturePackConfig fpConfig) {
+        void addFpConfig(ProducerSpec producer, FeaturePackConfig fpConfig) {
             fpConfigs = CollectionUtils.add(fpConfigs, fpConfig);
             if(fpConfig.isTransitive()) {
-                transitive = CollectionUtils.put(transitive, fpConfig.getLocation().getProducer(), fpConfig);
+                transitive = CollectionUtils.put(transitive, producer, fpConfig);
             }
         }
 
@@ -136,24 +138,26 @@ class FpStack {
         }
     }
 
+    private final ProvisioningLayout<?> layout;
     private final ProvisioningConfig config;
     private List<Level> levels = new ArrayList<>();
     private Level lastPushed;
 
-    FpStack(ProvisioningConfig config) {
+    FpStack(ProvisioningConfig config, ProvisioningLayout<?> layout) {
         this.config = config;
+        this.layout = layout;
     }
 
-    boolean push(FeaturePackConfig fpConfig, boolean extendCurrentLevel) {
+    boolean push(FeaturePackConfig fpConfig, boolean extendCurrentLevel) throws ProvisioningException {
         if(!isRelevant(fpConfig)) {
             return false;
         }
         if(extendCurrentLevel) {
-            lastPushed.addFpConfig(fpConfig);
+            lastPushed.addFpConfig(layout.getFplProducerSpec(fpConfig.getLocation()), fpConfig);
             return true;
         }
         final Level newLevel = new Level();
-        newLevel.addFpConfig(fpConfig);
+        newLevel.addFpConfig(layout.getFplProducerSpec(fpConfig.getLocation()), fpConfig);
         levels.add(newLevel);
         lastPushed = newLevel;
         return true;
@@ -190,7 +194,7 @@ class FpStack {
         return lastPushed.next();
     }
 
-    boolean isFilteredOut(ProducerSpec producer, ConfigId configId, boolean fromPrevLevel) {
+    boolean isFilteredOut(ProducerSpec producer, ConfigId configId, boolean fromPrevLevel) throws ProvisioningException {
         Boolean filteredOut = isFilteredOut(config, configId);
         if(filteredOut != null) {
             return filteredOut;
@@ -198,7 +202,7 @@ class FpStack {
         return isFilteredOutFromDeps(producer, configId, fromPrevLevel);
     }
 
-    boolean isFilteredOutFromDeps(ProducerSpec producer, ConfigId configId, boolean fromPrevLevel) {
+    boolean isFilteredOutFromDeps(ProducerSpec producer, ConfigId configId, boolean fromPrevLevel) throws ProvisioningException {
         final int last = levels.size() - (fromPrevLevel ? 1 : 0);
         int i = 0;
         int notInheritingLevel = Integer.MAX_VALUE;
@@ -206,7 +210,7 @@ class FpStack {
         stackIterator: while(i < last) {
             final Level level = levels.get(i);
             final FeaturePackConfig levelFpConfig = level.getCurrentConfig();
-            final ProducerSpec levelProducer = levelFpConfig.getLocation().getProducer();
+            final ProducerSpec levelProducer = layout.getFplProducerSpec(levelFpConfig.getLocation());
             for(int j = 0; j <= Math.min(i, notInheritingLevel); ++j) {
                 final FeaturePackConfig transitiveFpConfig = levels.get(j).transitive.get(levelProducer);
                 if(transitiveFpConfig == null) {
@@ -250,7 +254,7 @@ class FpStack {
 
         stackIterator: while(i > 0) {
             final Level level = levels.get(--i);
-            final ProducerSpec levelProducer = level.getCurrentConfig().getLocation().getProducer();
+            final ProducerSpec levelProducer = layout.getFplProducerSpec(level.getCurrentConfig().getLocation());
             for(int j = 0; j <= i; ++j) {
                 final FeaturePackConfig fpConfig = levels.get(j).transitive.get(levelProducer);
                 if(fpConfig == null) {
@@ -311,12 +315,12 @@ class FpStack {
         return inheritConfigs == null || inheritConfigs ? null : true;
     }
 
-    boolean isIncludedInTransitiveDeps(ProducerSpec producer, ConfigId configId) {
+    boolean isIncludedInTransitiveDeps(ProducerSpec producer, ConfigId configId) throws ProvisioningException {
         final int end = levels.size() - 1;
         int i = 0;
         while(i < end) {
             final Level level = levels.get(i++);
-            final ProducerSpec levelProducer = level.getCurrentConfig().getLocation().getProducer();
+            final ProducerSpec levelProducer = layout.getFplProducerSpec(level.getCurrentConfig().getLocation());
             for(int j = 0; j <= i; ++j) {
                 final Boolean included = levels.get(j).isIncludedInTransitive(levelProducer, configId);
                 if(included != null) {
@@ -379,11 +383,11 @@ class FpStack {
         return inheritConfigs == null || inheritConfigs ? null : true;
     }
 
-    private boolean isRelevant(FeaturePackConfig fpConfig) {
+    private boolean isRelevant(FeaturePackConfig fpConfig) throws ProvisioningException {
         if(isEmpty()) {
             return true;
         }
-        final ProducerSpec producer = fpConfig.getLocation().getProducer();
+        final ProducerSpec producer = layout.getFplProducerSpec(fpConfig.getLocation());
         final int inheritPkgs = isInheritPackages(producer);
         if(inheritPkgs == INHERIT_PKGS_NOT_FOUND || inheritPkgs == INHERIT_PKGS_TRANSITIVE && !fpConfig.isTransitive()) {
             return true;
@@ -465,7 +469,7 @@ class FpStack {
         return false;
     }
 
-    boolean isPackageFilteredOut(ProducerSpec producer, String packageName) {
+    boolean isPackageFilteredOut(ProducerSpec producer, String packageName) throws ProvisioningException {
         final int levelsTotal = levels.size();
         if(levelsTotal == 0) {
             return false;
@@ -481,7 +485,7 @@ class FpStack {
         Boolean inheritPackages = level.getInheritPackages();
         stackIterator: for(int i = 1; i < levelsTotal; ++i) {
             level = levels.get(i);
-            final ProducerSpec currentFpProducer = level.getCurrentConfig().getLocation().getProducer();
+            final ProducerSpec currentFpProducer = layout.getFplProducerSpec(level.getCurrentConfig().getLocation());
 
             for(int j = 0; j < i; ++j) {
                 final FeaturePackConfig transitiveFpConfig = levels.get(j).transitive.get(currentFpProducer);

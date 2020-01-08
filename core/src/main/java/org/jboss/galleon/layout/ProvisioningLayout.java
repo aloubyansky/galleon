@@ -555,6 +555,10 @@ public class ProvisioningLayout<F extends FeaturePackLayout> implements AutoClos
         initPluginOptions(pluginOptions, false);
     }
 
+    public ProducerSpec getFplProducerSpec(FeaturePackLocation fpl) throws ProvisioningException {
+        return fpl.isMavenCoordinates() ? getFeaturePack(fpl.getProducer()).fpid.getProducer() : fpl.getProducer();
+    }
+
     private ProvisioningConfig.Builder install(FeaturePackConfig fpConfig, ProvisioningConfig.Builder configBuilder) throws ProvisioningException {
         FeaturePackLocation fpl = fpConfig.getLocation();
         if(!fpl.hasBuild()) {
