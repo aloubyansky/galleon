@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2023 Red Hat, Inc. and/or its affiliates
+ * Copyright 2016-2026 Red Hat, Inc. and/or its affiliates
  * and other contributors as indicated by the @author tags.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,6 +34,7 @@ public class GalleonProvisioningConfig extends GalleonFeaturePackDepsConfig {
     public static class Builder extends GalleonFeaturePackDepsConfigBuilder<Builder> {
 
         private Map<String, String> options = Collections.emptyMap();
+        private Map<String, String> pluginVersions = Collections.emptyMap();
 
         protected Builder() {
         }
@@ -44,6 +45,9 @@ public class GalleonProvisioningConfig extends GalleonFeaturePackDepsConfig {
             }
             if(original.hasOptions()) {
                 addOptions(original.getOptions());
+            }
+            if(original.hasPluginVersions()) {
+                addPluginVersions(original.getPluginVersions());
             }
             for (GalleonFeaturePackConfig fp : original.getFeaturePackDeps()) {
                 addFeaturePackDep(original.originOf(fp.getLocation().getProducer()), fp);
@@ -78,6 +82,17 @@ public class GalleonProvisioningConfig extends GalleonFeaturePackDepsConfig {
             return this;
         }
 
+        public Builder addPluginVersion(String location) {
+            final String ga = extractGroupArtifact(location);
+            pluginVersions = CollectionUtils.put(pluginVersions, ga, location);
+            return this;
+        }
+
+        public Builder addPluginVersions(Map<String, String> pluginVersions) {
+            this.pluginVersions = CollectionUtils.putAll(this.pluginVersions, pluginVersions);
+            return this;
+        }
+
         public GalleonProvisioningConfig build() throws ProvisioningDescriptionException {
             return new GalleonProvisioningConfig(this);
         }
@@ -100,10 +115,12 @@ public class GalleonProvisioningConfig extends GalleonFeaturePackDepsConfig {
     }
 
     private final Map<String, String> options;
+    private final Map<String, String> pluginVersions;
 
     private GalleonProvisioningConfig(Builder builder) throws ProvisioningDescriptionException {
         super(builder);
         this.options = CollectionUtils.unmodifiable(builder.options);
+        this.pluginVersions = CollectionUtils.unmodifiable(builder.pluginVersions);
     }
 
     public boolean hasOptions() {
@@ -122,11 +139,32 @@ public class GalleonProvisioningConfig extends GalleonFeaturePackDepsConfig {
         return options.get(name);
     }
 
+    public boolean hasPluginVersions() {
+        return !pluginVersions.isEmpty();
+    }
+
+    public Map<String, String> getPluginVersions() {
+        return pluginVersions;
+    }
+
+    public static String extractGroupArtifact(String location) {
+        final int firstColon = location.indexOf(':');
+        if (firstColon < 0) {
+            return location;
+        }
+        final int secondColon = location.indexOf(':', firstColon + 1);
+        if (secondColon < 0) {
+            return location;
+        }
+        return location.substring(0, secondColon);
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
         result = prime * result + ((options == null) ? 0 : options.hashCode());
+        result = prime * result + ((pluginVersions == null) ? 0 : pluginVersions.hashCode());
         return result;
     }
 
@@ -144,6 +182,11 @@ public class GalleonProvisioningConfig extends GalleonFeaturePackDepsConfig {
                 return false;
         } else if (!options.equals(other.options))
             return false;
+        if (pluginVersions == null) {
+            if (other.pluginVersions != null)
+                return false;
+        } else if (!pluginVersions.equals(other.pluginVersions))
+            return false;
         return true;
     }
 
@@ -154,6 +197,10 @@ public class GalleonProvisioningConfig extends GalleonFeaturePackDepsConfig {
         if(!options.isEmpty()) {
             buf.append("options=");
             StringUtils.append(buf, options.entrySet());
+        }
+        if(!pluginVersions.isEmpty()) {
+            buf.append("plugin-versions=");
+            StringUtils.append(buf, pluginVersions.entrySet());
         }
         return buf.append(']').toString();
     }

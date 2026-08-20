@@ -1055,6 +1055,19 @@ public class ProvisioningLayout<F extends FeaturePackLayout> implements AutoClos
             }
         }
 
+        if (config.hasPluginVersions()) {
+            final Map<String, String> overrides = config.getPluginVersions();
+            final Map<String, FeaturePackPlugin> overridden = new HashMap<>(pluginLocations);
+            for (Map.Entry<String, FeaturePackPlugin> entry : pluginLocations.entrySet()) {
+                final String ga = ProvisioningConfig.extractGroupArtifact(entry.getValue().getLocation());
+                final String newLocation = overrides.get(ga);
+                if (newLocation != null) {
+                    overridden.put(entry.getKey(), FeaturePackPlugin.getInstance(entry.getKey(), newLocation));
+                }
+            }
+            pluginLocations = overridden;
+        }
+
         if(!pluginLocations.isEmpty()) {
             handle.addPlugins(pluginLocations.values());
         }

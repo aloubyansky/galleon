@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2023 Red Hat, Inc. and/or its affiliates
+ * Copyright 2016-2026 Red Hat, Inc. and/or its affiliates
  * and other contributors as indicated by the @author tags.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -47,6 +47,7 @@ public class ProvisioningConfig extends FeaturePackDepsConfig {
     public static class Builder extends FeaturePackDepsConfigBuilder<Builder> {
 
         private Map<String, String> options = Collections.emptyMap();
+        private Map<String, String> pluginVersions = Collections.emptyMap();
 
         private Builder() {
         }
@@ -57,6 +58,9 @@ public class ProvisioningConfig extends FeaturePackDepsConfig {
             }
             if (original.hasOptions()) {
                 addOptions(original.getOptions());
+            }
+            if (original.hasPluginVersions()) {
+                addPluginVersions(original.getPluginVersions());
             }
             for (FeaturePackConfig fp : original.getFeaturePackDeps()) {
                 addFeaturePackDep(original.originOf(fp.getLocation().getProducer()), fp);
@@ -90,6 +94,17 @@ public class ProvisioningConfig extends FeaturePackDepsConfig {
             return this;
         }
 
+        public Builder addPluginVersion(String location) {
+            final String ga = extractGroupArtifact(location);
+            pluginVersions = CollectionUtils.put(pluginVersions, ga, location);
+            return this;
+        }
+
+        public Builder addPluginVersions(Map<String, String> pluginVersions) {
+            this.pluginVersions = CollectionUtils.putAll(this.pluginVersions, pluginVersions);
+            return this;
+        }
+
         public ProvisioningConfig build() throws ProvisioningDescriptionException {
             return new ProvisioningConfig(this);
         }
@@ -105,6 +120,9 @@ public class ProvisioningConfig extends FeaturePackDepsConfig {
     public static ProvisioningConfig toConfig(GalleonProvisioningConfig gConfig, List<Path> customConfigs) throws ProvisioningException, ProvisioningDescriptionException {
         Builder builder = ProvisioningConfig.builder();
         builder.addOptions(gConfig.getOptions());
+        if (gConfig.hasPluginVersions()) {
+            builder.addPluginVersions(gConfig.getPluginVersions());
+        }
         for (ConfigId c : gConfig.getExcludedConfigs()) {
             builder.excludeDefaultConfig(c);
         }
@@ -224,6 +242,9 @@ public class ProvisioningConfig extends FeaturePackDepsConfig {
     public static GalleonProvisioningConfig toConfig(ProvisioningConfig gConfig) throws ProvisioningDescriptionException {
         GalleonProvisioningConfig.Builder builder = GalleonProvisioningConfig.builder();
         builder.addOptions(gConfig.getOptions());
+        if (gConfig.hasPluginVersions()) {
+            builder.addPluginVersions(gConfig.getPluginVersions());
+        }
         for (ConfigId c : gConfig.getExcludedConfigs()) {
             builder.excludeDefaultConfig(c);
         }
@@ -273,10 +294,12 @@ public class ProvisioningConfig extends FeaturePackDepsConfig {
     }
 
     private final Map<String, String> options;
+    private final Map<String, String> pluginVersions;
 
     private ProvisioningConfig(Builder builder) throws ProvisioningDescriptionException {
         super(builder);
         this.options = CollectionUtils.unmodifiable(builder.options);
+        this.pluginVersions = CollectionUtils.unmodifiable(builder.pluginVersions);
     }
 
     public boolean hasOptions() {
@@ -295,11 +318,27 @@ public class ProvisioningConfig extends FeaturePackDepsConfig {
         return options.get(name);
     }
 
+    public boolean hasPluginVersions() {
+        return !pluginVersions.isEmpty();
+    }
+
+    /**
+     * Returns plugin version overrides keyed by groupId:artifactId.
+     */
+    public Map<String, String> getPluginVersions() {
+        return pluginVersions;
+    }
+
+    public static String extractGroupArtifact(String location) {
+        return GalleonProvisioningConfig.extractGroupArtifact(location);
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
         result = prime * result + ((options == null) ? 0 : options.hashCode());
+        result = prime * result + ((pluginVersions == null) ? 0 : pluginVersions.hashCode());
         return result;
     }
 
@@ -322,6 +361,13 @@ public class ProvisioningConfig extends FeaturePackDepsConfig {
         } else if (!options.equals(other.options)) {
             return false;
         }
+        if (pluginVersions == null) {
+            if (other.pluginVersions != null) {
+                return false;
+            }
+        } else if (!pluginVersions.equals(other.pluginVersions)) {
+            return false;
+        }
         return true;
     }
 
@@ -332,6 +378,10 @@ public class ProvisioningConfig extends FeaturePackDepsConfig {
         if (!options.isEmpty()) {
             buf.append("options=");
             StringUtils.append(buf, options.entrySet());
+        }
+        if (!pluginVersions.isEmpty()) {
+            buf.append("plugin-versions=");
+            StringUtils.append(buf, pluginVersions.entrySet());
         }
         return buf.append(']').toString();
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2023 Red Hat, Inc. and/or its affiliates
+ * Copyright 2016-2026 Red Hat, Inc. and/or its affiliates
  * and other contributors as indicated by the @author tags.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -149,6 +149,13 @@ public class ProvisionStateMojo extends AbstractMojo {
     private List<ResolveLocalItem> resolveLocals = Collections.emptyList();
 
     /**
+     * A list of plugin version overrides specified as Maven GAV locations (groupId:artifactId:packaging:version).
+     * Overrides plugin versions declared in feature-packs, matching by groupId:artifactId.
+     */
+    @Parameter(alias = "plugin-versions", required = false)
+    private List<String> pluginVersions = Collections.emptyList();
+
+    /**
      * Specifies whether the provisioning should be skipped.
      *
      * @since 4.2.6
@@ -296,6 +303,9 @@ public class ProvisionStateMojo extends AbstractMojo {
             } else if (!pluginOptions.containsKey(Constants.OPTIONAL_PACKAGES)) {
                 pluginOptions.put(Constants.OPTIONAL_PACKAGES, Constants.PASSIVE_PLUS);
             }
+        }
+        for (String pv : pluginVersions) {
+            state.addPluginVersion(pv);
         }
         state.addOptions(pluginOptions);
         List<Path> customConfigs = new ArrayList<>();

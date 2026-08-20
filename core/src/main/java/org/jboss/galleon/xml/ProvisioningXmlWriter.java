@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2025 Red Hat, Inc. and/or its affiliates
+ * Copyright 2016-2026 Red Hat, Inc. and/or its affiliates
  * and other contributors as indicated by the @author tags.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -52,14 +52,20 @@ public class ProvisioningXmlWriter extends BaseXmlWriter<ProvisioningConfig> {
 
     protected ElementNode toElement(ProvisioningConfig config) {
 
-        final ElementNode install = addElement(null, Element.INSTALLATION);
+        final ElementNode install;
+        if (config.hasPluginVersions()) {
+            install = addElement(null, ProvisioningXmlParser41.Element.INSTALLATION);
+        } else {
+            install = addElement(null, Element.INSTALLATION);
+        }
+        final String ns = install.getNamespace();
 
         writeUniverseSpecs(config, install);
 
         if(config.hasTransitiveDeps()) {
-            final ElementNode transitives = addElement(install, Element.TRANSITIVE);
+            final ElementNode transitives = addElement(install, Element.TRANSITIVE.getLocalName(), ns);
             for(FeaturePackConfig dep : config.getTransitiveDeps()) {
-                writeFeaturePackConfig(addElement(transitives, Element.FEATURE_PACK),
+                writeFeaturePackConfig(addElement(transitives, Element.FEATURE_PACK.getLocalName(), ns),
                         config.getUserConfiguredLocation(dep.getLocation()), dep,
                         config.originOf(dep.getLocation().getProducer()));
             }
@@ -67,26 +73,36 @@ public class ProvisioningXmlWriter extends BaseXmlWriter<ProvisioningConfig> {
 
         if (config.hasFeaturePackDeps()) {
             for(FeaturePackConfig fp : config.getFeaturePackDeps()) {
-                final ElementNode fpElement = addElement(install, Element.FEATURE_PACK);
+                final ElementNode fpElement = addElement(install, Element.FEATURE_PACK.getLocalName(), ns);
                 writeFeaturePackConfig(fpElement, config.getUserConfiguredLocation(fp.getLocation()),
                         fp, config.originOf(fp.getLocation().getProducer()));
             }
         }
 
-        writeConfigCustomizations(install, Element.INSTALLATION.getNamespace(), config);
+        writeConfigCustomizations(install, ns, config);
 
         if(config.hasOptions()) {
             final Map<String, String> pluginOptions = config.getOptions();
             final String[] names = pluginOptions.keySet().toArray(new String[pluginOptions.size()]);
             Arrays.sort(names);
-            final ElementNode optionsE = addElement(install, Element.OPTIONS);
+            final ElementNode optionsE = addElement(install, Element.OPTIONS.getLocalName(), ns);
             for(String name : names) {
-                final ElementNode optionE = addElement(optionsE, Element.OPTION);
+                final ElementNode optionE = addElement(optionsE, Element.OPTION.getLocalName(), ns);
                 addAttribute(optionE, Attribute.NAME, name);
                 final String value = pluginOptions.get(name);
                 if(value != null) {
                     addAttribute(optionE, Attribute.VALUE, value);
                 }
+            }
+        }
+
+        if(config.hasPluginVersions()) {
+            final ElementNode pluginVersionsE = addElement(install,
+                    ProvisioningXmlParser41.Element.PLUGIN_VERSIONS.getLocalName(), ns);
+            for(String location : config.getPluginVersions().values()) {
+                final ElementNode pluginE = addElement(pluginVersionsE,
+                        ProvisioningXmlParser41.Element.PLUGIN.getLocalName(), ns);
+                addAttribute(pluginE, Attribute.LOCATION, location);
             }
         }
 
